@@ -1,10 +1,7 @@
 function API_PATH(path) {
-    const API_URL = new URL();
-    API_URL.protocol = "http:";
-    API_URL.host = betterQQNT.api.address.host;
-    API_URL.port = betterQQNT.api.address.port;
-    API_URL.pathname = path;
-    return API_URL;
+    const host = betterQQNT.net.host;
+    const port = betterQQNT.net.port;
+    return `http://${host}:${port}${path}`;
 }
 
 
@@ -35,7 +32,7 @@ async function read_file_blob(params = {
 
 
 // API
-betterQQNT.api = {
+betterQQNT["api"] = {
     fs: {
         read_file_text,
         read_file_blob

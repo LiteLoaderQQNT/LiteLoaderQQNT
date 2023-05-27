@@ -27,8 +27,8 @@ async function read_file_text(req, res) {
     const text = new TextDecoder().decode(data);
     const json = JSON.parse(text);
 
-    const file_path = path.join(__dirname, json["path"]);
-    const readFile = fs.readFile(file_path, { encoding: "utf-8" });
+    const filePath = path.normalize(json["path"]);
+    const readFile = fs.readFile(filePath, { encoding: "utf-8" });
 
     readFile.then(file => {
         res.statusCode = 200;
@@ -47,8 +47,8 @@ async function read_file_blob(req, res) {
     const text = new TextDecoder().decode(data);
     const json = JSON.parse(text);
 
-    const file_path = path.join(__dirname, json["path"]);
-    const readFile = fs.readFile(file_path, { encoding: "binary" });
+    const filePath = path.normalize(json["path"]);
+    const readFile = fs.readFile(filePath, { encoding: "binary" });
 
     readFile.then(file => {
         res.statusCode = 200;
