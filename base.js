@@ -9,10 +9,16 @@ const BETTERQQNT_PLUGINS_DATA = path.join(BETTERQQNT_PROFILE, "/plugins_data");
 const BETTERQQNT_PLUGINS_CACHE = path.join(BETTERQQNT_PROFILE, "/plugins_cache");
 
 
+function output(...args) {
+    console.log("\x1b[32m%s\x1b[0m", "BetterQQNT:", ...args);
+}
+
+
 module.exports = {
     BETTERQQNT_PROFILE,
     BETTERQQNT_PLUGINS,
     BETTERQQNT_PLUGINS_DEV,
     BETTERQQNT_PLUGINS_DATA,
-    BETTERQQNT_PLUGINS_CACHE
+    BETTERQQNT_PLUGINS_CACHE,
+    output
 }

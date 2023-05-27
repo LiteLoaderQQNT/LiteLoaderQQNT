@@ -1,18 +1,18 @@
 const { BrowserWindow } = require("electron");
 const { BetterQQNTLoader } = require("./loader.js");
-const { output } = require("./utils.js")
+const base = require("./base.js");
 
 
 // 初始化，加载BetterQQNT
 function initialization(webContents) {
     const loader = new BetterQQNTLoader(webContents);
-    output("BetterQQNTLoader Created.");
+    base.output("BetterQQNTLoader Created.");
     loader.loadAPI();
-    output("API Loaded.");
+    base.output("API Loaded.");
     loader.loadPlugins();
-    output("loadPlugins Loaded.");
+    base.output("loadPlugins Loaded.");
     loader.loadRendererLoader();
-    output("loadRendererLoader Loaded.");
+    base.output("loadRendererLoader Loaded.");
 }
 
 
@@ -23,9 +23,9 @@ const interval = setInterval(() => {
         const webContents = browserWindow.webContents;
         const url = webContents.getURL();
         if (url.includes("app://./renderer/index.html")) {
-            output("Found Index Window!");
+            base.output("Found Index Window!");
             clearInterval(interval);
-            output("Initializing...");
+            base.output("Initializing...");
             initialization(webContents);
             return;
         }
@@ -34,5 +34,5 @@ const interval = setInterval(() => {
 
 
 // 继续执行QQNT启动
-output("Starting QQNT...");
+base.output("Starting QQNT...");
 require("../app_launcher/index.js");

@@ -1,8 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const api = require("./api/server.js");
-const base = require("./base.js")
-const { output } = require("./utils.js")
+const base = require("./base.js");
 
 
 
@@ -40,7 +39,7 @@ function getPluginList(func) {
                 manifest: manifest,
                 pluginPath: plugin_path,
             }
-            output("Found Plugin:", manifest["name"]);
+            base.output("Found Plugin:", manifest["name"]);
         }
         func(plugins);
     });
@@ -115,7 +114,7 @@ class BetterQQNTLoader {
                 main.forEach(file_name => {
                     const file_path = path.join(pluginPath, file_name);
                     require(file_path);
-                    output(value.manifest["name"], "Plugin Is Loaded On The Main.");
+                    base.output(value.manifest["name"], "Plugin Is Loaded On The Main.");
                 });
                 // 渲染进程
                 const renderer = value.manifest.injects.renderer;
@@ -127,7 +126,7 @@ class BetterQQNTLoader {
                             throw err;
                         }
                         this.#injectScript(data);
-                        output(value.manifest["name"], "Plugin Is Loaded On The Renderer.");
+                        base.output(value.manifest["name"], "Plugin Is Loaded On The Renderer.");
                     });
                 });
             }
