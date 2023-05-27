@@ -50,9 +50,9 @@ class BetterQQNTLoader {
     constructor(webContents) {
         this.webContents = webContents;
         function injectScript(base64) {
-            const code = atob(base64);
+            const code = decodeURIComponent(atob(base64));
             const element = document.createElement("script");
-            // element.defer = "defer";
+            element.defer = "defer";
             element.textContent = code;
             document.head.appendChild(element);
         }
@@ -61,7 +61,7 @@ class BetterQQNTLoader {
 
     // 注入JS代码到渲染进程
     #injectScript(code) {
-        const buffer = new Buffer(code);
+        const buffer = new Buffer(encodeURIComponent(code));
         const base64 = buffer.toString("base64")
         const text = `injectScript("${base64}");`;
         this.webContents.executeJavaScript(text, true);
@@ -72,28 +72,25 @@ class BetterQQNTLoader {
         const file_path = path.join(__dirname, "./api/client.js");
         const data = fs.readFileSync(file_path, { encoding: "utf-8" });
         const code = `
-        alert("嘿嘿嘿")
-        const betterQQNT = {};
+        // 挂载API到全局
+        window["betterQQNT"] = {};
 
         // 路径
-        betterQQNT.path = {
-            root: ${base.BETTERQQNT_PROFILE},
-            plugins: ${base.BETTERQQNT_PLUGINS},
-            plugins_dev: ${base.BETTERQQNT_PLUGINS_DEV},
-            plugins_data: ${base.BETTERQQNT_PLUGINS_DATA},
-            plugins_cache: ${base.BETTERQQNT_PLUGINS_CACHE}
+        betterQQNT["path"] = {
+            root: "${base.BETTERQQNT_PROFILE}",
+            plugins: "${base.BETTERQQNT_PLUGINS}",
+            plugins_dev: "${base.BETTERQQNT_PLUGINS_DEV}",
+            plugins_data: "${base.BETTERQQNT_PLUGINS_DATA}",
+            plugins_cache: "${base.BETTERQQNT_PLUGINS_CACHE}"
         }
 
         // 网络
-        betterQQNT.net = {
+        betterQQNT["net"] = {
             host: String("${api.BetterQQNT_API_HOST}"),
             port: Number("${api.BetterQQNT_API_PORT}")
         }
 
         ${data}
-
-        // 挂载API到全局
-        window.betterQQNT = betterQQNT;
         `;
         this.#injectScript(code);
     }
@@ -106,6 +103,9 @@ class BetterQQNTLoader {
     // 初始化加载插件
     loadPlugins() {
         getPluginList(plugins => {
+            const code = `betterQQNT["plugins"] = ${JSON.stringify(plugins)}`
+            this.#injectScript(code);
+            // 继续
             for (const key in plugins) {
                 const value = plugins[key];
                 const pluginPath = value.pluginPath;
