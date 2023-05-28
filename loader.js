@@ -113,7 +113,7 @@ class BetterQQNTLoader {
                 const main = value.manifest.injects.main;
                 main.forEach(file_name => {
                     const file_path = path.join(pluginPath, file_name);
-                    const init = require(file_path).expect;
+                    const init = require(file_path);
                     if (typeof init == "function") {
                         init(this.webContents);
                     }
