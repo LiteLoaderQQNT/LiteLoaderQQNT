@@ -10,8 +10,8 @@ function getData(req) {
         req.on("data", chunk => data.push(...chunk));
         req.on("end", () => {
             try {
-                const data = new ArrayBuffer(data);
-                resolve(data);
+                const uint8Array = new Uint8Array(data);
+                resolve(uint8Array);
             } catch (error) {
                 reject(error);
             }
@@ -21,23 +21,20 @@ function getData(req) {
 }
 
 
-
 async function read_file_text(req, res) {
     const data = await getData(req);
     const text = new TextDecoder().decode(data);
     const json = JSON.parse(text);
-
     const filePath = path.normalize(json["path"]);
-    const readFile = fs.readFile(filePath, { encoding: "utf-8" });
-
-    readFile.then(file => {
+    fs.readFile(filePath, { encoding: "utf-8" }, (err, data) => {
+        if (err) {
+            res.statusCode = 400;
+            res.end();
+            throw err;
+        }
         res.statusCode = 200;
         res.setHeader("Content-Type", "text/plain");
-        res.end(file);
-    }).catch(err => {
-        res.statusCode = 400;
-        res.end();
-        throw err;
+        res.end(data);
     });
 }
 
@@ -46,18 +43,16 @@ async function read_file_blob(req, res) {
     const data = await getData(req);
     const text = new TextDecoder().decode(data);
     const json = JSON.parse(text);
-
     const filePath = path.normalize(json["path"]);
-    const readFile = fs.readFile(filePath, { encoding: "binary" });
-
-    readFile.then(file => {
+    fs.readFile(filePath, { encoding: "binary" }, (err, data) => {
+        if (err) {
+            res.statusCode = 400;
+            res.end();
+            throw err;
+        }
         res.statusCode = 200;
         res.setHeader("Content-Type", "application/octet-stream");
         res.end(file);
-    }).catch(err => {
-        res.statusCode = 400;
-        res.end();
-        throw err;
     });
 }
 
@@ -87,7 +82,8 @@ server.on("request", requestListener);
 server.listen(0);
 
 
-const BetterQQNT_API_HOST = server.address().address;
+// const BetterQQNT_API_HOST = server.address().address;
+const BetterQQNT_API_HOST = "localhost";
 const BetterQQNT_API_PORT = server.address().port;
 
 

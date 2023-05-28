@@ -8,7 +8,7 @@ function API_PATH(path) {
 async function read_file_text(params = {
     path: ""
 }) {
-    const url = API_PATH("/fs/read_file_text");
+    const url = URL(API_PATH("/api/fs/read_file_text"));
     const init = {
         method: "POST",
         body: JSON.stringify(params)
@@ -21,7 +21,7 @@ async function read_file_text(params = {
 async function read_file_blob(params = {
     path: ""
 }) {
-    const url = API_PATH("/fs/read_file_blob");
+    const url = API_PATH("/api/fs/read_file_blob");
     const init = {
         method: "POST",
         body: JSON.stringify(params)
