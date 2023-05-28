@@ -113,7 +113,10 @@ class BetterQQNTLoader {
                 const main = value.manifest.injects.main;
                 main.forEach(file_name => {
                     const file_path = path.join(pluginPath, file_name);
-                    require(file_path);
+                    const init = require(file_path).expect;
+                    if (typeof init == "function") {
+                        init(this.webContents);
+                    }
                     base.output(value.manifest["name"], "Plugin Is Loaded On The Main.");
                 });
                 // 渲染进程
