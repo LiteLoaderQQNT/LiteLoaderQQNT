@@ -1,6 +1,5 @@
 const fs = require("fs");
 const path = require("path");
-const api = require("./api/server.js");
 const base = require("./base.js");
 
 
@@ -49,28 +48,6 @@ function getPluginList(func) {
 class BetterQQNTLoader {
     constructor(webContents) {
         this.webContents = webContents;
-        function injectScript(base64) {
-            const code = decodeURIComponent(atob(base64));
-            const element = document.createElement("script");
-            element.defer = "defer";
-            element.textContent = code;
-            document.head.appendChild(element);
-        }
-        this.webContents.executeJavaScript(injectScript.toString(), true);
-    }
-
-    // 注入JS代码到渲染进程
-    #injectScript(code) {
-        const buffer = new Buffer(encodeURIComponent(code));
-        const base64 = buffer.toString("base64")
-        const text = `injectScript("${base64}");`;
-        this.webContents.executeJavaScript(text, true);
-    }
-
-    // 初始化加载API到渲染进程
-    loadAPI() {
-        const file_path = path.join(__dirname, "./api/client.js");
-        const data = fs.readFileSync(file_path, { encoding: "utf-8" });
         const code = `
         // 挂载API到全局
         window["betterQQNT"] = {};
@@ -83,55 +60,27 @@ class BetterQQNTLoader {
             plugins_data: "${base.BETTERQQNT_PLUGINS_DATA}",
             plugins_cache: "${base.BETTERQQNT_PLUGINS_CACHE}"
         }
-
-        // 网络
-        betterQQNT["net"] = {
-            host: String("${api.BetterQQNT_API_HOST}"),
-            port: Number("${api.BetterQQNT_API_PORT}")
-        }
-
-        ${data}
         `;
-        this.#injectScript(code);
-    }
-
-    // 初始化从渲染进程加载代码
-    loadRendererLoader() {
-
+        this.webContents.executeJavaScript(`(() => { ${code} })()`, true);
     }
 
     // 初始化加载插件
     loadPlugins() {
         getPluginList(plugins => {
             const code = `betterQQNT["plugins"] = ${JSON.stringify(plugins)}`
-            this.#injectScript(code);
+            this.webContents.executeJavaScript(code);
             // 继续
             for (const key in plugins) {
                 const value = plugins[key];
                 const pluginPath = value.pluginPath;
                 // 主进程
-                const main = value.manifest.injects.main;
-                main.forEach(file_name => {
-                    const file_path = path.join(pluginPath, file_name);
-                    const init = require(file_path);
-                    if (typeof init == "function") {
-                        init(this.webContents);
-                    }
-                    base.output(value.manifest["name"], "Plugin Is Loaded On The Main.");
-                });
-                // 渲染进程
-                const renderer = value.manifest.injects.renderer;
-                renderer.forEach(file_name => {
-                    const file_path = path.join(pluginPath, file_name);
-                    fs.readFile(file_path, { encoding: "utf-8" }, (err, data) => {
-                        if (err) {
-                            plugins[key] = undefined;
-                            throw err;
-                        }
-                        this.#injectScript(data);
-                        base.output(value.manifest["name"], "Plugin Is Loaded On The Renderer.");
-                    });
-                });
+                const filename = value.manifest.inject;
+                const filepath = path.join(pluginPath, filename);
+                const init = require(filepath);
+                if (typeof init == "function") {
+                    init(this.webContents);
+                }
+                base.output(value.manifest["name"], "Plugin Is Loaded On The Main.");
             }
         });
     }
