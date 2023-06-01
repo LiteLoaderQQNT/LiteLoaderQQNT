@@ -1,6 +1,6 @@
 const { Module } = require("module");
-const { BetterQQNTLoader } = require("./loader.js");
-const base = require("./base.js");
+const { BetterQQNTLoader } = require("./src/loader.js");
+const base = require("./src/base.js");
 
 
 // 初始化

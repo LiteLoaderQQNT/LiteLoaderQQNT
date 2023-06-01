@@ -55,6 +55,7 @@ class BetterQQNTLoader {
         // 路径
         betterQQNT["path"] = {
             root: "${base.BETTERQQNT_PROFILE}",
+            config: "${base.BETTERQQNT_CONFIG}",
             plugins: "${base.BETTERQQNT_PLUGINS}",
             plugins_dev: "${base.BETTERQQNT_PLUGINS_DEV}",
             plugins_data: "${base.BETTERQQNT_PLUGINS_DATA}",
