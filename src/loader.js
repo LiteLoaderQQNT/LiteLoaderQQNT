@@ -23,7 +23,7 @@ function getPluginList(func) {
         if (err) {
             fs.mkdir(base.BETTERQQNT_PLUGINS, err => {
                 if (err) throw err;
-                getPluginPath.call(this);
+                getPluginList(func);
             });
             throw err;
         }
