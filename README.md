@@ -23,6 +23,11 @@ BetterQQNT是一个QQNT的插件加载器
 3. 重新启动QQNT，享受BetterQQNT带来的乐趣吧！
 
 
+## 平台兼容
+
+理论上能够支持`MacOS`, `Windows`, `Linux`三端的QQNT
+
+
 ## 目前功能
 
 - 打开QQNT的DevTools，方便你查看和修改QQNT的内部运行情况。
