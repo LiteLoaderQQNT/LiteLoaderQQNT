@@ -45,11 +45,11 @@ BetterQQNT
     ├─plugins           // 插件本体目录
     │   └─my-theme          // 主题插件
     │   └─...
-    ├─plugins_cache     // 插件缓存目录（暂未实现）
+    ├─plugins_cache     // 插件缓存目录
     │   └─...
-    ├─plugins_data      // 插件数据目录（暂未实现）
+    ├─plugins_data      // 插件数据目录
     │   └─...
-    ├─plugins_dev       // 插件开发目录（暂未实现）
+    ├─plugins_dev       // 插件开发目录
     │   └─...
     └─config.json       // BetterQQNT配置文件（暂未实现）
 ```
