@@ -1,93 +1,98 @@
 const fs = require("fs");
 const path = require("path");
-const base = require("./base.js");
+const { betterQQNT, output } = require("./base.js");
 
+
+// 获取插件路径列表
+function getPluginPaths(base_path) {
+    const plugin_paths = [];
+
+    try {
+        const plugin_dirnames = fs.readdirSync(base_path, "utf-8");
+        // 获取单个插件目录名
+        for (const plugin_dirname of plugin_dirnames) {
+            const plugin_path = path.join(base_path, plugin_dirname);
+            plugin_paths.push(plugin_path);
+        }
+    } catch (error) {
+        // 目录不存在
+        output("plugins directory does not exist, creating directory...");
+        // 创建目录
+        fs.mkdir(base_path, { recursive: true }, err => {
+            // 创建失败
+            if (err) {
+                output("Failed to create plugins directory!")
+            }
+            output("Directory created successfully!")
+        });
+    }
+
+    // 返回插件路径列表
+    return plugin_paths;
+}
 
 
 // 获取插件清单
 function getPluginManifest(plugin_path) {
     const file_path = path.join(plugin_path, "manifest.json");
     try {
-        const data = fs.readFileSync(file_path, { encoding: "utf-8" });
-        const manifest = JSON.parse(data);
-        return manifest;
+        const data = fs.readFileSync(file_path, "utf-8");
+        return JSON.parse(data);
     } catch (err) {
-        return undefined;
+        return null;
     }
 }
 
 
 // 获取插件列表
-function getPluginList(func) {
-    fs.readdir(base.BETTERQQNT_PLUGINS, (err, files) => {
-        if (err) {
-            fs.mkdir(base.BETTERQQNT_PLUGINS, err => {
-                if (err) throw err;
-                getPluginList(func);
-            });
-            throw err;
-        }
-        // 继续
-        const plugins = {};
-        for (const file of files) {
-            const plugin_path = path.join(base.BETTERQQNT_PLUGINS, file);
-            const manifest = getPluginManifest(plugin_path);
-            if (!manifest) break;
-            const slug = manifest["slug"];
-            plugins[slug] = {
+function getPlugins() {
+    const plugins = [];
+
+    // 获取插件路径列表
+    const plugin_paths = getPluginPaths(betterQQNT.path.plugins);
+    for (const plugin_path of plugin_paths) {
+        // 获取插件清单
+        const manifest = getPluginManifest(plugin_path);
+        if (manifest) {
+            output("Found plugin:", manifest["name"]);
+            plugins.push({
                 manifest: manifest,
-                pluginPath: plugin_path,
-            }
-            base.output("Found Plugin:", manifest["name"]);
+                path: plugin_path
+            });
         }
-        func(plugins);
-    });
+    }
+
+    // 返回插件列表
+    return plugins;
 }
 
 
-class BetterQQNTLoader {
-    constructor(webContents) {
-        this.webContents = webContents;
-        const code = `
-        // 挂载API到全局
-        window["betterQQNT"] = {};
-
-        // 路径
-        betterQQNT["path"] = {
-            root: "${base.BETTERQQNT_PROFILE}",
-            config: "${base.BETTERQQNT_CONFIG}",
-            plugins: "${base.BETTERQQNT_PLUGINS}",
-            plugins_dev: "${base.BETTERQQNT_PLUGINS_DEV}",
-            plugins_data: "${base.BETTERQQNT_PLUGINS_DATA}",
-            plugins_cache: "${base.BETTERQQNT_PLUGINS_CACHE}"
-        }
-        `;
-        this.webContents.executeJavaScript(`(() => { ${code} })()`, true);
+// 加载插件
+function loadPlugin(plugin, window) {
+    const file_name = plugin.manifest.inject;
+    const file_path = path.join(plugin.path, file_name);
+    const plugin_slug = plugin.manifest.slug;
+    const code = `betterQQNT["plugins"]["${plugin_slug}"] = ${JSON.stringify(plugin)};`;
+    window.webContents.executeJavaScript(code, true);
+    // 开始调用插件
+    const init = require(file_path);
+    if (typeof init == "function") {
+        init(plugin, window);
     }
+}
 
-    // 初始化加载插件
-    loadPlugins() {
-        getPluginList(plugins => {
-            const code = `betterQQNT["plugins"] = ${JSON.stringify(plugins)}`
-            this.webContents.executeJavaScript(code);
-            // 继续
-            for (const key in plugins) {
-                const value = plugins[key];
-                const pluginPath = value.pluginPath;
-                // 主进程
-                const filename = value.manifest.inject;
-                const filepath = path.join(pluginPath, filename);
-                const init = require(filepath);
-                if (typeof init == "function") {
-                    init(this.webContents);
-                }
-                base.output(value.manifest["name"], "Plugin Is Loaded On The Main.");
-            }
-        });
+
+// 插件加载器
+function loadPlugins(window) {
+    const plugins = getPlugins();
+    for (const plugin of plugins) {
+        output("Loading plugin:", plugin.manifest.name);
+        loadPlugin(plugin, window);
+        output("Loaded plugin:", plugin.manifest.name);
     }
 }
 
 
 module.exports = {
-    BetterQQNTLoader
+    loadPlugins
 }
