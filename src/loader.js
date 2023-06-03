@@ -82,17 +82,7 @@ function loadPlugin(plugin, window) {
 }
 
 
-// 插件加载器
-function loadPlugins(window) {
-    const plugins = getPlugins();
-    for (const plugin of plugins) {
-        output("Loading plugin:", plugin.manifest.name);
-        loadPlugin(plugin, window);
-        output("Loaded plugin:", plugin.manifest.name);
-    }
-}
-
-
 module.exports = {
-    loadPlugins
+    getPlugins,
+    loadPlugin
 }

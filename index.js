@@ -1,7 +1,6 @@
 const { Module } = require("module");
-const { ipcMain } = require("electron");
-const { loadPlugins } = require("./src/loader.js");
 const { betterQQNT, output } = require("./src/base.js");
+const loader = require("./src/loader.js");
 
 
 // 初始化
@@ -36,6 +35,7 @@ function initialization(callback) {
 
 // 初始化
 output("Initializing...");
+const plugins = loader.getPlugins();
 initialization(window => {
     // DevTools切换
     window.webContents.on("before-input-event", (event, input) => {
@@ -54,8 +54,21 @@ initialization(window => {
         `;
         window.webContents.executeJavaScript(code, true);
 
+        output("Start loading plugins.");
+
+        if (plugins.length == 0) {
+            output("No plugins to be loaded.")
+            return;
+        }
+
         // 加载插件
-        loadPlugins(window);
+        for (const plugin of plugins) {
+            output("Loading plugin:", plugin.manifest.name);
+            loader.loadPlugin(plugin, window);
+            output("Loaded plugin:", plugin.manifest.name);
+        }
+
+        output("Done!", plugins.length, "plugins loaded!");
     });
 });
 
