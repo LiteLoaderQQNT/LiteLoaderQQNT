@@ -12,18 +12,20 @@ function observeNewBrowserWindow(callback) {
 
         // Hook BrowserWindow
         if (args[0] === "electron") {
-            function HookedBrowserWindow(original_config) {
-                const config = {
-                    ...original_config,
-                    webPreferences: {
-                        ...original_config?.webPreferences,
-                        devTools: true
-                    }
+            class HookedBrowserWindow extends loaded_module.BrowserWindow {
+                constructor(original_config) {
+                    const config = {
+                        ...original_config,
+                        webPreferences: {
+                            ...original_config?.webPreferences,
+                            devTools: true
+                        }
+                    };
+                    super(config);
+                    callback(this);
                 }
-                const window = new loaded_module.BrowserWindow(config);
-                callback(window);
-                return window;
             }
+
             return {
                 ...loaded_module,
                 BrowserWindow: HookedBrowserWindow
