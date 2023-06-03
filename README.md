@@ -43,7 +43,7 @@ BetterQQNT的默认数据文件夹在`C:/BetterQQNT`
 ```
 BetterQQNT
     ├─plugins           // 插件本体目录
-    │   └─my-theme          // 主题插件
+    │   ├─my-plugin         // 插件本体
     │   └─...
     ├─plugins_cache     // 插件缓存目录
     │   └─...
