@@ -34,6 +34,11 @@ BetterQQNT是一个QQNT的插件加载器
 - 加载插件，让你可以根据自己的喜好和需求定制QQNT的外观和功能。
 
 
+## 插件链接
+
+- [window-on-top [窗口置顶]](https://github.com/mo-jinran/window-on-top)
+
+
 ## 数据目录
 
 BetterQQNT的默认数据文件夹在`C:/BetterQQNT`  
