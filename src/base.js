@@ -3,11 +3,24 @@ const path = require("path");
 
 // BetterQQNT的数据目录
 const BETTERQQNT_PROFILE = process.env["BETTERQQNT_PROFILE"] || "C:/BetterQQNT";
-const BETTERQQNT_CONFIG = path.join(BETTERQQNT_PROFILE, "/config.json");
-const BETTERQQNT_PLUGINS = path.join(BETTERQQNT_PROFILE, "/plugins");
-const BETTERQQNT_PLUGINS_DEV = path.join(BETTERQQNT_PROFILE, "/plugins_dev");
-const BETTERQQNT_PLUGINS_DATA = path.join(BETTERQQNT_PROFILE, "/plugins_data");
-const BETTERQQNT_PLUGINS_CACHE = path.join(BETTERQQNT_PROFILE, "/plugins_cache");
+
+
+const betterQQNT = {
+    path: {
+        profile: BETTERQQNT_PROFILE,
+        config: path.join(BETTERQQNT_PROFILE, "config.json"),
+        plugins: path.join(BETTERQQNT_PROFILE, "plugins"),
+        plugins_dev: path.join(BETTERQQNT_PROFILE, "plugins_dev"),
+        plugins_data: path.join(BETTERQQNT_PROFILE, "plugins_data"),
+        plugins_cache: path.join(BETTERQQNT_PROFILE, "plugins_cache")
+    },
+    versions: {
+        betterQQNT: null,
+        node: process.versions.node,
+        chrome: process.versions.chrome,
+        electron: process.versions.electron
+    }
+}
 
 
 function output(...args) {
@@ -16,11 +29,6 @@ function output(...args) {
 
 
 module.exports = {
-    BETTERQQNT_PROFILE,
-    BETTERQQNT_CONFIG,
-    BETTERQQNT_PLUGINS,
-    BETTERQQNT_PLUGINS_DEV,
-    BETTERQQNT_PLUGINS_DATA,
-    BETTERQQNT_PLUGINS_CACHE,
+    betterQQNT,
     output
 }
