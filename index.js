@@ -61,12 +61,15 @@ app.on("ready", () => {
         const plugin = plugins[key];
         output("Loading plugin:", plugin.manifest.name);
         const loaded_plugin = loader.loadPlugin(plugin);
-        loaded_plugins.push(loaded_plugin);
+        loaded_plugins.push({
+            ...loaded_plugin,
+            slug: key
+        });
         loaded_plugin.onLoad?.(plugin);
         output("Loaded plugin:", plugin.manifest.name);
     }
 
-    output("Done!", plugins.length, "plugins loaded!");
+    output("Done!", Object.keys(plugins).length, "plugins loaded!");
 });
 
 
@@ -89,7 +92,7 @@ observeNewBrowserWindow(window => {
 
     // 通知插件
     for (const loaded_plugin of loaded_plugins) {
-        loaded_plugin.onBrowserWindowCreated?.(window);
+        loaded_plugin.onBrowserWindowCreated?.(window, plugins[loaded_plugin.slug]);
     }
 });
 
