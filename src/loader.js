@@ -46,7 +46,7 @@ function getPluginManifest(plugin_path) {
 
 // 获取插件列表
 function getPlugins() {
-    const plugins = [];
+    const plugins = {};
 
     // 获取插件路径列表
     const plugin_paths = getPluginPaths(betterQQNT.path.plugins);
@@ -55,10 +55,10 @@ function getPlugins() {
         const manifest = getPluginManifest(plugin_path);
         if (manifest) {
             output("Found plugin:", manifest["name"]);
-            plugins.push({
+            plugins[manifest["slug"]] = {
                 manifest: manifest,
                 path: plugin_path
-            });
+            }
         }
     }
 
@@ -68,17 +68,11 @@ function getPlugins() {
 
 
 // 加载插件
-function loadPlugin(plugin, window) {
+function loadPlugin(plugin) {
     const file_name = plugin.manifest.inject;
     const file_path = path.join(plugin.path, file_name);
-    const plugin_slug = plugin.manifest.slug;
-    const code = `betterQQNT["plugins"]["${plugin_slug}"] = ${JSON.stringify(plugin)};`;
-    window.webContents.executeJavaScript(code, true);
     // 开始调用插件
-    const init = require(file_path);
-    if (typeof init == "function") {
-        init(plugin, window);
-    }
+    return require(file_path);
 }
 
 
