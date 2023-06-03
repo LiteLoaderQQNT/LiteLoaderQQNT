@@ -1,6 +1,7 @@
 const { Module } = require("module");
-const { BetterQQNTLoader } = require("./src/loader.js");
-const base = require("./src/base.js");
+const { ipcMain } = require("electron");
+const { loadPlugins } = require("./src/loader.js");
+const { betterQQNT, output } = require("./src/base.js");
 
 
 // 初始化
@@ -15,26 +16,26 @@ function initialization(callback) {
                     ...original_config,
                     webPreferences: {
                         ...original_config?.webPreferences,
-                        devTools: true,
-                    },
-                };
+                        devTools: true
+                    }
+                }
                 const window = new loaded_module.BrowserWindow(config);
                 callback(window);
                 return window;
             }
             return {
                 ...loaded_module,
-                BrowserWindow: HookedBrowserWindow,
+                BrowserWindow: HookedBrowserWindow
             }
         }
 
         return loaded_module;
-    };
+    }
 }
 
 
 // 初始化
-base.output("Initializing...");
+output("Initializing...");
 initialization(window => {
     // DevTools切换
     window.webContents.on("before-input-event", (event, input) => {
@@ -42,20 +43,23 @@ initialization(window => {
             window.webContents.toggleDevTools();
         }
     });
+
     // 注入插件
-    window.once("ready-to-show", () => {
-        const url = window.webContents.getURL();
-        if (url.includes("app://./renderer/index.html")) {
-            // 初始化，加载BetterQQNT
-            const loader = new BetterQQNTLoader(window.webContents);
-            base.output("BetterQQNTLoader Created.");
-            loader.loadPlugins();
-            base.output("loadPlugins Loaded.");
-        }
+    window.on("ready-to-show", () => {
+        const code = `
+        window["betterQQNT"] = {};
+        betterQQNT["path"] = ${JSON.stringify(betterQQNT.path)};
+        betterQQNT["versions"] = ${JSON.stringify(betterQQNT.versions)};
+        betterQQNT["plugins"] = {};
+        `;
+        window.webContents.executeJavaScript(code, true);
+
+        // 加载插件
+        loadPlugins(window);
     });
 });
 
 
 // 继续执行QQNT启动
-base.output("Starting QQNT...");
+output("Starting QQNT...");
 require("../app_launcher/index.js");
