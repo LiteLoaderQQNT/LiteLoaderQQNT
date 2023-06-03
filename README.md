@@ -36,7 +36,8 @@ BetterQQNT是一个QQNT的插件加载器
 
 ## 插件链接
 
-- [window-on-top [窗口置顶]](https://github.com/mo-jinran/window-on-top)
+- [[扩展] window-on-top (窗口置顶)](https://github.com/mo-jinran/BetterQQNT-window-on-top)
+- [[主题] test-theme (测试主题)](https://github.com/mo-jinran/BetterQQNT-test-theme)
 
 
 ## 数据目录
