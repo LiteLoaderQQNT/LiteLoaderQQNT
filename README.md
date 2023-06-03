@@ -56,7 +56,7 @@ BetterQQNT
 
 插件目录结构：
 ```
-my-theme
+my-plugin
     ├─manifest.json     // 存放插件信息
     ├─main.js           // 必须存在插件入口
     └─...
