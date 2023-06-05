@@ -35,6 +35,7 @@ BetterQQNT是一个QQNT的插件加载器
 
 - [[扩展] window-on-top (窗口置顶)](https://github.com/mo-jinran/BetterQQNT-window-on-top)
 - [[主题] test-theme (测试主题)](https://github.com/mo-jinran/BetterQQNT-test-theme)
+- [[扩展] background_plugin (自动轮换背景图)](https://github.com/xh321/BetterQQNT-Background-Plugin)
 
 
 ## 数据目录
