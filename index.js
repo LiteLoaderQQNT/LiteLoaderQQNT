@@ -83,16 +83,18 @@ observeNewBrowserWindow(window => {
         }
     });
 
-    const preloads = Array.from(new Set([
+    const preloads = new Set([
         ...window.webContents.session.getPreloads(),
         path.join(__dirname, "./src/preload.js")
-    ]));
-    window.webContents.session.setPreloads(preloads);
+    ]);
 
     // 通知插件
     for (const loaded_plugin of loaded_plugins) {
         loaded_plugin.onBrowserWindowCreated?.(window, plugins[loaded_plugin.slug]);
+        preloads.add(loader.getPreload(plugins[loaded_plugin.slug]));
     }
+
+    window.webContents.session.setPreloads([...preloads]);
 });
 
 

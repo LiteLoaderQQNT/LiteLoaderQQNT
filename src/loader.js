@@ -57,7 +57,11 @@ function getPlugins() {
             output("Found plugin:", manifest["name"]);
             plugins[manifest["slug"]] = {
                 manifest: manifest,
-                path: plugin_path
+                path: {
+                    plugin: plugin_path,
+                    data: path.join(betterQQNT.path.plugins_data, manifest["slug"]),
+                    cache: path.join(betterQQNT.path.plugins_cache, manifest["slug"])
+                }
             }
         }
     }
@@ -67,16 +71,23 @@ function getPlugins() {
 }
 
 
+function getPreload(plugin) {
+    const pathname = plugin.manifest.injects.preload;
+    const filepath = path.join(plugin.path.plugin, pathname);
+    return filepath;
+}
+
+
 // 加载插件
 function loadPlugin(plugin) {
-    const file_name = plugin.manifest.inject;
-    const file_path = path.join(plugin.path, file_name);
-    // 开始调用插件
-    return require(file_path);
+    const pathname = plugin.manifest.injects.main;
+    const filepath = path.join(plugin.path.plugin, pathname);
+    return require(filepath);
 }
 
 
 module.exports = {
     getPlugins,
+    getPreload,
     loadPlugin
 }
