@@ -1,5 +1,6 @@
 const { Module } = require("module");
-const { app } = require("electron");
+const { app, ipcMain } = require("electron");
+const path = require("path");
 const { betterQQNT, output } = require("./src/base.js");
 const loader = require("./src/loader.js");
 
@@ -82,18 +83,31 @@ observeNewBrowserWindow(window => {
         }
     });
 
-    // 注入一些变量
-    window.webContents.executeJavaScript(`
-        window["betterQQNT"] = {};
-        betterQQNT["path"] = ${JSON.stringify(betterQQNT.path)};
-        betterQQNT["versions"] = ${JSON.stringify(betterQQNT.versions)};
-        betterQQNT["plugins"] = ${JSON.stringify(plugins)};
-    `, true);
+    const preloads = Array.from(new Set([
+        ...window.webContents.session.getPreloads(),
+        path.join(__dirname, "./src/preload.js")
+    ]));
+    window.webContents.session.setPreloads(preloads);
 
     // 通知插件
     for (const loaded_plugin of loaded_plugins) {
         loaded_plugin.onBrowserWindowCreated?.(window, plugins[loaded_plugin.slug]);
     }
+});
+
+
+ipcMain.on("betterQQNT.betterQQNT.path", (event, message) => {
+    event.returnValue = betterQQNT.path;
+});
+
+
+ipcMain.on("betterQQNT.betterQQNT.versions", (event, message) => {
+    event.returnValue = betterQQNT.versions;
+});
+
+
+ipcMain.on("betterQQNT.betterQQNT.plugins", (event, message) => {
+    event.returnValue = plugins;
 });
 
 
