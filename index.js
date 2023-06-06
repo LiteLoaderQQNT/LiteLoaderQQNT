@@ -91,7 +91,10 @@ observeNewBrowserWindow(window => {
     // 通知插件
     for (const loaded_plugin of loaded_plugins) {
         loaded_plugin.onBrowserWindowCreated?.(window, plugins[loaded_plugin.slug]);
-        preloads.add(loader.getPreload(plugins[loaded_plugin.slug]));
+        const preload_path = loader.getPreload(plugins[loaded_plugin.slug]);
+        if (preload_path) {
+            preloads.add(preload_path);
+        }
     }
 
     window.webContents.session.setPreloads([...preloads]);

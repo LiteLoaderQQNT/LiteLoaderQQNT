@@ -72,9 +72,12 @@ function getPlugins() {
 
 
 function getPreload(plugin) {
-    const pathname = plugin.manifest.injects.preload;
-    const filepath = path.join(plugin.path.plugin, pathname);
-    return filepath;
+    const pathname = plugin.manifest.injects?.preload;
+    if (pathname) {
+        const filepath = path.join(plugin.path.plugin, pathname);
+        return filepath;
+    }
+    return null;
 }
 
 
