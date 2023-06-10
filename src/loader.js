@@ -71,16 +71,6 @@ function getPlugins() {
 }
 
 
-function getPreload(plugin) {
-    const pathname = plugin.manifest.injects?.preload;
-    if (pathname) {
-        const filepath = path.join(plugin.path.plugin, pathname);
-        return filepath;
-    }
-    return null;
-}
-
-
 // 加载插件
 function loadPlugin(plugin) {
     const pathname = plugin.manifest.injects.main;
@@ -91,6 +81,5 @@ function loadPlugin(plugin) {
 
 module.exports = {
     getPlugins,
-    getPreload,
     loadPlugin
 }

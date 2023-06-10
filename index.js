@@ -1,6 +1,7 @@
+const path = require("path");
+const fs = require("fs");
 const { Module } = require("module");
 const { app, ipcMain } = require("electron");
-const path = require("path");
 const { betterQQNT, output } = require("./src/base.js");
 const loader = require("./src/loader.js");
 
@@ -83,21 +84,37 @@ observeNewBrowserWindow(window => {
         }
     });
 
-    const preloads = new Set([
-        ...window.webContents.session.getPreloads(),
-        path.join(__dirname, "./src/preload.js")
-    ]);
+    // 渲染进程PluginLoader
+    window.webContents.on("dom-ready", () => {
+        const file_path = path.join(__dirname, "./src/plugin/loader.js");
+        fs.readFile(file_path, "utf-8", (err, data) => {
+            if (err) throw err;
+            window.webContents.executeJavaScript(data, true);
+        });
+    });
 
-    // 通知插件
-    for (const loaded_plugin of loaded_plugins) {
-        loaded_plugin.onBrowserWindowCreated?.(window, plugins[loaded_plugin.slug]);
-        const preload_path = loader.getPreload(plugins[loaded_plugin.slug]);
-        if (preload_path) {
-            preloads.add(preload_path);
+    // 注入插件Preload
+    {
+        const preloads = new Set([
+            ...window.webContents.session.getPreloads(),
+            path.join(__dirname, "./src/preload.js")
+        ]);
+
+        // 通知插件
+        for (const loaded_plugin of loaded_plugins) {
+            const plugin = plugins[loaded_plugin.slug];
+            loaded_plugin.onBrowserWindowCreated?.(window, plugin);
+            const preload_path = plugin.manifest.injects?.preload;
+            if (preload_path) {
+                const file_path = path.join(plugin.path.plugin, preload_path);
+                // 存在preload就放Set里
+                preloads.add(file_path);
+            }
         }
-    }
 
-    window.webContents.session.setPreloads([...preloads]);
+        // 加载Set中的Preload脚本
+        window.webContents.session.setPreloads([...preloads]);
+    }
 });
 
 
