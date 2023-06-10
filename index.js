@@ -86,7 +86,7 @@ observeNewBrowserWindow(window => {
 
     // 渲染进程PluginLoader
     window.webContents.on("dom-ready", () => {
-        const file_path = path.join(__dirname, "./src/plugin/loader.js");
+        const file_path = path.join(__dirname, "./src/renderer/loader.js");
         fs.readFile(file_path, "utf-8", (err, data) => {
             if (err) throw err;
             window.webContents.executeJavaScript(data, true);
