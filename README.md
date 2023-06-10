@@ -9,6 +9,7 @@ BetterQQNT是一个QQNT的插件加载器
 
 - 目前仍在开发当中，可能会存在一些问题和不足
 - 目前没有插件商店系统，也没有第三方插件可用
+- 目前不建议制作插件，等完善后有模板和文档吧
 - 仅为个人兴趣而制作，开发目的在于学习和探索
 - 能力有限，随缘更新。不过也欢迎各位来提交PR
 - 由于项目特殊性，必要时会停止开发或删除仓库
@@ -33,9 +34,10 @@ BetterQQNT是一个QQNT的插件加载器
 
 ## 插件链接
 
-- [[扩展] window-on-top (窗口置顶)](https://github.com/mo-jinran/BetterQQNT-window-on-top)
-- [[主题] test-theme (测试主题)](https://github.com/mo-jinran/BetterQQNT-test-theme)
-- [[扩展] background_plugin (自动轮换背景图)](https://github.com/xh321/BetterQQNT-Background-Plugin)
+- [[扩展] window-on-top](https://github.com/mo-jinran/BetterQQNT-window-on-top)
+- [[主题] test-theme](https://github.com/mo-jinran/BetterQQNT-test-theme)
+- [[扩展] background_plugin](https://github.com/xh321/BetterQQNT-Background-Plugin)
+- [[主题] MSpring-Theme](https://github.com/MUKAPP/BetterQQNT-MSpring-Theme)
 
 
 ## 数据目录
