@@ -21,7 +21,7 @@
 
     async function initConfig() {
         // 导入PluginManager
-        const path = `/${betterQQNT.path.root}/src/renderer/index.js`;
+        const path = `/${betterQQNT.path.root}/src/renderer/config.js`;
         const PluginConfigViewManager = await import(path);
         const plugin_config_view_manager = PluginConfigViewManager.init();
         // 遍历插件
