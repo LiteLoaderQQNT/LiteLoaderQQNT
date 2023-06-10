@@ -8,27 +8,24 @@ BetterQQNT是一个QQNT的插件加载器
 ## 注意事项
 
 - 目前仍在开发当中，可能会存在一些问题和不足
-- 目前没有插件商店系统，也没有第三方插件可用
 - 目前不建议制作插件，等完善后有模板和文档吧
+- 目前没有插件商店系统，暂时只能自行寻找插件
 - 仅为个人兴趣而制作，开发目的在于学习和探索
 - 能力有限，随缘更新。不过也欢迎各位来提交PR
 - 由于项目特殊性，必要时会停止开发或删除仓库
-
-
-## 目前进度
-- 正在完善插件配置界面
-- 正在修改插件加载机制
 
 
 ## 安装方法
 
 只需三步，就可以轻松安装BetterQQNT：
 
-1. 克隆本项目，并将其放到`QQNT的根目录/resources/app`下。
+1. 克隆/下载本项目，并将其放到`QQNT的根目录/resources/app`下。
 2. 编辑`package.json`文件，将`main`键值改为`./BetterQQNT/index.js`。
 3. 重新启动QQNT，享受BetterQQNT带来的乐趣吧！
 
-理论上能够支持`Windows`, `Linux`, `MacOS`三端的QQNT
+理论上能够支持`Windows`, `Linux`, `MacOS`  
+以及支持QQNT的`32位`与`64位`版本  
+（目前开发与测试都仅在Windows环境下进行）
 
 
 ## 目前功能
@@ -79,5 +76,5 @@ my-plugin
 
 ## 开源协议
 
-MIT License  
+[MIT License](./LICENSE)  
 Copyright (c) 2023 沫烬染
