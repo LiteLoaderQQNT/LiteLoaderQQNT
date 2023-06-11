@@ -133,6 +133,11 @@ ipcMain.on("betterQQNT.betterQQNT.plugins", (event, message) => {
 });
 
 
+ipcMain.on("betterQQNT.betterQQNT.package", (event, message) => {
+    event.returnValue = betterQQNT.package;
+});
+
+
 // 继续执行QQNT启动
 output("Starting QQNT...");
 require("../../app_launcher/index.js");

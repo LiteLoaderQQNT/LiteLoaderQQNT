@@ -1,4 +1,5 @@
 const path = require("path");
+const package = require("../../package.json");
 
 
 // BetterQQNT的数据目录
@@ -21,11 +22,12 @@ const betterQQNT = {
         plugins_cache: path.join(BETTERQQNT_PROFILE, "plugins_cache")
     },
     versions: {
-        betterQQNT: "0.1.0",
+        betterQQNT: package.version,
         node: process.versions.node,
         chrome: process.versions.chrome,
         electron: process.versions.electron
-    }
+    },
+    package: package
 }
 
 
