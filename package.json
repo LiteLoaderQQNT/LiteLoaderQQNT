@@ -1,0 +1,16 @@
+{
+    "name": "better-qqnt",
+    "version": "0.1.0",
+    "description": "QQNT的插件加载器，轻量、简洁、开源",
+    "main": "./src/index.js",
+    "author": {
+        "name": "沫烬染",
+        "email": "mojinran@outlook.com"
+    },
+    "license": "MIT",
+    "homepage": "https://github.com/mo-jinran/BetterQQNT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mo-jinran/BetterQQNT.git"
+    }
+}
