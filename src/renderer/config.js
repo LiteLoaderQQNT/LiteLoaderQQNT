@@ -1,4 +1,4 @@
-class PluginConfigView {
+export class PluginConfigView {
     constructor() {
         // 基本框架
         this.nav_bar = document.querySelector(".setting-tab .nav-bar");
@@ -52,21 +52,11 @@ class PluginConfigView {
                 this.setting_title.childNodes[1].textContent = name;
                 // 添加内容
                 this.setting_view.textContent = null;
-                if (view) {
-                    this.setting_view.appendChild(view);
-                }
+                this.setting_view.appendChild(view);
             }
         });
         nav_item.querySelector(".q-icon").textContent = null;
         nav_item.querySelector(".name").textContent = name;
         this.nav_bar.appendChild(nav_item);
     }
-}
-
-
-export function init() {
-    const plugin_config_view = new PluginConfigView();
-    plugin_config_view.createDividingLine();
-    plugin_config_view.createNavItme("BetterQQNT", null);
-    return plugin_config_view;
 }

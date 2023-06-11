@@ -1,47 +1,48 @@
-(async () => {
-    const plugins = {}
+export class PluginLoader {
+    constructor() {
+        this.plugin_paths = {};
+        this.plugins = {}
 
-
-    // 获取插件注入渲染进程的代码
-    for (const key in betterQQNT.plugins) {
-        const value = betterQQNT.plugins[key];
-
-        const plugin_path = value.path.plugin;
-        const renderer_path_name = value.manifest.injects?.renderer;
-        if (!renderer_path_name) {
-            continue;
-        }
-
-        // 导入
-        const path = `/${plugin_path}/${renderer_path_name}`;
-        const plugin = await import(path);
-        plugin?.onLoad();
-    }
-
-
-    async function initConfig() {
-        // 导入PluginManager
-        const path = `/${betterQQNT.path.root}/src/renderer/config.js`;
-        const PluginConfigViewManager = await import(path);
-        const plugin_config_view_manager = PluginConfigViewManager.init();
-        // 遍历插件
+        // 获取插件注入渲染进程的代码
         for (const key in betterQQNT.plugins) {
-            const name = betterQQNT.plugins[key].manifest.name;
-            const view = plugins[key]?.onConfigView() ?? null;
-            // 添加
-            plugin_config_view_manager.createNavItme(name, view);
+            const plugin = betterQQNT.plugins[key];
+            const plugin_path = plugin.path.plugin;
+            const renderer_path_name = plugin.manifest.injects?.renderer;
+            if (renderer_path_name) {
+                const path = `/${plugin_path}/${renderer_path_name}`;
+                this.plugin_paths[key] = path;
+            }
         }
     }
 
 
-    // 监听页面变化
-    navigation.addEventListener("navigatesuccess", async function func(event) {
-        const url = event.target.currentEntry.url;
-        // 检测是否为设置界面
-        if (url.includes("/index.html") && url.includes("#/setting")) {
-            // 移除监听
-            navigation.removeEventListener("navigatesuccess", func);
-            initConfig();
+    // 加载插件
+    async loadPlugins() {
+        for (const key in this.plugin_paths) {
+            const plugin_path = this.plugin_paths[key];
+            const plugin = await import(plugin_path);
+            this.plugins[key] = plugin;
+            plugin?.onLoad?.();
         }
-    });
-})();
+    }
+
+
+    // 初始化配置界面
+    async initConfig() {
+        const config_path = `/${betterQQNT.path.root}/src/renderer/config.js`;
+        const { PluginConfigView } = await import(config_path);
+        const plugin_config_view = new PluginConfigView();
+
+        // 分割线
+        plugin_config_view.createDividingLine();
+
+        // 遍历所有插件
+        for (const key in betterQQNT.plugins) {
+            const plugin = betterQQNT.plugins[key];
+            const name = plugin.manifest.name;
+            const view = document.createElement("div");
+            plugin_config_view.createNavItme(name, view);
+            this.plugins[key]?.onConfigView?.(view);
+        }
+    }
+}
