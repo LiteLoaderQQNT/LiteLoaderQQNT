@@ -12,7 +12,7 @@ if (!BETTERQQNT_PROFILE) {
 
 const betterQQNT = {
     path: {
-        root: path.join(__dirname, "../"),
+        root: path.join(__dirname, "../../"),
         profile: BETTERQQNT_PROFILE,
         config: path.join(BETTERQQNT_PROFILE, "config.json"),
         plugins: path.join(BETTERQQNT_PROFILE, "plugins"),

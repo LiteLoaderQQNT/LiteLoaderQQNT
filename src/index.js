@@ -2,8 +2,8 @@ const path = require("path");
 const fs = require("fs");
 const { Module } = require("module");
 const { app, ipcMain } = require("electron");
-const { betterQQNT, output } = require("./src/base.js");
-const loader = require("./src/loader.js");
+const { betterQQNT, output } = require("./main/base.js");
+const loader = require("./main/loader.js");
 
 
 // 监听窗口创建
@@ -86,7 +86,7 @@ observeNewBrowserWindow(window => {
 
     // 渲染进程PluginLoader
     window.webContents.on("dom-ready", () => {
-        const file_path = path.join(__dirname, "./src/renderer/loader.js");
+        const file_path = path.join(__dirname, "./renderer/loader.js");
         fs.readFile(file_path, "utf-8", (err, data) => {
             if (err) throw err;
             window.webContents.executeJavaScript(data, true);
@@ -97,7 +97,7 @@ observeNewBrowserWindow(window => {
     {
         const preloads = new Set([
             ...window.webContents.session.getPreloads(),
-            path.join(__dirname, "./src/preload.js")
+            path.join(__dirname, "./preload/index.js")
         ]);
 
         // 通知插件
@@ -135,4 +135,4 @@ ipcMain.on("betterQQNT.betterQQNT.plugins", (event, message) => {
 
 // 继续执行QQNT启动
 output("Starting QQNT...");
-require("../app_launcher/index.js");
+require("../../app_launcher/index.js");
