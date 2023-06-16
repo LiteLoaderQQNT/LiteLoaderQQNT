@@ -40,6 +40,7 @@ BetterQQNT是一个QQNT的插件加载器
 - [[主题] test-theme](https://github.com/mo-jinran/BetterQQNT-test-theme)
 - [[扩展] background_plugin](https://github.com/xh321/BetterQQNT-Background-Plugin)
 - [[主题] MSpring-Theme](https://github.com/MUKAPP/BetterQQNT-MSpring-Theme)
+- [[扩展] BetterQQNT-Directly-Jump](https://github.com/xh321/BetterQQNT-Directly-Jump)
 
 
 ## 数据目录
