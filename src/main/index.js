@@ -1,9 +1,7 @@
-const path = require("path");
-const fs = require("fs");
 const { Module } = require("module");
 const { app, ipcMain } = require("electron");
 const { betterQQNT, output } = require("./base.js");
-const loader = require("./loader.js");
+const { PluginLoader } = require("./loader.js");
 
 
 // 监听窗口创建
@@ -39,9 +37,14 @@ function observeNewBrowserWindow(callback) {
 }
 
 
-// 获取插件列表
-const plugins = loader.getPlugins();
-const loaded_plugins = [];
+// 插件加载器
+const plugin_loader = new PluginLoader();
+
+
+// 让插件加载只执行一次
+app.on("ready", () => {
+    plugin_loader.onLoad();
+});
 
 
 // 监听窗口创建
@@ -53,66 +56,9 @@ observeNewBrowserWindow(window => {
         }
     });
 
-    // 渲染进程PluginLoader
-    window.webContents.on("dom-ready", () => {
-        const file_path = path.join(__dirname, "../renderer/index.js");
-        fs.readFile(file_path, "utf-8", (err, data) => {
-            if (err) throw err;
-            window.webContents.executeJavaScript(data, true);
-        });
-    });
-
-    // 注入插件Preload
-    {
-        const preloads = new Set([
-            ...window.webContents.session.getPreloads(),
-            path.join(__dirname, "../preload/index.js")
-        ]);
-
-        // 通知插件
-        for (const loaded_plugin of loaded_plugins) {
-            const plugin = plugins[loaded_plugin.slug];
-            loaded_plugin.onBrowserWindowCreated?.(window, plugin);
-            const preload_path = plugin.manifest.injects?.preload;
-            if (preload_path) {
-                const file_path = path.join(plugin.path.plugin, preload_path);
-                // 存在preload就放Set里
-                preloads.add(file_path);
-            }
-        }
-
-        // 加载Set中的Preload脚本
-        window.webContents.session.setPreloads([...preloads]);
-    }
+    // 触发窗口创建
+    plugin_loader.onBrowserWindowCreated(window);
 });
-
-
-// 让插件加载只执行一次
-app.on("ready", () => {
-    output("Start loading plugins.");
-
-    // 如果为0就是没有插件
-    if (plugins.length == 0) {
-        output("No plugins to be loaded.")
-        return;
-    }
-
-    // 加载插件
-    for (const key in plugins) {
-        const plugin = plugins[key];
-        output("Loading plugin:", plugin.manifest.name);
-        const loaded_plugin = loader.loadPlugin(plugin);
-        loaded_plugins.push({
-            ...loaded_plugin,
-            slug: key
-        });
-        loaded_plugin.onLoad?.(plugin);
-        output("Loaded plugin:", plugin.manifest.name);
-    }
-
-    output("Done!", Object.keys(plugins).length, "plugins loaded!");
-});
-
 
 
 ipcMain.on("betterQQNT.betterQQNT.path", (event, message) => {
@@ -124,7 +70,7 @@ ipcMain.on("betterQQNT.betterQQNT.versions", (event, message) => {
 });
 
 ipcMain.on("betterQQNT.betterQQNT.plugins", (event, message) => {
-    event.returnValue = plugins;
+    event.returnValue = plugin_loader.getPlugins;
 });
 
 ipcMain.on("betterQQNT.betterQQNT.package", (event, message) => {

@@ -3,83 +3,145 @@ const path = require("path");
 const { betterQQNT, output } = require("./base.js");
 
 
-// 获取插件路径列表
-function getPluginPaths(base_path) {
-    const plugin_paths = [];
+class PluginLoader {
+    // 插件列表
+    #plugins = {}
 
-    try {
-        const plugin_dirnames = fs.readdirSync(base_path, "utf-8");
-        // 获取单个插件目录名
-        for (const plugin_dirname of plugin_dirnames) {
-            const plugin_path = path.join(base_path, plugin_dirname);
-            plugin_paths.push(plugin_path);
-        }
-    } catch (error) {
-        // 目录不存在
-        output("plugins directory does not exist, creating directory...");
-        // 创建目录
-        fs.mkdir(base_path, { recursive: true }, err => {
-            // 创建失败
-            if (err) {
-                output("Failed to create plugins directory!")
+
+    constructor() {
+        output("Start loading plugins.");
+
+        // 尝试获取插件路径
+        try {
+            const plugin_dirnames = fs.readdirSync(betterQQNT.path.plugins, "utf-8");
+
+            // 获取单个插件目录名
+            for (const plugin_dirname of plugin_dirnames) {
+                const plugin_path = path.join(betterQQNT.path.plugins, plugin_dirname);
+                this.#loadPlugin(plugin_path);
             }
-            output("Directory created successfully!")
+        }
+
+        // 失败创建插件目录
+        catch (error) {
+            // 目录不存在
+            output("The plugins directory does not exist.");
+            output("Trying to create the directory...");
+            // 创建目录
+            fs.mkdir(betterQQNT.path.plugins, { recursive: true }, err => {
+                const success_message = "Directory created successfully!";
+                const failure_message = "Failed to create the plugins directory!";
+                output(err ? success_message : failure_message);
+            });
+        }
+
+        // 插件加载完成输出
+        const plugins_length = Object.keys(this.#plugins).length;
+        const not_plugins_message = "No plugins to be loaded.";
+        const has_plugins_message = `Done! ${plugins_length} plugins loaded!`;
+        output(plugins_length == 0 ? not_plugins_message : has_plugins_message);
+    }
+
+
+    #getManifest(plugin_path) {
+        const file_path = path.join(plugin_path, "manifest.json");
+        // 尝试获取插件manifest内容
+        try {
+            const data = fs.readFileSync(file_path, "utf-8");
+            return JSON.parse(data);
+        }
+        // 出错就返回null，没有获取到
+        catch (err) {
+            return null;
+        }
+    }
+
+
+    #loadPlugin(plugin_path) {
+        const manifest = this.#getManifest(plugin_path);
+
+        if (!manifest) {
+            return;
+        }
+
+        // manifest与路径
+        const { slug, name } = manifest;
+        const plugin_data_path = path.join(betterQQNT.path.plugins_data, slug);
+        const plugin_cache_path = path.join(betterQQNT.path.plugins_cache, slug);
+
+        // 导入插件
+        const pathname = manifest.injects.main;
+        const filepath = path.join(plugin_path, pathname);
+        const exports = require(filepath);
+
+        // 保存到插件列表
+        this.#plugins[slug] = {
+            manifest: manifest,
+            path: {
+                plugin: plugin_path,
+                data: plugin_data_path,
+                cache: plugin_cache_path
+            },
+            exports: exports
+        }
+
+        output("Found plugin:", name);
+    }
+
+
+    get getPlugins() {
+        const plugins = {};
+        for (const [slug, plugin] of Object.entries(this.#plugins)) {
+            plugins[slug] = {
+                ...plugin,
+                exports: undefined
+            }
+        }
+        return plugins;
+    }
+
+
+    onLoad() {
+        // 加载插件
+        for (const [slug, plugin] of Object.entries(this.#plugins)) {
+            plugin.exports?.onLoad?.(plugin);
+        }
+    }
+
+
+    onBrowserWindowCreated(window) {
+        // 渲染进程PluginLoader
+        window.webContents.on("dom-ready", () => {
+            const file_path = path.join(__dirname, "../renderer/index.js");
+            fs.readFile(file_path, "utf-8", (err, data) => {
+                if (err) throw err;
+                window.webContents.executeJavaScript(data, true);
+            });
         });
-    }
 
-    // 返回插件路径列表
-    return plugin_paths;
-}
+        // 注入插件Preload
+        const preloads = new Set([
+            ...window.webContents.session.getPreloads(),
+            path.join(__dirname, "../preload/index.js")
+        ]);
 
-
-// 获取插件清单
-function getPluginManifest(plugin_path) {
-    const file_path = path.join(plugin_path, "manifest.json");
-    try {
-        const data = fs.readFileSync(file_path, "utf-8");
-        return JSON.parse(data);
-    } catch (err) {
-        return null;
-    }
-}
-
-
-// 获取插件列表
-function getPlugins() {
-    const plugins = {};
-
-    // 获取插件路径列表
-    const plugin_paths = getPluginPaths(betterQQNT.path.plugins);
-    for (const plugin_path of plugin_paths) {
-        // 获取插件清单
-        const manifest = getPluginManifest(plugin_path);
-        if (manifest) {
-            output("Found plugin:", manifest["name"]);
-            plugins[manifest["slug"]] = {
-                manifest: manifest,
-                path: {
-                    plugin: plugin_path,
-                    data: path.join(betterQQNT.path.plugins_data, manifest["slug"]),
-                    cache: path.join(betterQQNT.path.plugins_cache, manifest["slug"])
-                }
+        // 通知插件
+        for (const [slug, plugin] of Object.entries(this.#plugins)) {
+            plugin.exports?.onBrowserWindowCreated?.(window, plugin);
+            const preload_path = plugin.manifest.injects?.preload;
+            // 存在preload就放Set里
+            if (preload_path) {
+                const file_path = path.join(plugin.path.plugin, preload_path);
+                preloads.add(file_path);
             }
         }
+
+        // 加载Set中的Preload脚本
+        window.webContents.session.setPreloads([...preloads]);
     }
-
-    // 返回插件列表
-    return plugins;
-}
-
-
-// 加载插件
-function loadPlugin(plugin) {
-    const pathname = plugin.manifest.injects.main;
-    const filepath = path.join(plugin.path.plugin, pathname);
-    return require(filepath);
 }
 
 
 module.exports = {
-    getPlugins,
-    loadPlugin
+    PluginLoader
 }
