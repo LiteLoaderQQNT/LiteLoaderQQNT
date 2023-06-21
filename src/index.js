@@ -10,4 +10,4 @@ require("./main/index.js");
 
 // 继续执行QQNT启动
 output("Starting QQNT...");
-require("../../app_launcher/index.js");
+require("../app_launcher/index.js");
