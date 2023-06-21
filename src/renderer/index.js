@@ -3,8 +3,11 @@
     const { PluginLoader } = await import(loader_path);
     const plugin_loader = new PluginLoader();
 
+    // 初始化
+    await plugin_loader.init();
+
     // 加载插件
-    await plugin_loader.loadPlugins();
+    plugin_loader.onLoad();
 
     // 监听页面变化
     navigation.addEventListener("navigatesuccess", function func(event) {
@@ -13,7 +16,7 @@
         if (url.includes("/index.html") && url.includes("#/setting")) {
             // 移除监听
             navigation.removeEventListener("navigatesuccess", func);
-            plugin_loader.initConfig();
+            plugin_loader.onConfigView();
         }
     });
 })();
