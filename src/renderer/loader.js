@@ -11,7 +11,7 @@ export class PluginLoader {
 
         // 导入BetterQQNT配置界面
         const betterqqnt_config_path = `/${betterQQNT.path.root}/src/renderer/view/index.js`;
-        this.#plugins[betterQQNT.package.name] = await import(betterqqnt_config_path);
+        this.#plugins["better_qqnt"] = await import(betterqqnt_config_path);
 
         // 获取插件注入渲染进程的代码
         for (const [slug, plugin] of Object.entries(betterQQNT.plugins)) {
