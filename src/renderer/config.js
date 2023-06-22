@@ -26,6 +26,15 @@ export class PluginConfigView {
                 this.setting_view.style.display = contains_betterqqnt ? "block" : "none";
             }
         });
+        // 禁用样式
+        const style = document.createElement("style");
+        style.textContent = `
+        .betterqqnt.disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        `;
+        document.head.appendChild(style);
     }
 
 
@@ -42,7 +51,7 @@ export class PluginConfigView {
 
 
     // 导航栏条目
-    createNavItme(name, view) {
+    createNavItme(name, view, enable) {
         const nav_item = this.nav_bar.querySelector(".nav-item").cloneNode(true);
         nav_item.classList.remove("nav-item-active");
         nav_item.classList.add("betterqqnt");
@@ -57,6 +66,10 @@ export class PluginConfigView {
         });
         nav_item.querySelector(".q-icon").textContent = null;
         nav_item.querySelector(".name").textContent = name;
+        // 禁用插件
+        if (!enable) {
+            nav_item.classList.add("disabled");
+        }
         this.nav_bar.appendChild(nav_item);
     }
 }

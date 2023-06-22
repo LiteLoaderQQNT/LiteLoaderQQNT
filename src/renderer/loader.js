@@ -19,7 +19,11 @@ export class PluginLoader {
             const renderer_path_name = plugin.manifest.injects?.renderer;
             if (renderer_path_name) {
                 const path = `/${plugin_path}/${renderer_path_name}`;
-                this.#plugins[slug] = await import(path);
+                const { onLoad, onConfigView } = await import(path);
+                this.#plugins[slug] = {
+                    onLoad,
+                    onConfigView
+                };
             }
         }
     }
@@ -55,8 +59,12 @@ export class PluginLoader {
             const name = plugin.manifest.name;
             const view = document.createElement("div");
             view.classList.add(slug);
-            plugin_config_view.createNavItme(name, view);
-            this.#plugins?.[slug]?.onConfigView?.(view);
+            // 如果没有onConfigView函数，就将按钮禁用
+            const onConfigView = this.#plugins?.[slug]?.onConfigView;
+            plugin_config_view.createNavItme(name, view, onConfigView);
+            if (onConfigView) {
+                onConfigView(view);
+            }
         }
     }
 }
