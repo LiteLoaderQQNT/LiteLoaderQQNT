@@ -31,13 +31,15 @@ BetterQQNT是一个QQNT的插件加载器
 ## 目前功能
 
 - 打开QQNT的DevTools，方便你查看和修改QQNT的内部运行情况。
+- (QQNT 9.8.5版本暂时无法通过BetterQQNT打开QQNT自身的DevTools，请安装Chii Devtools插件进行远程调试)
 - 加载插件，让你可以根据自己的喜好和需求定制QQNT的外观和功能。
 
 
 ## 插件链接
 
-- [[扩展] window-on-top](https://github.com/mo-jinran/BetterQQNT-window-on-top)
-- [[主题] test-theme](https://github.com/mo-jinran/BetterQQNT-test-theme)
+- [[扩展] Chii DevTools](https://github.com/mo-jinran/chii-devtools)
+- [[扩展] 窗口置顶](https://github.com/mo-jinran/window-on-top)
+- [[主题] 测试主题](https://github.com/mo-jinran/test-theme)
 - [[扩展] background_plugin](https://github.com/xh321/BetterQQNT-Background-Plugin)
 - [[主题] MSpring-Theme](https://github.com/MUKAPP/BetterQQNT-MSpring-Theme)
 - [[扩展] BetterQQNT-Directly-Jump](https://github.com/xh321/BetterQQNT-Directly-Jump)
