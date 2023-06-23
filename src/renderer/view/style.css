@@ -1,0 +1,47 @@
+.better_qqnt {
+    padding: 20px;
+}
+
+.better_qqnt h1 {
+    color: var(--text_primary);
+    font-weight: var(--font-bold);
+    font-size: min(var(--font_size_3), 18px);
+    line-height: min(var(--line_height_3), 24px);
+    margin: 0px 0px 8px 16px;
+}
+
+.better_qqnt .wrap {
+    background-color: var(--fill_light_primary);
+    border-radius: 8px;
+    font-size: min(var(--font_size_3), 18px);
+    line-height: min(var(--line_height_3), 24px);
+    margin-bottom: 20px;
+}
+
+
+/* 版本号 */
+.better_qqnt .versions hr {
+    border: unset;
+    width: 1px;
+    margin: 8px 0px;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.better_qqnt .versions .wrap {
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.better_qqnt .versions .wrap>div {
+    flex: 1;
+    margin: 8px;
+}
+
+.better_qqnt .versions .content {
+    color: var(--on_bg_text);
+    font-size: 12px;
+    line-height: 18px;
+    margin-top: 6px;
+}
