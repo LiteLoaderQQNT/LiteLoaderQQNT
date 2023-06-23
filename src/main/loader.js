@@ -10,7 +10,7 @@ class PluginLoader {
         output("Start loading plugins.");
 
         // 尝试获取插件路径
-        var plugin_dirnames = [];
+        let plugin_dirnames = [];
         try {
             plugin_dirnames = fs.readdirSync(betterQQNT.path.plugins, "utf-8");
         } catch (error) {
@@ -20,8 +20,7 @@ class PluginLoader {
             // 创建目录
             fs.mkdir(betterQQNT.path.plugins, { recursive: true }, (err) => {
                 const success_message = "Directory created successfully!";
-                const failure_message =
-                    "Failed to create the plugins directory!";
+                const failure_message = "Failed to create the plugins directory!";
                 output(err ? failure_message : success_message);
             });
         }
@@ -29,14 +28,11 @@ class PluginLoader {
         try {
             // 获取单个插件目录名
             for (const plugin_dirname of plugin_dirnames) {
-                const plugin_path = path.join(
-                    betterQQNT.path.plugins,
-                    plugin_dirname
-                );
+                const plugin_path = path.join(betterQQNT.path.plugins, plugin_dirname);
                 this.#loadPlugin(plugin_path);
             }
         } catch (error) {
-            output("Plugins loaded with error: " + error);
+            output("Plugins loaded with error: ", error);
             console.dir(error);
         }
 
@@ -69,15 +65,7 @@ class PluginLoader {
         // manifest与路径
         const { slug, name } = manifest;
         const plugin_data_path = path.join(betterQQNT.path.plugins_data, slug);
-        const plugin_cache_path = path.join(
-            betterQQNT.path.plugins_cache,
-            slug
-        );
-
-        // 导入插件
-        const pathname = manifest.injects.main;
-        const filepath = path.join(plugin_path, pathname);
-        const exports = require(filepath);
+        const plugin_cache_path = path.join(betterQQNT.path.plugins_cache, slug);
 
         // 保存到插件列表
         this.#plugins[slug] = {
@@ -86,9 +74,15 @@ class PluginLoader {
                 plugin: plugin_path,
                 data: plugin_data_path,
                 cache: plugin_cache_path
-            },
-            exports: exports
+            }
         };
+
+        // 导入插件
+        const main_path = manifest.injects?.main;
+        if (main_path) {
+            const file_path = path.join(plugin_path, main_path);
+            this.#plugins[slug]["exports"] = require(file_path);
+        }
 
         output("Found plugin:", name);
     }
