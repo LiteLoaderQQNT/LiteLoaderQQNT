@@ -34,20 +34,21 @@ BetterQQNT是一个QQNT的插件加载器
 - 加载插件，让你可以根据自己的喜好和需求定制QQNT的外观和功能。
 
 > QQNT 9.8.5版本暂时无法通过BetterQQNT打开QQNT自身的DevTools  
-> 请安装Chii Devtools插件进行远程调试（跟普通的一样，只是功能很少）  
-> Chii DevTools插件仓库地址在插件链接处，请自行根据插件介绍安装
+> 请安装Chii Devtools插件或QQNT vConsole插件进行远程调试  
+> 插件仓库地址在插件链接处，请自行根据插件介绍安装
 
 
 ## 插件链接
 
 ### 扩展
 
-| 作者                                               | 名称                                                              | 描述                           |
-| -------------------------------------------------- | ----------------------------------------------------------------- | ------------------------------ |
-| [沫烬染](https://github.com/mo-jinran)             | [Chii DevTools](https://github.com/mo-jinran/chii-devtools)       | 使用Chii的DevTools进行远程调试 |
-| [沫烬染](https://github.com/mo-jinran)             | [窗口置顶](https://github.com/mo-jinran/window-on-top)            | 添加窗口置顶按钮               |
-| [zhenyu huang (1139834)](https://github.com/xh321) | [背景插件](https://github.com/xh321/BetterQQNT-Background-Plugin) | 窗口背景图片                   |
-| [zhenyu huang (1139834)](https://github.com/xh321) | [链接跳转](https://github.com/xh321/BetterQQNT-Directly-Jump)     | 外链直接跳转，而不经过拦截页   |
+| 作者                                   | 名称                                                              | 描述                               |
+| -------------------------------------- | ----------------------------------------------------------------- | ---------------------------------- |
+| [沫烬染](https://github.com/mo-jinran) | [Chii DevTools](https://github.com/mo-jinran/chii-devtools)       | 使用Chii的DevTools进行远程调试     |
+| [XiaoHe321](https://github.com/xh321)  | [QQNT vConsole](https://github.com/xh321/BetterQQNT-VConsole)     | 使用腾讯自己的vConsole进行前端调试 |
+| [沫烬染](https://github.com/mo-jinran) | [窗口置顶](https://github.com/mo-jinran/window-on-top)            | 添加窗口置顶按钮                   |
+| [XiaoHe321](https://github.com/xh321)  | [背景插件](https://github.com/xh321/BetterQQNT-Background-Plugin) | 窗口背景图片                       |
+| [XiaoHe321](https://github.com/xh321)  | [链接跳转](https://github.com/xh321/BetterQQNT-Directly-Jump)     | 外链直接跳转，而不经过拦截页       |
 
 
 ### 主题
