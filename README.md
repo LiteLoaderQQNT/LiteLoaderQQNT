@@ -23,9 +23,8 @@ BetterQQNT是一个QQNT的插件加载器
 2. 编辑`package.json`文件，将`main`键值改为`BetterQQNT`（大小写不敏感，请根据项目目录名实际情况修改）。
 3. 重新启动QQNT，享受BetterQQNT带来的乐趣吧！
 
-理论上能够支持`Windows`, `Linux`, `MacOS`  
-以及支持QQNT的`32位`与`64位`版本  
-（目前开发与测试都仅在Windows环境下进行）
+支持Windows QQNT的`32位`与`64位`版本  
+（暂时去除Linux与MacOS支持，等待兼容）
 
 
 ## 目前功能
@@ -61,12 +60,7 @@ BetterQQNT是一个QQNT的插件加载器
 
 ## 数据目录
 
-BetterQQNT的默认数据文件夹：
-
-- Windows: `C:\\BetterQQNT`
-- Linux: `~/Documents/BetterQQNT`
-- MacOS: `~/Documents/BetterQQNT`
-
+BetterQQNT的默认数据文件夹在`C:\\BetterQQNT`
 修改环境变量`BETTERQQNT_PROFILE`可指定目录位置
 
 数据目录结构：
@@ -86,7 +80,7 @@ BetterQQNT
 ```
 my-plugin
     ├─manifest.json     // 存放插件信息
-    ├─main.js           // 必须存在插件入口
+    ├─main.js           // 存在插件入口
     └─...
 ```
 
