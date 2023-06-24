@@ -9,10 +9,6 @@ export class PluginLoader {
         const { PluginConfigView } = await import(plugin_config_view_path);
         this.#PluginConfigView = PluginConfigView;
 
-        // 导入BetterQQNT配置界面
-        const betterqqnt_config_path = `/${betterQQNT.path.root}/src/renderer/view/index.js`;
-        this.#plugins["better_qqnt"] = await import(betterqqnt_config_path);
-
         // 获取插件注入渲染进程的代码
         for (const [slug, plugin] of Object.entries(betterQQNT.plugins)) {
             const plugin_path = plugin.path.plugin;
@@ -44,18 +40,8 @@ export class PluginLoader {
         // 分割线
         plugin_config_view.createDividingLine();
 
-        // 加上BetterQQNT
-        const plugins = {
-            better_qqnt: {
-                manifest: {
-                    name: "BetterQQNT"
-                }
-            },
-            ...betterQQNT.plugins
-        }
-
         // 遍历所有插件
-        for (const [slug, plugin] of Object.entries(plugins)) {
+        for (const [slug, plugin] of Object.entries(betterQQNT.plugins)) {
             const name = plugin.manifest.name;
             const view = document.createElement("div");
             view.classList.add(slug);

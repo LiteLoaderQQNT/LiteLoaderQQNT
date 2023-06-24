@@ -10,7 +10,17 @@ class PluginLoader {
         output("Start loading plugins.");
 
         // 尝试获取插件路径
+        let builtin_dirnames = [];
         let plugin_dirnames = [];
+
+        // 内置的核心插件
+        try {
+            builtin_dirnames = fs.readdirSync(betterQQNT.path.builtins, "utf-8");
+        } catch (error) {
+            output("The builtins directory does not exist.");
+        }
+
+        // 外置第三方插件
         try {
             plugin_dirnames = fs.readdirSync(betterQQNT.path.plugins, "utf-8");
         } catch (error) {
@@ -25,8 +35,13 @@ class PluginLoader {
             });
         }
 
+        // 加载插件
         try {
             // 获取单个插件目录名
+            for (const builtin_dirname of builtin_dirnames) {
+                const plugin_path = path.join(betterQQNT.path.builtins, builtin_dirname);
+                this.#loadPlugin(plugin_path);
+            }
             for (const plugin_dirname of plugin_dirnames) {
                 const plugin_path = path.join(betterQQNT.path.plugins, plugin_dirname);
                 this.#loadPlugin(plugin_path);
@@ -63,26 +78,33 @@ class PluginLoader {
         }
 
         // manifest与路径
-        const { slug, name } = manifest;
+        const { slug, name, type } = manifest;
         const plugin_data_path = path.join(betterQQNT.path.plugins_data, slug);
         const plugin_cache_path = path.join(betterQQNT.path.plugins_cache, slug);
+        const main_path = manifest.injects?.main;
+        const file_path = path.join(plugin_path, main_path);
 
         // 保存到插件列表
-        this.#plugins[slug] = {
+        const plugin = {
             manifest: manifest,
             path: {
                 plugin: plugin_path,
                 data: plugin_data_path,
                 cache: plugin_cache_path
-            }
-        };
-
-        // 导入插件
-        const main_path = manifest.injects?.main;
-        if (main_path) {
-            const file_path = path.join(plugin_path, main_path);
-            this.#plugins[slug]["exports"] = require(file_path);
+            },
+            exports: main_path ? require(file_path) : null
         }
+
+        if (type == "core") {
+            delete plugin.path.data;
+            delete plugin.path.cache;
+        }
+
+        if (!main_path) {
+            delete plugin.exports;
+        }
+
+        this.#plugins[slug] = plugin;
 
         output("Found plugin:", name);
     }
