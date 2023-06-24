@@ -16,6 +16,7 @@ const betterQQNT = {
     path: {
         root: path.join(__dirname, "../../"),
         builtins: path.join(__dirname, "../../builtins"),
+        default_profile: "C:\\BetterQQNT",
         profile: BETTERQQNT_PROFILE,
         config: path.join(BETTERQQNT_PROFILE, "config.json"),
         plugins: path.join(BETTERQQNT_PROFILE, "plugins"),

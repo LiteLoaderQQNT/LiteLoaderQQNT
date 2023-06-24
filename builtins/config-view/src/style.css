@@ -22,6 +22,58 @@
     display: flex;
 }
 
+/* 模态框 */
+.better_qqnt .modal-window {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.better_qqnt .modal-dialog {
+    width: 480px;
+    border-radius: 8px;
+    background-color: var(--bg_bottom_standard);
+}
+
+.better_qqnt .modal-dialog header {
+    font-size: 12px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+}
+
+.better_qqnt .modal-dialog main {
+    padding: 0px 16px;
+}
+
+.better_qqnt .modal-dialog main p {
+    margin: 8px 0px;
+}
+
+.better_qqnt .modal-dialog footer {
+    height: 30px;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+
+.better_qqnt .modal-dialog .q-icon {
+    width: 22px;
+    height: 22px;
+    margin: 8px;
+}
+
+.better_qqnt .hidden {
+    display: none !important;
+}
+
 
 /* 版本号 */
 .better_qqnt .versions hr {

@@ -31,6 +31,22 @@ export async function onConfigView(view) {
     electron.textContent = betterQQNT.versions.electron;
     nodejs.textContent = betterQQNT.versions.node;
 
+
+    // 模态窗口
+    const modal_window = view.querySelector(".path .modal-window");
+    const modal_dialog = view.querySelector(".path .modal-dialog");
+    const first = modal_dialog.querySelector(".first");
+    const second = modal_dialog.querySelector(".second");
+
+    modal_window.addEventListener("click", event => {
+        modal_window.classList.add("hidden");
+    });
+
+    modal_dialog.addEventListener("click", event => {
+        event.stopPropagation();
+    });
+
+
     // 数据目录
     const pick_dir = view.querySelector(".path .pick-dir");
     const path_input = view.querySelector(".path .path-input");
@@ -38,13 +54,31 @@ export async function onConfigView(view) {
     const apply = view.querySelector(".path .ops-btns .apply");
 
     path_input.value = betterQQNT.path.profile;
+
     pick_dir.addEventListener("click", async event => {
-
+        const result = await better_qqnt.showPickDirDialog();
+        const path = result.filePaths?.[0];
+        if (path) {
+            path_input.value = path;
+        }
     });
-    reset.addEventListener("click", event => {
 
+    reset.addEventListener("click", async event => {
+        better_qqnt.setProfilePath("").then(() => {
+            path_input.value = betterQQNT.path.default_profile;
+            first.classList.add("hidden");
+            second.classList.remove("hidden");
+            setTimeout(() => better_qqnt.quit(), 2000);
+        });
+        modal_window.classList.remove("hidden");
     });
+
     apply.addEventListener("click", event => {
-
+        better_qqnt.setProfilePath(path_input.value).then(() => {
+            first.classList.add("hidden");
+            second.classList.remove("hidden");
+            setTimeout(() => better_qqnt.quit(), 2000);
+        });
+        modal_window.classList.remove("hidden");
     });
 }
