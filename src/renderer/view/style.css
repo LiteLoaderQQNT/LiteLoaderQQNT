@@ -18,6 +18,10 @@
     margin-bottom: 20px;
 }
 
+.better_qqnt .ops-btns {
+    display: flex;
+}
+
 
 /* 版本号 */
 .better_qqnt .versions hr {
@@ -28,7 +32,6 @@
 }
 
 .better_qqnt .versions .wrap {
-    height: 60px;
     display: flex;
     justify-content: space-between;
     text-align: center;
@@ -37,11 +40,48 @@
 .better_qqnt .versions .wrap>div {
     flex: 1;
     margin: 8px;
+    border-radius: 8px;
+}
+
+.better_qqnt .versions .wrap>div * {
+    margin: 6px 0;
 }
 
 .better_qqnt .versions .content {
     color: var(--on_bg_text);
     font-size: 12px;
     line-height: 18px;
-    margin-top: 6px;
+}
+
+
+/* 数据目录 */
+.better_qqnt .path hr {
+    border: unset;
+    height: 1px;
+    margin: 0px 16px;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.better_qqnt .path .wrap {
+    overflow: hidden;
+}
+
+.better_qqnt .path .wrap>div {
+    margin: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.better_qqnt .path .path-input {
+    align-self: normal;
+    flex: 1;
+    border-radius: 4px;
+    margin-right: 16px;
+    transition: all 100ms ease-out;
+}
+
+.better_qqnt .path .path-input:focus {
+    padding-left: 4px;
+    background-color: rgba(127, 127, 127, 0.1);
 }

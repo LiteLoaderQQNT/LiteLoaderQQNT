@@ -30,4 +30,21 @@ export async function onConfigView(view) {
     chromium.textContent = betterQQNT.versions.chrome;
     electron.textContent = betterQQNT.versions.electron;
     nodejs.textContent = betterQQNT.versions.node;
+
+    // 数据目录
+    const pick_dir = view.querySelector(".path .pick-dir");
+    const path_input = view.querySelector(".path .path-input");
+    const reset = view.querySelector(".path .ops-btns .reset");
+    const apply = view.querySelector(".path .ops-btns .apply");
+
+    path_input.value = betterQQNT.path.profile;
+    pick_dir.addEventListener("click", async event => {
+
+    });
+    reset.addEventListener("click", event => {
+
+    });
+    apply.addEventListener("click", event => {
+
+    });
 }
