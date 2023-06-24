@@ -52,10 +52,11 @@ BetterQQNT是一个QQNT的插件加载器
 
 ### 主题
 
-| 作者                                   | 名称                                                                | 描述                                |
-| -------------------------------------- | ------------------------------------------------------------------- | ----------------------------------- |
-| [沫烬染](https://github.com/mo-jinran) | [测试主题](https://github.com/mo-jinran/test-theme)                 | 测试用的主题                        |
-| [MUK](https://github.com/MUKAPP)       | [MSpring-Theme](https://github.com/MUKAPP/BetterQQNT-MSpring-Theme) | BetterQQNT 主题，优雅 · 粉粉 · 细致 |
+| 作者                                      | 名称                                                                     | 描述                                  |
+| ----------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------- |
+| [沫烬染](https://github.com/mo-jinran)    | [测试主题](https://github.com/mo-jinran/test-theme)                      | 测试用的主题                          |
+| [MUK](https://github.com/MUKAPP)          | [MSpring-Theme](https://github.com/MUKAPP/BetterQQNT-MSpring-Theme)      | BetterQQNT 主题，优雅 · 粉粉 · 细致   |
+| [festoney8](https://github.com/festoney8) | [QQNT微信风格主题](https://github.com/festoney8/BetterQQNT-Wechat-Theme) | BetterQQNT 插件，高仿微信风格的QQ主题 |
 
 
 ## 数据目录
