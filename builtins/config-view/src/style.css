@@ -1,3 +1,4 @@
+/* 通用 */
 .better_qqnt {
     padding: 20px;
 }
@@ -16,11 +17,44 @@
     font-size: min(var(--font_size_3), 18px);
     line-height: min(var(--line_height_3), 24px);
     margin-bottom: 20px;
+    overflow: hidden;
+    padding: 0px 16px;
+}
+
+.better_qqnt .vertical-list-item {
+    margin: 12px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.better_qqnt .horizontal-dividing-line {
+    border: unset;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.better_qqnt .vertical-dividing-line {
+    border: unset;
+    width: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .better_qqnt .ops-btns {
     display: flex;
 }
+
+.better_qqnt .hidden {
+    display: none !important;
+}
+
+.secondary-text {
+    color: var(--text_secondary);
+    font-size: min(var(--font_size_2), 16px);
+    line-height: min(var(--line_height_2), 22px);
+    margin-top: 4px;
+}
+
 
 /* 模态框 */
 .better_qqnt .modal-window {
@@ -70,61 +104,24 @@
     margin: 8px;
 }
 
-.better_qqnt .hidden {
-    display: none !important;
-}
-
 
 /* 版本号 */
-.better_qqnt .versions hr {
-    border: unset;
-    width: 1px;
-    margin: 8px 0px;
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
 .better_qqnt .versions .wrap {
     display: flex;
     justify-content: space-between;
-    text-align: center;
+    padding: unset;
 }
 
 .better_qqnt .versions .wrap>div {
     flex: 1;
     margin: 8px;
+    padding: 6px 0px;
     border-radius: 8px;
-}
-
-.better_qqnt .versions .wrap>div * {
-    margin: 6px 0;
-}
-
-.better_qqnt .versions .content {
-    color: var(--on_bg_text);
-    font-size: 12px;
-    line-height: 18px;
+    text-align: center;
 }
 
 
 /* 数据目录 */
-.better_qqnt .path hr {
-    border: unset;
-    height: 1px;
-    margin: 0px 16px;
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-.better_qqnt .path .wrap {
-    overflow: hidden;
-}
-
-.better_qqnt .path .wrap>div {
-    margin: 10px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .better_qqnt .path .path-input {
     align-self: normal;
     flex: 1;
