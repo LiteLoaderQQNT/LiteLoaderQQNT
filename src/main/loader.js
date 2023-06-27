@@ -83,6 +83,7 @@ class PluginLoader {
         const plugin_cache_path = path.join(betterQQNT.path.plugins_cache, slug);
         const main_path = manifest.injects?.main;
         const file_path = path.join(plugin_path, main_path);
+        const plugin_disabled = betterQQNT.config?.disabled?.includes(slug) ?? false;
 
         // 保存到插件列表
         const plugin = {
@@ -92,7 +93,8 @@ class PluginLoader {
                 data: plugin_data_path,
                 cache: plugin_cache_path
             },
-            exports: main_path ? require(file_path) : null
+            exports: main_path && !plugin_disabled ? require(file_path) : null,
+            disabled: plugin_disabled
         }
 
         if (type == "core") {
@@ -123,7 +125,7 @@ class PluginLoader {
     onLoad() {
         // 加载插件
         for (const [slug, plugin] of Object.entries(this.#plugins)) {
-            plugin.exports?.onLoad?.(plugin);
+            plugin.exports?.onLoad?.(plugin, betterQQNT);
         }
     }
 

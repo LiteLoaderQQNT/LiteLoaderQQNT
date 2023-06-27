@@ -11,6 +11,9 @@ export class PluginLoader {
 
         // 获取插件注入渲染进程的代码
         for (const [slug, plugin] of Object.entries(betterQQNT.plugins)) {
+            if (plugin.disabled) {
+                continue;
+            }
             const plugin_path = plugin.path.plugin;
             const renderer_path_name = plugin.manifest.injects?.renderer;
             if (renderer_path_name) {
@@ -42,6 +45,9 @@ export class PluginLoader {
 
         // 遍历所有插件
         for (const [slug, plugin] of Object.entries(betterQQNT.plugins)) {
+            if (plugin.disabled) {
+                continue;
+            }
             const name = plugin.manifest.name;
             const view = document.createElement("div");
             view.classList.add(slug);

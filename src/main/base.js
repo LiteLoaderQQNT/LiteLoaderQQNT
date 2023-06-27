@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs");
 const betterQQNT_package = require("../../package.json");
 const qqnt_package = require("../../../versions/config.json");
 
@@ -34,8 +35,15 @@ const betterQQNT = {
     package: {
         qqnt: qqnt_package,
         betterQQNT: betterQQNT_package
-    }
+    },
+    config: {}
 }
+
+try {
+    const data = fs.readFileSync(betterQQNT.path.config, "utf-8");
+    betterQQNT.config = JSON.parse(data);
+}
+catch (error) { }
 
 
 function output(...args) {

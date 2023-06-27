@@ -93,14 +93,16 @@ export async function onConfigView(view) {
     };
 
     section_plugins.addEventListener("click", event => {
-        const target = event.target.closest(".wrap");
+        const target = event.target.closest(".title");
         if (target) {
-            const icon = target.querySelector(".title svg");
-            const list = target.querySelector(".list");
+            const icon = target.querySelector("svg");
+            const list = target.nextElementSibling;
             icon.classList.toggle("is-fold");
             list.classList.toggle("hidden");
         }
     });
+
+    const disabled_list = await better_qqnt.getDisabledList();
 
     for (const [slug, plugin] of Object.entries(betterQQNT.plugins)) {
         const hr = document.createElement("hr");
@@ -122,9 +124,22 @@ export async function onConfigView(view) {
         const plugin_item = doc.querySelector(".vertical-list-item");
         const q_switch = plugin_item.querySelector(".q-switch");
 
-        q_switch.addEventListener("click", () => {
+        q_switch.addEventListener("click", async () => {
+            const disabled_list = await better_qqnt.getDisabledList();
+            let new_disabled_list = [];
+            if (q_switch.classList.contains("is-active")) {
+                new_disabled_list = [...disabled_list, slug];
+            }
+            else {
+                new_disabled_list = disabled_list.filter(value => value != slug);
+            }
+            await better_qqnt.setDisabledList(new_disabled_list);
             q_switch.classList.toggle("is-active");
         });
+
+        if (disabled_list.includes(slug)) {
+            q_switch.classList.remove("is-active");
+        }
 
         const plugin_type = plugin.manifest.type;
         const plugin_list = plugin_lists[plugin_type] || plugin_lists.extension;
