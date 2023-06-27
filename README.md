@@ -8,7 +8,6 @@ BetterQQNT是一个QQNT的插件加载器
 ## 注意事项
 
 - 目前仍在开发当中，可能会存在一些问题和不足
-- 目前不建议制作插件，等完善后有模板和文档吧
 - 目前没有插件商店系统，暂时只能自行寻找插件
 - 仅为个人兴趣而制作，开发目的在于学习和探索
 - 能力有限，随缘更新。不过也欢迎各位来提交PR
@@ -48,6 +47,7 @@ BetterQQNT是一个QQNT的插件加载器
 | [沫烬染](https://github.com/mo-jinran) | [窗口置顶](https://github.com/mo-jinran/window-on-top)            | 添加窗口置顶按钮                   |
 | [XiaoHe321](https://github.com/xh321)  | [背景插件](https://github.com/xh321/BetterQQNT-Background-Plugin) | 窗口背景图片                       |
 | [XiaoHe321](https://github.com/xh321)  | [链接跳转](https://github.com/xh321/BetterQQNT-Directly-Jump)     | 外链直接跳转，而不经过拦截页       |
+| [FW27623](https://github.com/xh321)    | [移除QQ游戏中心](https://github.com/FW27623/remove_qqgame_center) | 删除QQ游戏中心侧边按钮             |
 
 
 ### 主题
