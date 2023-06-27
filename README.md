@@ -71,9 +71,12 @@ BetterQQNT
     │   ├─my-plugin         // 插件本体
     │   └─...
     ├─plugins_cache     // 插件缓存目录
+    │   ├─my-plugin
     │   └─...
-    └─plugins_data      // 插件数据目录
-        └─...
+    ├─plugins_data      // 插件数据目录
+    │   ├─my-plugin
+    │   └─...
+    └─config.json       // 配置文件（不是给插件用的
 ```
 
 插件目录结构：
