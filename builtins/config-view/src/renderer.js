@@ -81,4 +81,55 @@ export async function onConfigView(view) {
         });
         modal_window.classList.remove("hidden");
     });
+
+
+    // 插件列表
+    const section_plugins = view.querySelector(".plugins");
+    const plugin_lists = {
+        extension: view.querySelector(".plugins .wrap.extension .list"),
+        theme: view.querySelector(".plugins .wrap.theme .list"),
+        framework: view.querySelector(".plugins .wrap.framework .list"),
+        core: view.querySelector(".plugins .wrap.core .list")
+    };
+
+    section_plugins.addEventListener("click", event => {
+        const target = event.target.closest(".wrap");
+        if (target) {
+            const icon = target.querySelector(".title svg");
+            const list = target.querySelector(".list");
+            icon.classList.toggle("is-fold");
+            list.classList.toggle("hidden");
+        }
+    });
+
+    for (const [slug, plugin] of Object.entries(betterQQNT.plugins)) {
+        const hr = document.createElement("hr");
+        hr.classList.add("horizontal-dividing-line");
+
+        const plugin_item_html = `
+        <div class="vertical-list-item">
+            <div>
+                <h2>${plugin.manifest.name}</h2>
+                <span class="secondary-text">${plugin.manifest.description}</span>
+            </div>
+            <div class="q-switch is-active">
+                <span class="q-switch__handle"></span>
+            </div>
+        </div>
+        `;
+        const doc = parser.parseFromString(plugin_item_html, "text/html");
+
+        const plugin_item = doc.querySelector(".vertical-list-item");
+        const q_switch = plugin_item.querySelector(".q-switch");
+
+        q_switch.addEventListener("click", () => {
+            q_switch.classList.toggle("is-active");
+        });
+
+        const plugin_type = plugin.manifest.type;
+        const plugin_list = plugin_lists[plugin_type] || plugin_lists.extension;
+
+        plugin_list.appendChild(hr);
+        plugin_list.appendChild(plugin_item);
+    }
 }

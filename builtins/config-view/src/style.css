@@ -1,6 +1,6 @@
 /* 通用 */
 .better_qqnt {
-    padding: 20px;
+    margin: 20px;
 }
 
 .better_qqnt h1 {
@@ -8,7 +8,8 @@
     font-weight: var(--font-bold);
     font-size: min(var(--font_size_3), 18px);
     line-height: min(var(--line_height_3), 24px);
-    margin: 0px 0px 8px 16px;
+    padding: 0px 16px;
+    margin-bottom: 8px;
 }
 
 .better_qqnt .wrap {
@@ -48,11 +49,31 @@
     display: none !important;
 }
 
-.secondary-text {
+.better_qqnt .secondary-text {
     color: var(--text_secondary);
     font-size: min(var(--font_size_2), 16px);
     line-height: min(var(--line_height_2), 22px);
     margin-top: 4px;
+}
+
+.better_qqnt .wrap .title {
+    cursor: pointer;
+    font-size: min(var(--font_size_3), 18px);
+    line-height: min(var(--line_height_3), 24px);
+}
+
+.better_qqnt .wrap .title svg {
+    width: 1em;
+    height: 1em;
+    transform: rotate(-180deg);
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+    transition-property: transform;
+}
+
+.better_qqnt .wrap .title svg.is-fold {
+    transform: rotate(0deg);
 }
 
 
