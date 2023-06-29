@@ -31,7 +31,7 @@ BetterQQNT是一个QQNT的插件加载器
        └─...
    ```
 
-2. 编辑`package.json`文件，将`main`键值改为`BetterQQNT文件夹`下的`src/index.js`（大小写不敏感，请根据项目目录名实际情况修改），例如：`./BetterQQNT/src/index.js`。
+2. 编辑`package.json`文件，将`main`键值改为`BetterQQNT文件夹名字`（大小写不敏感，请根据项目目录名实际情况修改），例如：`BetterQQNT`。
 
 3. 重新启动QQNT，享受BetterQQNT带来的乐趣吧！
 
