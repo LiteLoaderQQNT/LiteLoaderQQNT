@@ -4,6 +4,11 @@ BetterQQNT是一个QQNT的插件加载器
 它可以让你自由地为QQNT添加各种插件  
 比如：美化主题，增加新功能 等...
 
+因为与橘子的BetterQQNT（dll版）重名，打算更换名称为LiteLoaderQQNT  
+（毕竟是橘子提出要做BetterQQNT，我只是等不及他做完，我就先做了试试）  
+一些奇怪的兼容性：LiteLoaderQQNT与BetterQQNT和QQNTim可正常使用  
+（不过橘子的BetterQQNT还没更新，目前在9.8.5版本无法使用，不要尝试上面）
+
 
 ## 注意事项
 
@@ -48,7 +53,7 @@ BetterQQNT是一个QQNT的插件加载器
 | [XiaoHe321](https://github.com/xh321)  | [背景插件](https://github.com/xh321/BetterQQNT-Background-Plugin) | 窗口背景图片                       |
 | [XiaoHe321](https://github.com/xh321)  | [链接跳转](https://github.com/xh321/BetterQQNT-Directly-Jump)     | 外链直接跳转，而不经过拦截页       |
 | [FW27623](https://github.com/xh321)    | [移除QQ游戏中心](https://github.com/FW27623/remove_qqgame_center) | 删除QQ游戏中心侧边按钮             |
-| [XiaoHe321](https://github.com/xh321)  | [关闭更新弹窗](https://github.com/xh321/BetterQQNT-Kill-Update)     | 关闭NTQQ恼人的更新弹窗       |
+| [XiaoHe321](https://github.com/xh321)  | [关闭更新弹窗](https://github.com/xh321/BetterQQNT-Kill-Update)   | 关闭NTQQ恼人的更新弹窗             |
 
 
 ### 主题
