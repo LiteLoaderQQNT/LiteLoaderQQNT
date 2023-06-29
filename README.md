@@ -4,6 +4,10 @@ BetterQQNT是一个QQNT的插件加载器
 它可以让你自由地为QQNT添加各种插件  
 比如：美化主题，增加新功能 等...
 
+> 不要将这个项目弄混淆了！  
+> 并非是橘子他们团队用C++所作的BetterQQNT（DLL版）  
+> 而是由作者自己用JavaScript所做的BetterQQNT（JS版）
+
 因为与橘子的BetterQQNT（dll版）重名，打算更换名称为LiteLoaderQQNT  
 （毕竟是橘子提出要做BetterQQNT，我只是等不及他做完，我就先做了试试）  
 一些奇怪的兼容性：LiteLoaderQQNT与BetterQQNT和QQNTim可正常使用  
