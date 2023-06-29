@@ -48,6 +48,7 @@ BetterQQNT是一个QQNT的插件加载器
 | [XiaoHe321](https://github.com/xh321)  | [背景插件](https://github.com/xh321/BetterQQNT-Background-Plugin) | 窗口背景图片                       |
 | [XiaoHe321](https://github.com/xh321)  | [链接跳转](https://github.com/xh321/BetterQQNT-Directly-Jump)     | 外链直接跳转，而不经过拦截页       |
 | [FW27623](https://github.com/xh321)    | [移除QQ游戏中心](https://github.com/FW27623/remove_qqgame_center) | 删除QQ游戏中心侧边按钮             |
+| [XiaoHe321](https://github.com/xh321)  | [关闭更新弹窗](https://github.com/xh321/BetterQQNT-Kill-Update)     | 关闭NTQQ恼人的更新弹窗       |
 
 
 ### 主题
