@@ -1,25 +1,21 @@
 const path = require("path");
 const fs = require("fs");
-const os = require('os');
+const os = require("os");
 const betterQQNT_package = require("../../package.json");
 const qqnt_package = require("../../../package.json");
 
 
 // BetterQQNT的数据目录
-let BETTERQQNT_PROFILE = process.env["BETTERQQNT_PROFILE"];
-const homeDir = os.homedir();
-if (!BETTERQQNT_PROFILE) {
-    BETTERQQNT_PROFILE = (process.platform === "win32")
-        ? "C:\\BetterQQNT"
-        : homeDir + "/Documents/BetterQQNT";
-}
+const BETTERQQNT_PROFILE_ENV = process.env["BETTERQQNT_PROFILE"];
+const BETTERQQNT_PROFILE_COSNT = `${os.homedir()}/Documents/BetterQQN`;
+const BETTERQQNT_PROFILE = BETTERQQNT_PROFILE_ENV || BETTERQQNT_PROFILE_COSNT;
 
 
 const betterQQNT = {
     path: {
         root: path.join(__dirname, "../../"),
         builtins: path.join(__dirname, "../../builtins"),
-        default_profile: "C:\\BetterQQNT",
+        default_profile: BETTERQQNT_PROFILE,
         profile: BETTERQQNT_PROFILE,
         config: path.join(BETTERQQNT_PROFILE, "config.json"),
         plugins: path.join(BETTERQQNT_PROFILE, "plugins"),
@@ -40,6 +36,7 @@ const betterQQNT = {
     },
     config: {}
 }
+
 
 try {
     const data = fs.readFileSync(betterQQNT.path.config, "utf-8");
