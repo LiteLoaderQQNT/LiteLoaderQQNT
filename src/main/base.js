@@ -34,6 +34,9 @@ const betterQQNT = {
         qqnt: qqnt_package,
         betterQQNT: betterQQNT_package
     },
+    os: {
+        platform: os.platform(),
+    },
     config: {}
 }
 
