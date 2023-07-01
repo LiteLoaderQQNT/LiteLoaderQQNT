@@ -44,8 +44,8 @@ BetterQQNT是一个QQNT的插件加载器
 
 3. 重新启动QQNT，享受BetterQQNT带来的乐趣吧！
 
-支持Windows QQNT的`32位`与`64位`版本  
-（暂时去除Linux与MacOS支持，等待兼容）
+支持Windows，Linux QQNT的`32位`与`64位`版本  
+（MacOS暂时未知，无设备测试）
 
 
 ## 目前功能
