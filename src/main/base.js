@@ -1,15 +1,17 @@
 const path = require("path");
 const fs = require("fs");
+const os = require('os');
 const betterQQNT_package = require("../../package.json");
 const qqnt_package = require("../../../package.json");
 
 
 // BetterQQNT的数据目录
 let BETTERQQNT_PROFILE = process.env["BETTERQQNT_PROFILE"];
+const homeDir = os.homedir();
 if (!BETTERQQNT_PROFILE) {
     BETTERQQNT_PROFILE = (process.platform === "win32")
         ? "C:\\BetterQQNT"
-        : "~/Documents/BetterQQNT";
+        : homeDir + "/Documents/BetterQQNT";
 }
 
 
