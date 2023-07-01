@@ -16,7 +16,12 @@
         if (url.includes("/index.html") && url.includes("#/setting")) {
             // 移除监听
             navigation.removeEventListener("navigatesuccess", func);
-            plugin_loader.onConfigView();
+            const interval = setInterval(() => {
+                if (document.querySelector(".setting-tab .nav-bar")) {
+                    clearInterval(interval);
+                    plugin_loader.onConfigView();
+                }
+            }, 100);
         }
     });
 })();

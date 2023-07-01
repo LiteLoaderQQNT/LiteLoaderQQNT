@@ -2,16 +2,15 @@ export class PluginConfigView {
     constructor() {
         // 基本框架
         this.nav_bar = document.querySelector(".setting-tab .nav-bar");
-        this.setting_title = document.querySelector(".setting-main .setting-title");
-        this.scroll_view = document.querySelector(".setting-main .q-scroll-view");
+        this.setting_main = document.querySelector(".setting-main");
+        this.setting_title = this.setting_main.querySelector(".setting-title");
+        this.setting_content = this.setting_main.querySelector(".setting-main__content");
         // 设置界面
-        const setting_view = document.createElement("div");
-        setting_view.classList.add("betterqqnt");
-        setting_view.classList.add("q-scroll-view");
-        setting_view.style.display = "none";
-        const setting_main = document.querySelector(".setting-main .setting-main__content");
-        setting_main.appendChild(setting_view);
-        this.setting_view = setting_view;
+        this.liteloader_setting_content = document.createElement("div");
+        this.liteloader_setting_content.classList.add("betterqqnt");
+        this.liteloader_setting_content.classList.add("setting-main__content");
+        this.liteloader_setting_content.style.display = "none";
+        this.setting_main.appendChild(this.liteloader_setting_content);
         // 处理点击
         this.nav_bar.addEventListener("click", event => {
             const target = event.target.closest(".nav-item");
@@ -22,11 +21,11 @@ export class PluginConfigView {
                 target.classList.add("nav-item-active", "qwq");
                 // 内容显示
                 const contains_betterqqnt = target.classList.contains("betterqqnt");
-                this.scroll_view.style.display = contains_betterqqnt ? "none" : "block";
-                this.setting_view.style.display = contains_betterqqnt ? "block" : "none";
+                this.setting_content.style.display = contains_betterqqnt ? "none" : "block";
+                this.liteloader_setting_content.style.display = contains_betterqqnt ? "block" : "none";
             }
         });
-        // 禁用样式
+        // 基本样式
         const style = document.createElement("style");
         style.textContent = `
         .betterqqnt.disabled {
@@ -39,6 +38,11 @@ export class PluginConfigView {
             border-radius: 4px;
             height: 3px;
             background: rgba(127, 127, 127, 0.5);
+        }
+        .betterqqnt.setting-main__content {
+            height: calc(100% - 70px);
+            margin-bottom: 20px;
+            overflow-y: scroll;
         }
         `;
         document.head.appendChild(style);
@@ -61,11 +65,22 @@ export class PluginConfigView {
         nav_item.classList.add("betterqqnt");
         nav_item.addEventListener("click", event => {
             const classList = event.currentTarget.classList;
-            if (!classList.contains("nav-item-active")) {
+            if (classList.contains("nav-item-active")) {
+                return;
+            }
+            // 添加内容
+            if (betterQQNT.os.platform == "win32") {
                 this.setting_title.childNodes[1].textContent = name;
-                // 添加内容
-                this.setting_view.textContent = null;
-                this.setting_view.appendChild(view);
+                const liteloader_setting_view = document.createElement("div");
+                liteloader_setting_view.classList.add("q-scroll-view");
+                liteloader_setting_view.appendChild(view);
+                this.liteloader_setting_content.textContent = null;
+                this.liteloader_setting_content.appendChild(liteloader_setting_view);
+            }
+            if (betterQQNT.os.platform == "linux") {
+                this.setting_title.textContent = name;
+                this.liteloader_setting_content.textContent = null;
+                this.liteloader_setting_content.appendChild(view);
             }
         });
         nav_item.querySelector(".q-icon").textContent = null;

@@ -77,3 +77,11 @@ ipcMain.on("betterQQNT.betterQQNT.plugins", (event, message) => {
 ipcMain.on("betterQQNT.betterQQNT.package", (event, message) => {
     event.returnValue = betterQQNT.package;
 });
+
+ipcMain.on("betterQQNT.betterQQNT.os", (event, message) => {
+    event.returnValue = betterQQNT.os;
+});
+
+ipcMain.on("betterQQNT.betterQQNT.config", (event, message) => {
+    event.returnValue = betterQQNT.config;
+});
