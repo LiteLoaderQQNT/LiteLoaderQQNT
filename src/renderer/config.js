@@ -33,6 +33,13 @@ export class PluginConfigView {
             pointer-events: none;
             opacity: 0.5;
         }
+        .betterqqnt.dividing_line {
+            margin: 5% 30%;
+            border: initial;
+            border-radius: 4px;
+            height: 3px;
+            background: rgba(127, 127, 127, 0.5);
+        }
         `;
         document.head.appendChild(style);
     }
@@ -41,11 +48,8 @@ export class PluginConfigView {
     // 分割线
     createDividingLine() {
         const dividing_line = document.createElement("hr");
-        dividing_line.style.margin = "5% 30%";
-        dividing_line.style.border = "initial";
-        dividing_line.style.borderRadius = "4px";
-        dividing_line.style.height = "3px";
-        dividing_line.style.background = "rgba(127, 127, 127, 0.5)";
+        dividing_line.classList.add("betterqqnt");
+        dividing_line.classList.add("dividing_line");
         this.nav_bar.appendChild(dividing_line);
     }
 
