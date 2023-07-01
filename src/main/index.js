@@ -1,6 +1,6 @@
 const { Module } = require("module");
 const { app, ipcMain } = require("electron");
-const { betterQQNT, output } = require("./base.js");
+const { betterQQNT } = require("./base.js");
 const { PluginLoader } = require("./loader.js");
 
 
@@ -21,7 +21,8 @@ function observeNewBrowserWindow(callback) {
                     ...original_config,
                     webPreferences: {
                         ...original_config?.webPreferences,
-                        devTools: true
+                        devTools: true,
+                        webSecurity: false
                     }
                 };
                 super(config);

@@ -1,7 +1,7 @@
 export async function onConfigView(view) {
     const plugin_path = betterQQNT.plugins.better_qqnt.path.plugin;
-    const css_file_path = `/${plugin_path}/src/style.css`;
-    const html_file_path = `/${plugin_path}/src/view.html`;
+    const css_file_path = `file:///${plugin_path}/src/style.css`;
+    const html_file_path = `file:///${plugin_path}/src/view.html`;
 
     // CSS
     const css_text = await (await fetch(css_file_path)).text();
