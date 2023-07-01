@@ -84,7 +84,7 @@ BetterQQNT是一个QQNT的插件加载器
 
 ## 数据目录
 
-BetterQQNT的默认数据文件夹在`C:\\BetterQQNT`
+BetterQQNT的默认数据文件夹在`用户目录/Documents/BetterQQN`
 修改环境变量`BETTERQQNT_PROFILE`可指定目录位置
 
 数据目录结构：
