@@ -13,7 +13,8 @@
 }
 
 .better_qqnt .wrap {
-    background-color: var(--fill_light_primary);
+    /* Linux样式兼容：--fg_white */
+    background-color: var(--fill_light_primary, var(--fg_white));
     border-radius: 8px;
     font-size: min(var(--font_size_3), 18px);
     line-height: min(var(--line_height_3), 24px);
@@ -31,12 +32,14 @@
 
 .better_qqnt .horizontal-dividing-line {
     border: unset;
+    margin: unset;
     height: 1px;
     background-color: rgba(0, 0, 0, 0.1);
 }
 
 .better_qqnt .vertical-dividing-line {
     border: unset;
+    margin: unset;
     width: 1px;
     background-color: rgba(0, 0, 0, 0.1);
 }
@@ -47,6 +50,11 @@
 
 .better_qqnt .hidden {
     display: none !important;
+}
+
+.better_qqnt .disabled {
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 .better_qqnt .secondary-text {
@@ -94,7 +102,8 @@
 .better_qqnt .modal-dialog {
     width: 480px;
     border-radius: 8px;
-    background-color: var(--bg_bottom_standard);
+    /* Linux样式兼容：--fg_white */
+    background-color: var(--bg_bottom_standard, var(--fg_white));
 }
 
 .better_qqnt .modal-dialog header {
@@ -158,11 +167,12 @@
 
 @media (prefers-color-scheme: light) {
     .text_color {
-      color:black;
+        color: black;
     }
 }
+
 @media (prefers-color-scheme: dark) {
     .text_color {
-      color:white;
+        color: white;
     }
 }

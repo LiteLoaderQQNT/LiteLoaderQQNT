@@ -82,6 +82,15 @@ export async function onConfigView(view) {
         modal_window.classList.remove("hidden");
     });
 
+    // 非Windows平台禁止修改
+    if (betterQQNT.os.platform != "win32") {
+        path_input.readOnly = true;
+        pick_dir.classList.add("disabled");
+        reset.classList.add("disabled");
+        apply.classList.add("disabled");
+        pick_dir.previousElementSibling.textContent += "（非Windows平台请手动更改环境变量）"
+    }
+
 
     // 插件列表
     const section_plugins = view.querySelector(".plugins");
