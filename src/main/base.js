@@ -7,7 +7,7 @@ const qqnt_package = require("../../../package.json");
 
 // BetterQQNT的数据目录
 const BETTERQQNT_PROFILE_ENV = process.env["BETTERQQNT_PROFILE"];
-const BETTERQQNT_PROFILE_COSNT = `${os.homedir()}/Documents/BetterQQN`;
+const BETTERQQNT_PROFILE_COSNT = `${os.homedir()}/Documents/BetterQQNT`;
 const BETTERQQNT_PROFILE = BETTERQQNT_PROFILE_ENV || BETTERQQNT_PROFILE_COSNT;
 
 
