@@ -82,6 +82,11 @@ export class PluginConfigView {
                 this.liteloader_setting_content.textContent = null;
                 this.liteloader_setting_content.appendChild(view);
             }
+            if (betterQQNT.os.platform == "darwin") {
+                this.setting_title.textContent = name;
+                this.liteloader_setting_content.textContent = null;
+                this.liteloader_setting_content.appendChild(view);
+            }
         });
         nav_item.querySelector(".q-icon").textContent = null;
         nav_item.querySelector(".name").textContent = name;
