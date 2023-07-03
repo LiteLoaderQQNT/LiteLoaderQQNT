@@ -11,7 +11,7 @@ BetterQQNT是一个QQNT的插件加载器
 因为与橘子的BetterQQNT（dll版）重名，打算更换名称为LiteLoaderQQNT  
 （毕竟是橘子提出要做BetterQQNT，我只是等不及他做完，我就先做了试试）  
 一些奇怪的兼容性：LiteLoaderQQNT与BetterQQNT和QQNTim可正常使用  
-（不过橘子的BetterQQNT还没更新，目前在9.8.5版本无法使用，不要尝试上面）
+（不过橘子的BetterQQNT还没更新，Windows 9.8.5版本无法使用，不要尝试上面）
 
 
 ## 注意事项
@@ -42,6 +42,9 @@ BetterQQNT是一个QQNT的插件加载器
 ```
 ├─app_launcher
 ├─BetterQQNT <--在这
+│  ├─builtins
+│  ├─src
+│  ├─package.json
 │  └─...
 ├─package.json
 └─...
@@ -58,17 +61,17 @@ package.json文件示例：
 ```
 
 
-## 目前功能
-
-- 打开QQNT的DevTools，方便你查看和修改QQNT的内部运行情况。
-- 加载插件，让你可以根据自己的喜好和需求定制QQNT的外观和功能。
-
-> Windows QQNT 9.8.5版本暂时无法打开QQNT自身的DevTools  
-> 请安装Chii Devtools插件或QQNT vConsole插件进行远程调试  
-> 插件仓库地址在插件链接处，请自行根据插件介绍安装
-
-
 ## 插件链接
+
+### 开发
+
+目前并不建议开发插件，加载器还在完善中...  
+插件格式基本确定，直到完善后都应该不会大改  
+插件模板：[LiteLoaderQQNT-Plugin-Template](https://github.com/mo-jinran/LiteLoaderQQNT-Plugin-Template)
+
+> Windows QQNT 9.8.5版本暂时无法打开自身的DevTools  
+> 请安装Chii Devtools插件或QQNT vConsole插件进行调试  
+
 
 ### 扩展
 
@@ -94,10 +97,10 @@ package.json文件示例：
 
 ## 数据目录
 
-BetterQQNT的默认数据文件夹在`用户目录/Documents/BetterQQN`
+BetterQQNT的默认数据文件夹在`用户目录/Documents/BetterQQN`  
 修改环境变量`BETTERQQNT_PROFILE`可指定目录位置
 
-数据目录结构：
+### 数据目录结构：
 ```
 BetterQQNT
     ├─plugins           // 插件本体目录
@@ -112,7 +115,7 @@ BetterQQNT
     └─config.json       // 配置文件（不是给插件用的
 ```
 
-插件目录结构：
+### 插件目录结构：
 ```
 my-plugin
     ├─manifest.json     // 存放插件信息
