@@ -63,7 +63,7 @@ package.json文件示例：
 - 打开QQNT的DevTools，方便你查看和修改QQNT的内部运行情况。
 - 加载插件，让你可以根据自己的喜好和需求定制QQNT的外观和功能。
 
-> QQNT 9.8.5版本暂时无法通过BetterQQNT打开QQNT自身的DevTools  
+> Windows QQNT 9.8.5版本暂时无法打开QQNT自身的DevTools  
 > 请安装Chii Devtools插件或QQNT vConsole插件进行远程调试  
 > 插件仓库地址在插件链接处，请自行根据插件介绍安装
 
