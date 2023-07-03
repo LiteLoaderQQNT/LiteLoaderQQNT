@@ -25,27 +25,37 @@ BetterQQNT是一个QQNT的插件加载器
 
 ## 安装方法
 
+支持Windows, Linux, MacOS的32位与64位QQNT
+
+安装位置：
+- Windows：`QQNT的根目录/resources/app`
+- Linux：`QQNT的根目录/resources/app`
+- MacOS：`/Applications/QQ.app/Contents/Resources/app`
+
 只需三步，就可以轻松安装BetterQQNT：
-
-1. 在`QQNT的根目录/resources/app`下克隆本项目，或者下载项目ZIP并解压到`QQNT的根目录/resources/app`下（需要保留BetterQQNT文件夹，并使其与`package.json`同级）。
-
-   完成后，`QQNT的根目录/resources/app`下的文件夹结构应为：
-
-   ```
-   ├─app_launcher
-   ├─BetterQQNT <--在这
-   │  └─...
-   ├─node_modules
-   └─versions
-       └─...
-   ```
-
-2. 编辑`package.json`文件，将`main`键值改为`BetterQQNT文件夹名字`（大小写不敏感，请根据项目目录名实际情况修改），例如：`BetterQQNT`。
-
+1. 使用工具克隆项目，或者下载项目ZIP并将内部文件夹放入`安装位置`下
+2. 编辑`package.json`文件，将`main`键值改为`BetterQQNT文件夹名字`
 3. 重新启动QQNT，享受BetterQQNT带来的乐趣吧！
 
-支持Windows，Linux QQNT的`32位`与`64位`版本  
-（MacOS暂时未知，无设备测试）
+应与package.json文件同级：
+
+```
+├─app_launcher
+├─BetterQQNT <--在这
+│  └─...
+├─package.json
+└─...
+
+```
+
+package.json文件示例：
+```
+{
+    ...
+    "main": "BetterQQNT",
+    ...
+}
+```
 
 
 ## 目前功能
