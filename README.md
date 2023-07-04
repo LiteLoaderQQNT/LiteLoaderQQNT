@@ -31,15 +31,15 @@ Telegram闲聊群：https://t.me/LiteLoaderQQNT
 - MacOS：`/Applications/QQ.app/Contents/Resources/app`
 
 只需三步，就可以轻松安装LiteLoaderQQNT：
-1. 下载`Release`中最新的`Source code`，解压出文件夹并放到`安装位置`，重命名文件夹为`LiteLoaderQQNT`
-2. 编辑`安装位置/package.json`文件，将`main`键值改为`LiteLoaderQQNT文件夹名字`
+1. 下载`Release`中最新的`Source code`，解压出文件夹并放到`安装位置`，重命名文件夹为`LiteLoader`
+2. 编辑`安装位置/package.json`文件，将`main`键值改为`LiteLoader`（根据文件夹名字而修改）
 3. 重新启动QQNT，享受LiteLoaderQQNT带来的乐趣吧！
 
 应与package.json文件同级：
 
 ```
 ├─app_launcher
-├─LiteLoaderQQNT <--在这
+├─LiteLoader <--在这
 │  ├─builtins
 │  ├─src
 │  ├─package.json
@@ -53,7 +53,7 @@ package.json文件示例：
 ```
 {
     ...
-    "main": "LiteLoaderQQNT",
+    "main": "LiteLoader",
     ...
 }
 ```
