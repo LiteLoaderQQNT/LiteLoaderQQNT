@@ -97,7 +97,7 @@ package.json文件示例：
 
 ## 数据目录
 
-BetterQQNT的默认数据文件夹在`用户目录/Documents/BetterQQN`  
+BetterQQNT的默认数据文件夹在`用户目录/Documents/BetterQQNT`  
 修改环境变量`BETTERQQNT_PROFILE`可指定目录位置
 
 ### 数据目录结构：
