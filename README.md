@@ -33,7 +33,7 @@ BetterQQNT是一个QQNT的插件加载器
 - MacOS：`/Applications/QQ.app/Contents/Resources/app`
 
 只需三步，就可以轻松安装BetterQQNT：
-1. 使用工具克隆项目，或者下载项目ZIP并将内部文件夹放入`安装位置`下
+1. 下载`Release`中最新的`Source code`，解压出文件夹并放到`安装位置`
 2. 编辑`package.json`文件，将`main`键值改为`BetterQQNT文件夹名字`
 3. 重新启动QQNT，享受BetterQQNT带来的乐趣吧！
 
