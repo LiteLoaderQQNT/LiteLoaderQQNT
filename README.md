@@ -22,7 +22,7 @@ Telegram闲聊群：https://t.me/LiteLoaderQQNT
 
 ## 安装方法
 
-请先去官网安装QQNT最新版：https://im.qq.com/pcqq/index.shtml
+请先去官网安装QQNT最新版：https://im.qq.com/pcqq/index.shtml  
 支持Windows, Linux, MacOS的32位与64位QQNT
 
 安装位置：
