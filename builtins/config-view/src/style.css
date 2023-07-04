@@ -34,14 +34,14 @@
     border: unset;
     margin: unset;
     height: 1px;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(127, 127, 127, 0.15);
 }
 
 .config_view .vertical-dividing-line {
     border: unset;
     margin: unset;
     width: 1px;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(127, 127, 127, 0.15);
 }
 
 .config_view .ops-btns {
