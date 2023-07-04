@@ -1,6 +1,6 @@
-# BetterQQNT
+# LiteLoaderQQNT
 
-BetterQQNT是一个QQNT的插件加载器  
+LiteLoaderQQNT是一个QQNT的插件加载器  
 它可以让你自由地为QQNT添加各种插件  
 比如：美化主题，增加新功能 等...
 
@@ -8,7 +8,7 @@ Telegram闲聊群：https://t.me/LiteLoaderQQNT
 
 > 不要将这个项目弄混淆了！  
 > 并非是橘子他们团队用C++所作的BetterQQNT（DLL版）  
-> 而是由作者自己用JavaScript所做的BetterQQNT（JS版）
+> 而是由作者自己用JavaScript所做的LiteLoaderQQNT
 
 
 ## 注意事项
@@ -30,16 +30,16 @@ Telegram闲聊群：https://t.me/LiteLoaderQQNT
 - Linux：`QQNT的根目录/resources/app`
 - MacOS：`/Applications/QQ.app/Contents/Resources/app`
 
-只需三步，就可以轻松安装BetterQQNT：
-1. 下载`Release`中最新的`Source code`，解压出文件夹并放到`安装位置`
-2. 编辑`安装位置/package.json`文件，将`main`键值改为`BetterQQNT文件夹名字`
-3. 重新启动QQNT，享受BetterQQNT带来的乐趣吧！
+只需三步，就可以轻松安装LiteLoaderQQNT：
+1. 下载`Release`中最新的`Source code`，解压出文件夹并放到`安装位置`，重命名文件夹为`LiteLoaderQQNT`
+2. 编辑`安装位置/package.json`文件，将`main`键值改为`LiteLoaderQQNT文件夹名字`
+3. 重新启动QQNT，享受LiteLoaderQQNT带来的乐趣吧！
 
 应与package.json文件同级：
 
 ```
 ├─app_launcher
-├─BetterQQNT <--在这
+├─LiteLoaderQQNT <--在这
 │  ├─builtins
 │  ├─src
 │  ├─package.json
@@ -53,7 +53,7 @@ package.json文件示例：
 ```
 {
     ...
-    "main": "BetterQQNT",
+    "main": "LiteLoaderQQNT",
     ...
 }
 ```
@@ -95,7 +95,7 @@ package.json文件示例：
 
 ## 数据目录
 
-BetterQQNT的默认数据文件夹在`用户目录/Documents/BetterQQNT`  
+LiteLoaderQQNT的默认数据文件夹在`用户目录/Documents/BetterQQNT`  
 修改环境变量`BETTERQQNT_PROFILE`可指定目录位置
 
 ### 数据目录结构：
