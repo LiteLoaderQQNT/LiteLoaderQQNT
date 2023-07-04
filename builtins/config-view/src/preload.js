@@ -2,22 +2,22 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 
-contextBridge.exposeInMainWorld("better_qqnt", {
+contextBridge.exposeInMainWorld("config_view", {
     getDisabledList: () => ipcRenderer.invoke(
-        "betterQQNT.better_qqnt.getDisabledList"
+        "betterQQNT.config_view.getDisabledList"
     ),
     setDisabledList: list => ipcRenderer.invoke(
-        "betterQQNT.better_qqnt.setDisabledList",
+        "betterQQNT.config_view.setDisabledList",
         list
     ),
     showPickDirDialog: () => ipcRenderer.invoke(
-        "betterQQNT.better_qqnt.showPickDirDialog"
+        "betterQQNT.config_view.showPickDirDialog"
     ),
     setProfilePath: path => ipcRenderer.invoke(
-        "betterQQNT.better_qqnt.setProfilePath",
+        "betterQQNT.config_view.setProfilePath",
         path
     ),
     quit: () => ipcRenderer.send(
-        "betterQQNT.better_qqnt.quit"
+        "betterQQNT.config_view.quit"
     )
 });

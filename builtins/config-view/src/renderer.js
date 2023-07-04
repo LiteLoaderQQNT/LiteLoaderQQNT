@@ -1,5 +1,5 @@
 export async function onConfigView(view) {
-    const plugin_path = betterQQNT.plugins.better_qqnt.path.plugin;
+    const plugin_path = betterQQNT.plugins.config_view.path.plugin;
     const css_file_path = `file:///${plugin_path}/src/style.css`;
     const html_file_path = `file:///${plugin_path}/src/view.html`;
 
@@ -56,7 +56,7 @@ export async function onConfigView(view) {
     path_input.value = betterQQNT.path.profile;
 
     pick_dir.addEventListener("click", async event => {
-        const result = await better_qqnt.showPickDirDialog();
+        const result = await config_view.showPickDirDialog();
         const path = result.filePaths?.[0];
         if (path) {
             path_input.value = path;
@@ -64,20 +64,20 @@ export async function onConfigView(view) {
     });
 
     reset.addEventListener("click", async event => {
-        better_qqnt.setProfilePath("").then(() => {
+        config_view.setProfilePath("").then(() => {
             path_input.value = betterQQNT.path.default_profile;
             first.classList.add("hidden");
             second.classList.remove("hidden");
-            setTimeout(() => better_qqnt.quit(), 2000);
+            setTimeout(() => config_view.quit(), 2000);
         });
         modal_window.classList.remove("hidden");
     });
 
     apply.addEventListener("click", event => {
-        better_qqnt.setProfilePath(path_input.value).then(() => {
+        config_view.setProfilePath(path_input.value).then(() => {
             first.classList.add("hidden");
             second.classList.remove("hidden");
-            setTimeout(() => better_qqnt.quit(), 2000);
+            setTimeout(() => config_view.quit(), 2000);
         });
         modal_window.classList.remove("hidden");
     });
@@ -111,7 +111,7 @@ export async function onConfigView(view) {
         }
     });
 
-    const disabled_list = await better_qqnt.getDisabledList();
+    const disabled_list = await config_view.getDisabledList();
 
     for (const [slug, plugin] of Object.entries(betterQQNT.plugins)) {
         const hr = document.createElement("hr");
@@ -134,7 +134,7 @@ export async function onConfigView(view) {
         const q_switch = plugin_item.querySelector(".q-switch");
 
         q_switch.addEventListener("click", async () => {
-            const disabled_list = await better_qqnt.getDisabledList();
+            const disabled_list = await config_view.getDisabledList();
             let new_disabled_list = [];
             if (q_switch.classList.contains("is-active")) {
                 new_disabled_list = [...disabled_list, slug];
@@ -142,7 +142,7 @@ export async function onConfigView(view) {
             else {
                 new_disabled_list = disabled_list.filter(value => value != slug);
             }
-            await better_qqnt.setDisabledList(new_disabled_list);
+            await config_view.setDisabledList(new_disabled_list);
             q_switch.classList.toggle("is-active");
         });
 

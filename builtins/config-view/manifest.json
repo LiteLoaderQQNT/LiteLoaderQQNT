@@ -1,9 +1,9 @@
 {
     "manifest_version": 1,
     "type": "core",
-    "name": "BetterQQNT",
-    "slug": "better_qqnt",
-    "description": "BetterQQNT的配置界面",
+    "name": "LiteLoader 配置界面",
+    "slug": "config_view",
+    "description": "LiteLoaderQQNT的配置界面",
     "version": "0.1.0",
     "author": [
         {

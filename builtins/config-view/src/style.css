@@ -1,9 +1,9 @@
 /* 通用 */
-.better_qqnt {
+.config_view {
     margin: 20px;
 }
 
-.better_qqnt h1 {
+.config_view h1 {
     color: var(--text_primary);
     font-weight: var(--font-bold);
     font-size: min(var(--font_size_3), 18px);
@@ -12,7 +12,7 @@
     margin-bottom: 8px;
 }
 
-.better_qqnt .wrap {
+.config_view .wrap {
     /* Linux样式兼容：--fg_white */
     background-color: var(--fill_light_primary, var(--fg_white));
     border-radius: 8px;
@@ -23,54 +23,54 @@
     padding: 0px 16px;
 }
 
-.better_qqnt .vertical-list-item {
+.config_view .vertical-list-item {
     margin: 12px 0px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.better_qqnt .horizontal-dividing-line {
+.config_view .horizontal-dividing-line {
     border: unset;
     margin: unset;
     height: 1px;
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.better_qqnt .vertical-dividing-line {
+.config_view .vertical-dividing-line {
     border: unset;
     margin: unset;
     width: 1px;
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.better_qqnt .ops-btns {
+.config_view .ops-btns {
     display: flex;
 }
 
-.better_qqnt .hidden {
+.config_view .hidden {
     display: none !important;
 }
 
-.better_qqnt .disabled {
+.config_view .disabled {
     pointer-events: none;
     opacity: 0.5;
 }
 
-.better_qqnt .secondary-text {
+.config_view .secondary-text {
     color: var(--text_secondary);
     font-size: min(var(--font_size_2), 16px);
     line-height: min(var(--line_height_2), 22px);
     margin-top: 4px;
 }
 
-.better_qqnt .wrap .title {
+.config_view .wrap .title {
     cursor: pointer;
     font-size: min(var(--font_size_3), 18px);
     line-height: min(var(--line_height_3), 24px);
 }
 
-.better_qqnt .wrap .title svg {
+.config_view .wrap .title svg {
     width: 1em;
     height: 1em;
     transform: rotate(-180deg);
@@ -80,13 +80,13 @@
     transition-property: transform;
 }
 
-.better_qqnt .wrap .title svg.is-fold {
+.config_view .wrap .title svg.is-fold {
     transform: rotate(0deg);
 }
 
 
 /* 模态框 */
-.better_qqnt .modal-window {
+.config_view .modal-window {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -99,36 +99,36 @@
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.better_qqnt .modal-dialog {
+.config_view .modal-dialog {
     width: 480px;
     border-radius: 8px;
     /* Linux样式兼容：--fg_white */
     background-color: var(--bg_bottom_standard, var(--fg_white));
 }
 
-.better_qqnt .modal-dialog header {
+.config_view .modal-dialog header {
     font-size: 12px;
     height: 30px;
     line-height: 30px;
     text-align: center;
 }
 
-.better_qqnt .modal-dialog main {
+.config_view .modal-dialog main {
     padding: 0px 16px;
 }
 
-.better_qqnt .modal-dialog main p {
+.config_view .modal-dialog main p {
     margin: 8px 0px;
 }
 
-.better_qqnt .modal-dialog footer {
+.config_view .modal-dialog footer {
     height: 30px;
     display: flex;
     justify-content: right;
     align-items: center;
 }
 
-.better_qqnt .modal-dialog .q-icon {
+.config_view .modal-dialog .q-icon {
     width: 22px;
     height: 22px;
     margin: 8px;
@@ -136,13 +136,13 @@
 
 
 /* 版本号 */
-.better_qqnt .versions .wrap {
+.config_view .versions .wrap {
     display: flex;
     justify-content: space-between;
     padding: unset;
 }
 
-.better_qqnt .versions .wrap>div {
+.config_view .versions .wrap>div {
     flex: 1;
     margin: 8px;
     padding: 6px 0px;
@@ -152,7 +152,7 @@
 
 
 /* 数据目录 */
-.better_qqnt .path .path-input {
+.config_view .path .path-input {
     align-self: normal;
     flex: 1;
     border-radius: 4px;
@@ -160,7 +160,7 @@
     transition: all 100ms ease-out;
 }
 
-.better_qqnt .path .path-input:focus {
+.config_view .path .path-input:focus {
     padding-left: 4px;
     background-color: rgba(127, 127, 127, 0.1);
 }
