@@ -1,3 +1,5 @@
+const LiteLoader = betterQQNT;
+
 export class PluginLoader {
     #PluginConfigView = null;
     #plugins = {};
@@ -5,12 +7,12 @@ export class PluginLoader {
 
     async init() {
         // 导入PluginConfigView
-        const plugin_config_view_path = `file:///${betterQQNT.path.root}/src/renderer/config.js`;
+        const plugin_config_view_path = `file:///${LiteLoader.path.root}/src/renderer/config.js`;
         const { PluginConfigView } = await import(plugin_config_view_path);
         this.#PluginConfigView = PluginConfigView;
 
         // 获取插件注入渲染进程的代码
-        for (const [slug, plugin] of Object.entries(betterQQNT.plugins)) {
+        for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
             if (plugin.disabled) {
                 continue;
             }
@@ -44,7 +46,7 @@ export class PluginLoader {
         plugin_config_view.createDividingLine();
 
         // 遍历所有插件
-        for (const [slug, plugin] of Object.entries(betterQQNT.plugins)) {
+        for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
             if (plugin.disabled) {
                 continue;
             }

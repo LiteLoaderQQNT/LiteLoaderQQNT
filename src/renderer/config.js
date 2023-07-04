@@ -1,3 +1,5 @@
+const LiteLoader = betterQQNT;
+
 export class PluginConfigView {
     constructor() {
         // 基本框架
@@ -7,7 +9,7 @@ export class PluginConfigView {
         this.setting_content = this.setting_main.querySelector(".setting-main__content");
         // 设置界面
         this.liteloader_setting_content = document.createElement("div");
-        this.liteloader_setting_content.classList.add("betterqqnt");
+        this.liteloader_setting_content.classList.add("liteloader");
         this.liteloader_setting_content.classList.add("setting-main__content");
         this.liteloader_setting_content.style.display = "none";
         this.setting_main.appendChild(this.liteloader_setting_content);
@@ -20,26 +22,26 @@ export class PluginConfigView {
                 });
                 target.classList.add("nav-item-active", "qwq");
                 // 内容显示
-                const contains_betterqqnt = target.classList.contains("betterqqnt");
-                this.setting_content.style.display = contains_betterqqnt ? "none" : "block";
-                this.liteloader_setting_content.style.display = contains_betterqqnt ? "block" : "none";
+                const contains_liteloader = target.classList.contains("liteloader");
+                this.setting_content.style.display = contains_liteloader ? "none" : "block";
+                this.liteloader_setting_content.style.display = contains_liteloader ? "block" : "none";
             }
         });
         // 基本样式
         const style = document.createElement("style");
         style.textContent = `
-        .betterqqnt.disabled {
+        .liteloader.disabled {
             pointer-events: none;
             opacity: 0.5;
         }
-        .betterqqnt.dividing_line {
+        .liteloader.dividing_line {
             margin: 5% 30%;
             border: initial;
             border-radius: 4px;
             height: 3px;
             background: rgba(127, 127, 127, 0.5);
         }
-        .betterqqnt.setting-main__content {
+        .liteloader.setting-main__content {
             height: calc(100% - 70px);
             margin-bottom: 20px;
             overflow-y: scroll;
@@ -52,7 +54,7 @@ export class PluginConfigView {
     // 分割线
     createDividingLine() {
         const dividing_line = document.createElement("hr");
-        dividing_line.classList.add("betterqqnt");
+        dividing_line.classList.add("liteloader");
         dividing_line.classList.add("dividing_line");
         this.nav_bar.appendChild(dividing_line);
     }
@@ -62,14 +64,14 @@ export class PluginConfigView {
     createNavItme(name, view, enable) {
         const nav_item = this.nav_bar.querySelector(".nav-item").cloneNode(true);
         nav_item.classList.remove("nav-item-active");
-        nav_item.classList.add("betterqqnt");
+        nav_item.classList.add("liteloader");
         nav_item.addEventListener("click", event => {
             const classList = event.currentTarget.classList;
             if (classList.contains("nav-item-active")) {
                 return;
             }
             // 添加内容
-            if (betterQQNT.os.platform == "win32") {
+            if (LiteLoader.os.platform == "win32") {
                 this.setting_title.childNodes[1].textContent = name;
                 const liteloader_setting_view = document.createElement("div");
                 liteloader_setting_view.classList.add("q-scroll-view");
@@ -77,12 +79,12 @@ export class PluginConfigView {
                 this.liteloader_setting_content.textContent = null;
                 this.liteloader_setting_content.appendChild(liteloader_setting_view);
             }
-            if (betterQQNT.os.platform == "linux") {
+            if (LiteLoader.os.platform == "linux") {
                 this.setting_title.textContent = name;
                 this.liteloader_setting_content.textContent = null;
                 this.liteloader_setting_content.appendChild(view);
             }
-            if (betterQQNT.os.platform == "darwin") {
+            if (LiteLoader.os.platform == "darwin") {
                 this.setting_title.textContent = name;
                 this.liteloader_setting_content.textContent = null;
                 this.liteloader_setting_content.appendChild(view);

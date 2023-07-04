@@ -4,12 +4,12 @@ const child_process = require("child_process");
 const fs = require("fs");
 
 
-function onLoad(plugin, betterQQNT) {
+function onLoad(plugin, liteloader) {
 
     ipcMain.handle(
-        "betterQQNT.config_view.getDisabledList",
+        "LiteLoader.config_view.getDisabledList",
         (event, message) => {
-            const config_path = betterQQNT.path.config;
+            const config_path = liteloader.path.config;
             try {
                 const data = fs.readFileSync(config_path, "utf-8");
                 const config = JSON.parse(data);
@@ -24,9 +24,9 @@ function onLoad(plugin, betterQQNT) {
 
 
     ipcMain.handle(
-        "betterQQNT.config_view.setDisabledList",
+        "LiteLoader.config_view.setDisabledList",
         (event, list) => {
-            const config_path = betterQQNT.path.config;
+            const config_path = liteloader.path.config;
             try {
                 const data = fs.readFileSync(config_path, "utf-8");
                 const config = JSON.parse(data);
@@ -48,7 +48,7 @@ function onLoad(plugin, betterQQNT) {
 
 
     ipcMain.handle(
-        "betterQQNT.config_view.showPickDirDialog",
+        "LiteLoader.config_view.showPickDirDialog",
         (event, message) => dialog.showOpenDialog({
             properties: [
                 "openDirectory",
@@ -60,7 +60,7 @@ function onLoad(plugin, betterQQNT) {
 
 
     ipcMain.handle(
-        "betterQQNT.config_view.setProfilePath",
+        "LiteLoader.config_view.setProfilePath",
         (event, path) => new Promise((resolve, reject) => {
             const command = `setx BETTERQQNT_PROFILE "${path}"`;
             child_process.exec(command, (error, stdout, stderr) => {
@@ -75,7 +75,7 @@ function onLoad(plugin, betterQQNT) {
 
 
     ipcMain.on(
-        "betterQQNT.config_view.quit",
+        "LiteLoader.config_view.quit",
         (event, message) => {
             app.quit();
         }

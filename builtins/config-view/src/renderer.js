@@ -1,5 +1,7 @@
+const LiteLoader = betterQQNT;
+
 export async function onConfigView(view) {
-    const plugin_path = betterQQNT.plugins.config_view.path.plugin;
+    const plugin_path = LiteLoader.plugins.config_view.path.plugin;
     const css_file_path = `file:///${plugin_path}/src/style.css`;
     const html_file_path = `file:///${plugin_path}/src/view.html`;
 
@@ -20,16 +22,16 @@ export async function onConfigView(view) {
     // 初始化
     // 版本号
     const qqnt = view.querySelector(".versions .qqnt .content");
-    const betterqqnt = view.querySelector(".versions .betterqqnt .content");
+    const liteloader = view.querySelector(".versions .liteloader .content");
     const chromium = view.querySelector(".versions .chromium .content");
     const electron = view.querySelector(".versions .electron .content");
     const nodejs = view.querySelector(".versions .nodejs .content");
 
-    qqnt.textContent = betterQQNT.versions.qqnt;
-    betterqqnt.textContent = betterQQNT.versions.betterQQNT;
-    chromium.textContent = betterQQNT.versions.chrome;
-    electron.textContent = betterQQNT.versions.electron;
-    nodejs.textContent = betterQQNT.versions.node;
+    qqnt.textContent = LiteLoader.versions.qqnt;
+    liteloader.textContent = LiteLoader.versions.betterQQNT;
+    chromium.textContent = LiteLoader.versions.chrome;
+    electron.textContent = LiteLoader.versions.electron;
+    nodejs.textContent = LiteLoader.versions.node;
 
 
     // 模态窗口
@@ -53,7 +55,7 @@ export async function onConfigView(view) {
     const reset = view.querySelector(".path .ops-btns .reset");
     const apply = view.querySelector(".path .ops-btns .apply");
 
-    path_input.value = betterQQNT.path.profile;
+    path_input.value = LiteLoader.path.profile;
 
     pick_dir.addEventListener("click", async event => {
         const result = await config_view.showPickDirDialog();
@@ -65,7 +67,7 @@ export async function onConfigView(view) {
 
     reset.addEventListener("click", async event => {
         config_view.setProfilePath("").then(() => {
-            path_input.value = betterQQNT.path.default_profile;
+            path_input.value = LiteLoader.path.default_profile;
             first.classList.add("hidden");
             second.classList.remove("hidden");
             setTimeout(() => config_view.quit(), 2000);
@@ -83,7 +85,7 @@ export async function onConfigView(view) {
     });
 
     // 非Windows平台禁止修改
-    if (betterQQNT.os.platform != "win32") {
+    if (LiteLoader.os.platform != "win32") {
         path_input.readOnly = true;
         pick_dir.classList.add("disabled");
         reset.classList.add("disabled");
@@ -113,7 +115,7 @@ export async function onConfigView(view) {
 
     const disabled_list = await config_view.getDisabledList();
 
-    for (const [slug, plugin] of Object.entries(betterQQNT.plugins)) {
+    for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
         const hr = document.createElement("hr");
         hr.classList.add("horizontal-dividing-line");
 

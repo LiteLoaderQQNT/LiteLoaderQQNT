@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { betterQQNT, output } = require("./base.js");
+const { LiteLoader, output } = require("./base.js");
 
 class PluginLoader {
     // 插件列表
@@ -15,20 +15,20 @@ class PluginLoader {
 
         // 内置的核心插件
         try {
-            builtin_dirnames = fs.readdirSync(betterQQNT.path.builtins, "utf-8");
+            builtin_dirnames = fs.readdirSync(LiteLoader.path.builtins, "utf-8");
         } catch (error) {
             output("The builtins directory does not exist.");
         }
 
         // 外置第三方插件
         try {
-            plugin_dirnames = fs.readdirSync(betterQQNT.path.plugins, "utf-8");
+            plugin_dirnames = fs.readdirSync(LiteLoader.path.plugins, "utf-8");
         } catch (error) {
             // 目录不存在
             output("The plugins directory does not exist.");
             output("Trying to create the directory...");
             // 创建目录
-            fs.mkdir(betterQQNT.path.plugins, { recursive: true }, (err) => {
+            fs.mkdir(LiteLoader.path.plugins, { recursive: true }, (err) => {
                 const success_message = "Directory created successfully!";
                 const failure_message = "Failed to create the plugins directory!";
                 output(err ? failure_message : success_message);
@@ -39,11 +39,11 @@ class PluginLoader {
         try {
             // 获取单个插件目录名
             for (const builtin_dirname of builtin_dirnames) {
-                const plugin_path = path.join(betterQQNT.path.builtins, builtin_dirname);
+                const plugin_path = path.join(LiteLoader.path.builtins, builtin_dirname);
                 this.#loadPlugin(plugin_path);
             }
             for (const plugin_dirname of plugin_dirnames) {
-                const plugin_path = path.join(betterQQNT.path.plugins, plugin_dirname);
+                const plugin_path = path.join(LiteLoader.path.plugins, plugin_dirname);
                 this.#loadPlugin(plugin_path);
             }
         } catch (error) {
@@ -79,11 +79,11 @@ class PluginLoader {
 
         // manifest与路径
         const { slug, name, type } = manifest;
-        const plugin_data_path = path.join(betterQQNT.path.plugins_data, slug);
-        const plugin_cache_path = path.join(betterQQNT.path.plugins_cache, slug);
+        const plugin_data_path = path.join(LiteLoader.path.plugins_data, slug);
+        const plugin_cache_path = path.join(LiteLoader.path.plugins_cache, slug);
         const main_path = manifest.injects?.main;
         const file_path = path.join(plugin_path, main_path);
-        const plugin_disabled = betterQQNT.config?.disabled?.includes(slug) ?? false;
+        const plugin_disabled = LiteLoader.config?.disabled?.includes(slug) ?? false;
 
         // 保存到插件列表
         const plugin = {
@@ -125,7 +125,7 @@ class PluginLoader {
     onLoad() {
         // 加载插件
         for (const [slug, plugin] of Object.entries(this.#plugins)) {
-            plugin.exports?.onLoad?.(plugin, betterQQNT);
+            plugin.exports?.onLoad?.(plugin, LiteLoader);
         }
     }
 

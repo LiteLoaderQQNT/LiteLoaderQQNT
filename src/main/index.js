@@ -1,6 +1,6 @@
 const { Module } = require("module");
 const { app, ipcMain } = require("electron");
-const { betterQQNT } = require("./base.js");
+const { LiteLoader } = require("./base.js");
 const { PluginLoader } = require("./loader.js");
 
 
@@ -62,26 +62,26 @@ observeNewBrowserWindow(window => {
 });
 
 
-ipcMain.on("betterQQNT.betterQQNT.path", (event, message) => {
-    event.returnValue = betterQQNT.path;
+ipcMain.on("LiteLoader.LiteLoader.path", (event, message) => {
+    event.returnValue = LiteLoader.path;
 });
 
-ipcMain.on("betterQQNT.betterQQNT.versions", (event, message) => {
-    event.returnValue = betterQQNT.versions;
+ipcMain.on("LiteLoader.LiteLoader.versions", (event, message) => {
+    event.returnValue = LiteLoader.versions;
 });
 
-ipcMain.on("betterQQNT.betterQQNT.plugins", (event, message) => {
+ipcMain.on("LiteLoader.LiteLoader.plugins", (event, message) => {
     event.returnValue = plugin_loader.getPlugins;
 });
 
-ipcMain.on("betterQQNT.betterQQNT.package", (event, message) => {
-    event.returnValue = betterQQNT.package;
+ipcMain.on("LiteLoader.LiteLoader.package", (event, message) => {
+    event.returnValue = LiteLoader.package;
 });
 
-ipcMain.on("betterQQNT.betterQQNT.os", (event, message) => {
-    event.returnValue = betterQQNT.os;
+ipcMain.on("LiteLoader.LiteLoader.os", (event, message) => {
+    event.returnValue = LiteLoader.os;
 });
 
-ipcMain.on("betterQQNT.betterQQNT.config", (event, message) => {
-    event.returnValue = betterQQNT.config;
+ipcMain.on("LiteLoader.LiteLoader.config", (event, message) => {
+    event.returnValue = LiteLoader.config;
 });
