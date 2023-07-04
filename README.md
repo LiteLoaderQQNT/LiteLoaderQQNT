@@ -73,15 +73,16 @@ package.json文件示例：
 
 ### 扩展
 
-| 作者                                   | 名称                                                              | 描述                               |
-| -------------------------------------- | ----------------------------------------------------------------- | ---------------------------------- |
-| [沫烬染](https://github.com/mo-jinran) | [Chii DevTools](https://github.com/mo-jinran/chii-devtools)       | 使用Chii的DevTools进行远程调试     |
-| [XiaoHe321](https://github.com/xh321)  | [QQNT vConsole](https://github.com/xh321/BetterQQNT-VConsole)     | 使用腾讯自己的vConsole进行前端调试 |
-| [沫烬染](https://github.com/mo-jinran) | [窗口置顶](https://github.com/mo-jinran/window-on-top)            | 添加窗口置顶按钮                   |
-| [XiaoHe321](https://github.com/xh321)  | [背景插件](https://github.com/xh321/BetterQQNT-Background-Plugin) | 窗口背景图片                       |
-| [XiaoHe321](https://github.com/xh321)  | [链接跳转](https://github.com/xh321/BetterQQNT-Directly-Jump)     | 外链直接跳转，而不经过拦截页       |
-| [FW27623](https://github.com/FW27623)    | [移除QQ游戏中心](https://github.com/FW27623/remove_qqgame_center) | 删除QQ游戏中心侧边按钮             |
-| [XiaoHe321](https://github.com/xh321)  | [关闭更新弹窗](https://github.com/xh321/BetterQQNT-Kill-Update)   | 关闭NTQQ恼人的更新弹窗             |
+| 作者                                   | 名称                                                                          | 描述                                         |
+| -------------------------------------- | ----------------------------------------------------------------------------- | -------------------------------------------- |
+| [沫烬染](https://github.com/mo-jinran) | [Chii DevTools](https://github.com/mo-jinran/chii-devtools)                   | 使用Chii的DevTools进行远程调试               |
+| [XiaoHe321](https://github.com/xh321)  | [QQNT vConsole](https://github.com/xh321/BetterQQNT-VConsole)                 | 使用腾讯自己的vConsole进行前端调试           |
+| [沫烬染](https://github.com/mo-jinran) | [窗口置顶](https://github.com/mo-jinran/window-on-top)                        | 添加窗口置顶按钮                             |
+| [XiaoHe321](https://github.com/xh321)  | [背景插件](https://github.com/xh321/BetterQQNT-Background-Plugin)             | 窗口背景图片                                 |
+| [XiaoHe321](https://github.com/xh321)  | [链接跳转](https://github.com/xh321/BetterQQNT-Directly-Jump)                 | 外链直接跳转，而不经过拦截页                 |
+| [FW27623](https://github.com/FW27623)  | [移除QQ游戏中心](https://github.com/FW27623/remove_qqgame_center)             | 删除QQ游戏中心侧边按钮                       |
+| [XiaoHe321](https://github.com/xh321)  | [关闭更新弹窗](https://github.com/xh321/BetterQQNT-Kill-Update)               | 关闭NTQQ恼人的更新弹窗                       |
+| [沫烬染](https://github.com/mo-jinran) | [Linux - 背景毛玻璃](https://github.com/mo-jinran/linux-qqnt-background-blur) | 给Linux下KDE桌面环境的QQNT添加背景毛玻璃效果 |
 
 
 ### 主题
