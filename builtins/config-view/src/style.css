@@ -139,13 +139,12 @@
 .config_view .versions .wrap {
     display: flex;
     justify-content: space-between;
-    padding: unset;
+    padding: 16px 0px;
 }
 
 .config_view .versions .wrap>div {
     flex: 1;
-    margin: 8px;
-    padding: 6px 0px;
+    margin: 0px 10px;
     border-radius: 8px;
     text-align: center;
 }
