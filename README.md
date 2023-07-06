@@ -86,6 +86,7 @@ package.json文件示例：
 | [沫烬染](https://github.com/mo-jinran)  | [Linux - 背景毛玻璃](https://github.com/mo-jinran/linux-qqnt-background-blur) | 给Linux下KDE桌面环境的QQNT添加背景毛玻璃效果         |
 | [XiaoHe321](https://github.com/xh321)   | [防撤回](https://github.com/xh321/BetterQQNT-Anti-Recall)                     | 目前防撤回仅当你打开聊天窗口时生效，重新进入就失效了 |
 | [谦虚](https://github.com/qianxu2001)   | [繁化姬](https://github.com/qianxu2001/LiteLoaderQQNT-Plugin-Fanhuaji)        | 将消息从繁体转化为简体                               |
+| [xinyihl](https://github.com/xinyihl)   | [自定义移除侧栏](https://github.com/xinyihl/LiteLoaderQQNT-RemoveSidebar)     | 通过序号自定义移除主页的侧栏                         |
 
 
 ### 主题
