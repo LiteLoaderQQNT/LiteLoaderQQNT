@@ -1,5 +1,3 @@
-const LiteLoader = betterQQNT;
-
 export async function onConfigView(view) {
     const plugin_path = LiteLoader.plugins.config_view.path.plugin;
     const css_file_path = `file:///${plugin_path}/src/style.css`;
@@ -28,7 +26,7 @@ export async function onConfigView(view) {
     const nodejs = view.querySelector(".versions .nodejs .content");
 
     qqnt.textContent = LiteLoader.versions.qqnt;
-    liteloader.textContent = LiteLoader.versions.betterQQNT;
+    liteloader.textContent = LiteLoader.versions.liteLoader;
     chromium.textContent = LiteLoader.versions.chrome;
     electron.textContent = LiteLoader.versions.electron;
     nodejs.textContent = LiteLoader.versions.node;

@@ -1,5 +1,3 @@
-const LiteLoader = betterQQNT;
-
 export class PluginConfigView {
     constructor() {
         // 基本框架

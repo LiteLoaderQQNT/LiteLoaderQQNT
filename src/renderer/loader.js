@@ -1,5 +1,3 @@
-const LiteLoader = betterQQNT;
-
 export class PluginLoader {
     #PluginConfigView = null;
     #plugins = {};

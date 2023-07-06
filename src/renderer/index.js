@@ -1,5 +1,5 @@
 (async () => {
-    const loader_path = `file:///${betterQQNT.path.root}/src/renderer/loader.js`;
+    const loader_path = `file:///${LiteLoader.path.root}/src/renderer/loader.js`;
     const { PluginLoader } = await import(loader_path);
     const plugin_loader = new PluginLoader();
 
