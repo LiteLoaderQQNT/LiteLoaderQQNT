@@ -62,7 +62,7 @@ function onLoad(plugin, liteloader) {
     ipcMain.handle(
         "LiteLoader.config_view.setProfilePath",
         (event, path) => new Promise((resolve, reject) => {
-            const command = `setx BETTERQQNT_PROFILE "${path}"`;
+            const command = `setx LITELOADERQQNT_PROFILE "${path}"`;
             child_process.exec(command, (error, stdout, stderr) => {
                 if (error) {
                     reject(error);

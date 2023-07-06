@@ -7,7 +7,7 @@ const qqnt_package = require("../../../package.json");
 
 
 // LiteLoaderQQNT的数据目录
-const LITELOADER_PROFILE_ENV = process.env["LITELOADER_PROFILE"];
+const LITELOADER_PROFILE_ENV = process.env["LITELOADERQQNT_PROFILE"];
 const LITELOADER_PROFILE_CONST = path.join(app.getPath("documents"), "LiteLoaderQQNT");
 const LITELOADER_PROFILE = LITELOADER_PROFILE_ENV || LITELOADER_PROFILE_CONST;
 
