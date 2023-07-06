@@ -1,22 +1,18 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
+function ipcGet(channel) {
+    return ipcRenderer.sendSync(channel, { eventName: "LiteLoader" });
+}
+
+const LiteLoader = {
+    path: ipcGet("LiteLoader.LiteLoader.path"),
+    versions: ipcGet("LiteLoader.LiteLoader.versions"),
+    plugins: ipcGet("LiteLoader.LiteLoader.plugins"),
+    package: ipcGet("LiteLoader.LiteLoader.package"),
+    os: ipcGet("LiteLoader.LiteLoader.os"),
+    config: ipcGet("LiteLoader.LiteLoader.config"),
+};
 
 // 即将废弃
-contextBridge.exposeInMainWorld("betterQQNT", {
-    path: ipcRenderer.sendSync("LiteLoader.LiteLoader.path"),
-    versions: ipcRenderer.sendSync("LiteLoader.LiteLoader.versions"),
-    plugins: ipcRenderer.sendSync("LiteLoader.LiteLoader.plugins"),
-    package: ipcRenderer.sendSync("LiteLoader.LiteLoader.package"),
-    os: ipcRenderer.sendSync("LiteLoader.LiteLoader.os"),
-    config: ipcRenderer.sendSync("LiteLoader.LiteLoader.config"),
-});
-
-
-contextBridge.exposeInMainWorld("LiteLoader", {
-    path: ipcRenderer.sendSync("LiteLoader.LiteLoader.path"),
-    versions: ipcRenderer.sendSync("LiteLoader.LiteLoader.versions"),
-    plugins: ipcRenderer.sendSync("LiteLoader.LiteLoader.plugins"),
-    package: ipcRenderer.sendSync("LiteLoader.LiteLoader.package"),
-    os: ipcRenderer.sendSync("LiteLoader.LiteLoader.os"),
-    config: ipcRenderer.sendSync("LiteLoader.LiteLoader.config"),
-});
+contextBridge.exposeInMainWorld("betterQQNT", LiteLoader);
+contextBridge.exposeInMainWorld("LiteLoader", LiteLoader);
