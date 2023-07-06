@@ -73,18 +73,19 @@ package.json文件示例：
 
 ### 扩展
 
-| 作者                                      | 名称                                                                          | 描述                                                 |
-| ----------------------------------------- | ----------------------------------------------------------------------------- | ---------------------------------------------------- |
-| [沫烬染](https://github.com/mo-jinran)    | [Chii DevTools](https://github.com/mo-jinran/chii-devtools)                   | 使用Chii的DevTools进行远程调试                       |
-| [XiaoHe321](https://github.com/xh321)     | [QQNT vConsole](https://github.com/xh321/BetterQQNT-VConsole)                 | 使用腾讯自己的vConsole进行前端调试                   |
-| [沫烬染](https://github.com/mo-jinran)    | [窗口置顶](https://github.com/mo-jinran/window-on-top)                        | 添加窗口置顶按钮                                     |
-| [XiaoHe321](https://github.com/xh321)     | [背景插件](https://github.com/xh321/BetterQQNT-Background-Plugin)             | 窗口背景图片                                         |
-| [XiaoHe321](https://github.com/xh321)     | [链接跳转](https://github.com/xh321/BetterQQNT-Directly-Jump)                 | 外链直接跳转，而不经过拦截页                         |
-| [FW27623](https://github.com/FW27623)     | [移除QQ游戏中心](https://github.com/FW27623/remove_qqgame_center)             | 删除QQ游戏中心侧边按钮                               |
-| [Zhang Zhao](https://github.com/cookieiz) | [关闭QQ空间](https://github.com/cookieiz/BetterQQNT-RemoveZone)               | 移除QQ空间按钮                                       |
-| [XiaoHe321](https://github.com/xh321)     | [关闭更新弹窗](https://github.com/xh321/BetterQQNT-Kill-Update)               | 关闭NTQQ恼人的更新弹窗                               |
-| [沫烬染](https://github.com/mo-jinran)    | [Linux - 背景毛玻璃](https://github.com/mo-jinran/linux-qqnt-background-blur) | 给Linux下KDE桌面环境的QQNT添加背景毛玻璃效果         |
-| [XiaoHe321](https://github.com/xh321)     | [防撤回](https://github.com/xh321/BetterQQNT-Anti-Recall)                     | 目前防撤回仅当你打开聊天窗口时生效，重新进入就失效了 |
+| 作者                                    | 名称                                                                          | 描述                                                 |
+| --------------------------------------- | ----------------------------------------------------------------------------- | ---------------------------------------------------- |
+| [沫烬染](https://github.com/mo-jinran)  | [Chii DevTools](https://github.com/mo-jinran/chii-devtools)                   | 使用Chii的DevTools进行远程调试                       |
+| [XiaoHe321](https://github.com/xh321)   | [QQNT vConsole](https://github.com/xh321/BetterQQNT-VConsole)                 | 使用腾讯自己的vConsole进行前端调试                   |
+| [沫烬染](https://github.com/mo-jinran)  | [窗口置顶](https://github.com/mo-jinran/window-on-top)                        | 添加窗口置顶按钮                                     |
+| [XiaoHe321](https://github.com/xh321)   | [背景插件](https://github.com/xh321/BetterQQNT-Background-Plugin)             | 窗口背景图片                                         |
+| [XiaoHe321](https://github.com/xh321)   | [链接跳转](https://github.com/xh321/BetterQQNT-Directly-Jump)                 | 外链直接跳转，而不经过拦截页                         |
+| [FW27623](https://github.com/FW27623)   | [移除QQ游戏中心](https://github.com/FW27623/remove_qqgame_center)             | 删除QQ游戏中心侧边按钮                               |
+| [cookieiz](https://github.com/cookieiz) | [关闭QQ空间](https://github.com/cookieiz/BetterQQNT-RemoveZone)               | 移除QQ空间按钮                                       |
+| [XiaoHe321](https://github.com/xh321)   | [关闭更新弹窗](https://github.com/xh321/BetterQQNT-Kill-Update)               | 关闭NTQQ恼人的更新弹窗                               |
+| [沫烬染](https://github.com/mo-jinran)  | [Linux - 背景毛玻璃](https://github.com/mo-jinran/linux-qqnt-background-blur) | 给Linux下KDE桌面环境的QQNT添加背景毛玻璃效果         |
+| [XiaoHe321](https://github.com/xh321)   | [防撤回](https://github.com/xh321/BetterQQNT-Anti-Recall)                     | 目前防撤回仅当你打开聊天窗口时生效，重新进入就失效了 |
+| [谦虚](https://github.com/qianxu2001)   | [繁化姬](https://github.com/qianxu2001/LiteLoaderQQNT-Plugin-Fanhuaji)        | 将消息从繁体转化为简体                               |
 
 
 ### 主题
@@ -92,7 +93,7 @@ package.json文件示例：
 | 作者                                      | 名称                                                                     | 描述                                  |
 | ----------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------- |
 | [沫烬染](https://github.com/mo-jinran)    | [测试主题](https://github.com/mo-jinran/test-theme)                      | 测试用的主题                          |
-| [MUK](https://github.com/MUKAPP)          | [MSpring-Theme](https://github.com/MUKAPP/BetterQQNT-MSpring-Theme)      | BetterQQNT 主题，优雅 · 粉粉 · 细致   |
+| [MUKAPP](https://github.com/MUKAPP)       | [MSpring-Theme](https://github.com/MUKAPP/BetterQQNT-MSpring-Theme)      | BetterQQNT 主题，优雅 · 粉粉 · 细致   |
 | [festoney8](https://github.com/festoney8) | [QQNT微信风格主题](https://github.com/festoney8/BetterQQNT-Wechat-Theme) | BetterQQNT 插件，高仿微信风格的QQ主题 |
 
 
