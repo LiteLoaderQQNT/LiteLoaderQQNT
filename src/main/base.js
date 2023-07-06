@@ -1,14 +1,15 @@
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
+const { app } = require("electron");
 const liteloader_package = require("../../package.json");
 const qqnt_package = require("../../../package.json");
 
 
-// LiteLoader的数据目录
-const LITELOADER_PROFILE_ENV = process.env["BETTERQQNT_PROFILE"];
-const LITELOADER_PROFILE_COSNT = path.join(os.homedir(),"Documents/BetterQQNT");
-const LITELOADER_PROFILE = LITELOADER_PROFILE_ENV || LITELOADER_PROFILE_COSNT;
+// LiteLoaderQQNT的数据目录
+const LITELOADER_PROFILE_ENV = process.env["LITELOADER_PROFILE"];
+const LITELOADER_PROFILE_CONST = path.join(app.getPath("documents"), "LiteLoaderQQNT");
+const LITELOADER_PROFILE = LITELOADER_PROFILE_ENV || LITELOADER_PROFILE_CONST;
 
 
 const LiteLoader = {
