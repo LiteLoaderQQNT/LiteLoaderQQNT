@@ -50,7 +50,7 @@ export class PluginLoader {
             }
             const name = plugin.manifest.name;
             const view = document.createElement("div");
-            view.classList.add(slug);
+            view.classList.add(slug, "plugin-config-view");
             // 如果没有onConfigView函数，就将按钮禁用
             const onConfigView = this.#plugins?.[slug]?.onConfigView;
             plugin_config_view.createNavItme(name, view, onConfigView);

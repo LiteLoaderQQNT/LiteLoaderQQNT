@@ -1,0 +1,96 @@
+.liteloader {
+
+    /* 外边距 */
+    .plugin-config-view {
+        margin: 20px;
+    }
+
+    /* 每节的标题 */
+    & h1 {
+        color: var(--text_primary);
+        font-weight: var(--font-bold);
+        font-size: min(var(--font_size_3), 18px);
+        line-height: min(var(--line_height_3), 24px);
+        padding: 0px 16px;
+        margin-bottom: 8px;
+    }
+
+    .wrap {
+        /* Linux样式兼容：--fg_white */
+        background-color: var(--fill_light_primary, var(--fg_white));
+        border-radius: 8px;
+        font-size: min(var(--font_size_3), 18px);
+        line-height: min(var(--line_height_3), 24px);
+        margin-bottom: 20px;
+        overflow: hidden;
+        padding: 0px 16px;
+
+        .title {
+            cursor: pointer;
+            font-size: min(var(--font_size_3), 18px);
+            line-height: min(var(--line_height_3), 24px);
+
+            & svg {
+                width: 1em;
+                height: 1em;
+                transform: rotate(-180deg);
+                transition-duration: 0.2s;
+                transition-timing-function: ease;
+                transition-delay: 0s;
+                transition-property: transform;
+
+                .is-fold {
+                    transform: rotate(0deg);
+                }
+            }
+        }
+    }
+
+    /* 纵向列表条目 */
+    .vertical-list-item {
+        margin: 12px 0px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* 水平分割线 */
+    .horizontal-dividing-line {
+        border: unset;
+        margin: unset;
+        height: 1px;
+        background-color: rgba(127, 127, 127, 0.15);
+    }
+
+    /* 纵向分割线 */
+    .vertical-dividing-line {
+        border: unset;
+        margin: unset;
+        width: 1px;
+        background-color: rgba(127, 127, 127, 0.15);
+    }
+
+    /* 按钮布局 */
+    .ops-btns {
+        display: flex;
+    }
+
+    /* 副文本 */
+    .secondary-text {
+        color: var(--text_secondary);
+        font-size: min(var(--font_size_2), 16px);
+        line-height: min(var(--line_height_2), 22px);
+        margin-top: 4px;
+    }
+
+    /* 隐藏 */
+    .hidden {
+        display: none !important;
+    }
+
+    /* 禁用 */
+    .disabled {
+        pointer-events: none;
+        opacity: 0.5;
+    }
+}

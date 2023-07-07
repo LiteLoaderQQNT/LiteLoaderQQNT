@@ -118,7 +118,7 @@ export async function onConfigView(view) {
         hr.classList.add("horizontal-dividing-line");
 
         const plugin_item_html = `
-        <div class="vertical-list-item">
+        <li class="vertical-list-item">
             <div>
                 <h2>${plugin.manifest.name}</h2>
                 <span class="secondary-text">${plugin.manifest.description}</span>
@@ -126,7 +126,7 @@ export async function onConfigView(view) {
             <div class="q-switch is-active">
                 <span class="q-switch__handle"></span>
             </div>
-        </div>
+        </li>
         `;
         const doc = parser.parseFromString(plugin_item_html, "text/html");
 
