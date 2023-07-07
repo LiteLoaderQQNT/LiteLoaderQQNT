@@ -1,13 +1,13 @@
 export async function onConfigView(view) {
     const plugin_path = LiteLoader.plugins.config_view.path.plugin;
-    const css_file_path = `file:///${plugin_path}/src/style.css`;
-    const html_file_path = `file:///${plugin_path}/src/view.html`;
+    const css_file_path = `file://${plugin_path}/src/style.css`;
+    const html_file_path = `file://${plugin_path}/src/view.html`;
 
     // CSS
-    const css_text = await (await fetch(css_file_path)).text();
-    const style = document.createElement("style");
-    style.textContent = css_text;
-    view.appendChild(style);
+    const link_element = document.createElement("link");
+    link_element.rel = "stylesheet";
+    link_element.href = css_file_path;
+    document.head.appendChild(link_element);
 
 
     // HTMl
