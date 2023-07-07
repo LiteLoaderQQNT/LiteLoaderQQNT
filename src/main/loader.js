@@ -81,7 +81,7 @@ class PluginLoader {
         const { slug, name, type } = manifest;
         const plugin_data_path = path.join(LiteLoader.path.plugins_data, slug);
         const plugin_cache_path = path.join(LiteLoader.path.plugins_cache, slug);
-        const main_path = manifest.injects?.main;
+        const main_path = manifest.injects?.main ?? "";
         const file_path = path.join(plugin_path, main_path);
         const plugin_disabled = LiteLoader.config?.disabled?.includes(slug) ?? false;
 
