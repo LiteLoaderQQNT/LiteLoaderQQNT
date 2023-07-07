@@ -95,10 +95,10 @@ export async function onConfigView(view) {
     // 插件列表
     const section_plugins = view.querySelector(".plugins");
     const plugin_lists = {
-        extension: view.querySelector(".plugins .wrap.extension .list"),
-        theme: view.querySelector(".plugins .wrap.theme .list"),
-        framework: view.querySelector(".plugins .wrap.framework .list"),
-        core: view.querySelector(".plugins .wrap.core .list")
+        extension: view.querySelector(".plugins .wrap.extension ul"),
+        theme: view.querySelector(".plugins .wrap.theme ul"),
+        framework: view.querySelector(".plugins .wrap.framework ul"),
+        core: view.querySelector(".plugins .wrap.core ul")
     };
 
     section_plugins.addEventListener("click", event => {
