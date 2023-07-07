@@ -40,7 +40,7 @@
     transition-property: transform;
 }
 
-.liteloader .wrap .title .icon .is-fold {
+.liteloader .wrap .title .icon.is-fold {
     transform: rotate(0deg);
 }
 
