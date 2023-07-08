@@ -36,16 +36,16 @@ function createPluginItem() {
 
 // 初始化列表控制区域
 function initListCtl(view) {
-    const search_input = view.querySelector(".search-input");
-    const adv_ops_btn = view.querySelector(".adv-ops-btn");
-    const adv_ops_list = view.querySelector(".adv-ops-list");
-
     // 搜索框
+    const search_input = view.querySelector(".search-input");
     search_input.addEventListener("change", event => {
 
     });
 
-    // 点击展开高级选项
+
+    // 高级选项
+    const adv_ops_btn = view.querySelector(".adv-ops-btn");
+    const adv_ops_list = view.querySelector(".adv-ops-list");
     adv_ops_btn.addEventListener("click", () => {
         const icon = adv_ops_btn.querySelector(".icon");
         icon.classList.toggle("is-fold");
@@ -53,7 +53,8 @@ function initListCtl(view) {
         adv_ops_list.classList.toggle("hidden");
     });
 
-    // 点击选择框触发
+
+    // 选择框
     const all_pulldown_menu_button = view.querySelectorAll(".q-pulldown-menu-button");
     for (const pulldown_menu_button of all_pulldown_menu_button) {
         pulldown_menu_button.addEventListener("click", event => {
@@ -61,8 +62,6 @@ function initListCtl(view) {
             context_menu.classList.toggle("hidden");
         });
     }
-
-    // 点击其他地方收起选择框
     addEventListener("pointerup", event => {
         if (event.target.closest(".q-pulldown-menu-button")) {
             return
@@ -75,6 +74,28 @@ function initListCtl(view) {
         }
     });
 
+
+    // 插件类型
+    const pulldown_menus = view.querySelectorAll(".q-pulldown-menu");
+    for (const pulldown_menu of pulldown_menus) {
+        const content = pulldown_menu.querySelector(".q-pulldown-menu-button .content");
+        const pulldown_menu_list = pulldown_menu.querySelector(".q-pulldown-menu-list");
+        const pulldown_menu_list_items = pulldown_menu_list.querySelectorAll(".q-pulldown-menu-list-item");
+        pulldown_menu_list.addEventListener("click", event => {
+            const target = event.target.closest(".q-pulldown-menu-list-item");
+            if (target) {
+                for (const pulldown_menu_list_item of pulldown_menu_list_items) {
+                    pulldown_menu_list_item.classList.remove("selected");
+                }
+                target.classList.add("selected");
+                const text_content = target.querySelector(".content").textContent;
+                content.value = text_content;
+                const value = target.dataset.value;
+                console.log(value);
+
+            }
+        });
+    }
 }
 
 
