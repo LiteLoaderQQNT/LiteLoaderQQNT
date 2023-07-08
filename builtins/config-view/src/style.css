@@ -74,7 +74,7 @@
 
 .config_view .path .path-input:focus {
     padding-left: 5px;
-    background-color: rgba(127, 127, 127, 0.1);
+    background-color: var(--overlay_active);
 }
 
 @media (prefers-color-scheme: light) {
