@@ -1,3 +1,4 @@
+// 一个插件列表-插件条目生成函数
 function createPluginItem() {
     const parser = new DOMParser();
     return plugin => {
@@ -33,30 +34,18 @@ function createPluginItem() {
 }
 
 
-export async function onConfigView(view) {
-    const plugin_path = LiteLoader.plugins.plugins_marketplace.path.plugin;
-    const css_file_path = `file://${plugin_path}/src/style.css`;
-    const html_file_path = `file://${plugin_path}/src/view.html`;
+// 初始化列表控制区域
+function initListCtl(view) {
+    const search_input = view.querySelector(".search-input");
+    const adv_ops_btn = view.querySelector(".adv-ops-btn");
+    const adv_ops_list = view.querySelector(".adv-ops-list");
 
-    // CSS
-    const link_element = document.createElement("link");
-    link_element.rel = "stylesheet";
-    link_element.href = css_file_path;
-    document.head.appendChild(link_element);
+    // 搜索框
+    search_input.addEventListener("change", event => {
 
+    });
 
-    // HTMl
-    const html_text = await (await fetch(html_file_path)).text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html_text, "text/html");
-    doc.querySelectorAll("section").forEach(node => view.appendChild(node));
-
-    const list_ctl = view.querySelector(".list-ctl");
-    const search_input = list_ctl.querySelector(".search-input");
-    const type = list_ctl.querySelector(".type");
-    const adv_ops_btn = list_ctl.querySelector(".adv-ops-btn");
-    const adv_ops_list = list_ctl.querySelector(".adv-ops-list");
-
+    // 点击展开高级选项
     adv_ops_btn.addEventListener("click", () => {
         const icon = adv_ops_btn.querySelector(".icon");
         icon.classList.toggle("is-fold");
@@ -64,7 +53,8 @@ export async function onConfigView(view) {
         adv_ops_list.classList.toggle("hidden");
     });
 
-    const all_pulldown_menu_button = list_ctl.querySelectorAll(".q-pulldown-menu-button");
+    // 点击选择框触发
+    const all_pulldown_menu_button = view.querySelectorAll(".q-pulldown-menu-button");
     for (const pulldown_menu_button of all_pulldown_menu_button) {
         pulldown_menu_button.addEventListener("click", event => {
             const context_menu = event.currentTarget.nextElementSibling;
@@ -72,20 +62,24 @@ export async function onConfigView(view) {
         });
     }
 
-    // 点击其他地方收起下拉选择框
+    // 点击其他地方收起选择框
     addEventListener("pointerup", event => {
         if (event.target.closest(".q-pulldown-menu-button")) {
             return
         }
         if (!event.target.closest(".q-context-menu")) {
-            const all_context_menu = list_ctl.querySelectorAll(".q-context-menu");
+            const all_context_menu = view.querySelectorAll(".q-context-menu");
             for (const context_menu of all_context_menu) {
                 context_menu.classList.add("hidden");
             }
         }
     });
 
-    const plugin_list = view.querySelector(".plugin-list");
+}
+
+
+// 初始化插件列表区域
+function initPluginList(view) {
     const pluginItem = createPluginItem();
     const plugin_info = {
         thumbnail: `https://avatars.githubusercontent.com/u/66980784`,
@@ -107,5 +101,28 @@ export async function onConfigView(view) {
         fragment.appendChild(plugin_item);
     }
 
-    plugin_list.appendChild(fragment);
+    view.appendChild(fragment);
+}
+
+
+export async function onConfigView(view) {
+    const plugin_path = LiteLoader.plugins.plugins_marketplace.path.plugin;
+    const css_file_path = `file://${plugin_path}/src/style.css`;
+    const html_file_path = `file://${plugin_path}/src/view.html`;
+
+    // CSS
+    const link_element = document.createElement("link");
+    link_element.rel = "stylesheet";
+    link_element.href = css_file_path;
+    document.head.appendChild(link_element);
+
+    // HTMl
+    const html_text = await (await fetch(html_file_path)).text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html_text, "text/html");
+    doc.querySelectorAll("section").forEach(node => view.appendChild(node));
+
+    // 初始化
+    initListCtl(view.querySelector(".list-ctl"));
+    initPluginList(view.querySelector(".plugin-list"));
 }
