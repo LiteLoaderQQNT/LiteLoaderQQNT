@@ -1,17 +1,8 @@
-.plugins_marketplace .list-ctl .ops-selects {
-    display: flex;
-    gap: 8px;
-}
+/**************/
+/* 列表控制区域 */
+/**************/
 
-.plugins_marketplace .list-ctl .q-pulldown-menu-button .icon {
-    width: 16px;
-    height: 16px;
-}
-
-.plugins_marketplace .list-ctl .q-pulldown-menu-button .content {
-    width: 80px;
-}
-
+/* 高级选项按钮 */
 .plugins_marketplace .list-ctl .adv-ops-btn {
     display: flex;
     align-items: center;
@@ -19,17 +10,19 @@
     height: 24px;
     width: 24px;
     border-radius: 4px;
-    margin-left: 16px;
 }
 
+/* 高级选项按钮-鼠标效果 */
 .plugins_marketplace .list-ctl .adv-ops-btn:hover {
     background-color: var(--overlay_hover);
 }
 
+/* 高级选项按钮-激活效果 */
 .plugins_marketplace .list-ctl .adv-ops-btn.is-active {
     background-color: var(--overlay_active);
 }
 
+/* 高级选项按钮-图标 */
 .plugins_marketplace .list-ctl .adv-ops-btn .icon {
     width: 1em;
     height: 1em;
@@ -40,34 +33,48 @@
     transition-property: transform;
 }
 
+/* 高级选项按钮-图标收起 */
 .plugins_marketplace .list-ctl .adv-ops-btn .icon.is-fold {
     transform: rotate(0deg);
 }
 
+/* 选择框容器 */
+.plugins_marketplace .list-ctl .ops-selects {
+    display: flex;
+    gap: 8px;
+}
 
+/* 选择框按钮-文本 */
+.plugins_marketplace .list-ctl .q-pulldown-menu-button .content {
+    width: 80px;
+}
+
+/* 选择框按钮-图标 */
+.plugins_marketplace .list-ctl .q-pulldown-menu-button .icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* 选择框选项菜单 */
 .plugins_marketplace .list-ctl .q-context-menu {
     z-index: 4000;
     margin-top: 5px;
     width: 122px;
 }
 
-.plugins_marketplace .list-ctl .selected .icon {
-    display: block !important;
-}
-
+/* 选择框选项菜单-图标 */
 .plugins_marketplace .list-ctl .q-context-menu .icon {
     display: none;
     width: 1em;
     height: 1em;
 }
 
-
-/* 列表控制 */
-.plugins_marketplace .list-ctl .vertical-list-item>div {
-    display: flex;
-    align-items: center;
+/* 选择框选项菜单-选择后图标 */
+.plugins_marketplace .list-ctl .q-context-menu .selected .icon {
+    display: block !important;
 }
 
+/* 搜索框 */
 .plugins_marketplace .list-ctl .search-input {
     align-self: normal;
     flex: 1;
@@ -76,22 +83,25 @@
     transition: all 100ms ease-out;
 }
 
+/* 搜索框-聚焦 */
 .plugins_marketplace .list-ctl .search-input:focus {
     padding-left: 5px;
     background-color: var(--overlay_active);
 }
 
 
-/* 插件列表 */
+/**************/
+/* 插件列表区域 */
+/**************/
 
-/* 缩略图 */
+/* 插件缩略图 */
 .plugins_marketplace .plugin-list .thumbnail {
     width: 56px;
     height: 56px;
     border-radius: 8px;
 }
 
-/* 插件信息 */
+/* 插件信息容器 */
 .plugins_marketplace .plugin-list .info {
     flex: 1;
     margin: 0px 16px;
@@ -104,21 +114,7 @@
     margin-bottom: 4px;
 }
 
-.plugins_marketplace .plugin-list .ops-btns {
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 8px;
-}
-
-.plugins_marketplace .plugin-list .ops-btns .q-button:not(:last-child) {
-    margin: unset;
-}
-
-.plugins_marketplace .plugin-list span:not(:last-child) {
-    margin-right: 12px;
-}
-
-/* 描述超过两行显示省略号 */
+/* 插件描述 */
 .plugins_marketplace .plugin-list .info .description {
     display: -webkit-box;
     word-break: break-all;
@@ -128,6 +124,24 @@
     overflow: hidden;
 }
 
+/* 插件按钮容器 */
+.plugins_marketplace .plugin-list .ops-btns {
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+/* 插件按钮 */
+.plugins_marketplace .plugin-list .ops-btns .q-button {
+    margin: unset;
+}
+
+/* 插件附加信息 */
 .plugins_marketplace .plugin-list .extra-information {
     margin: unset;
+}
+
+/* 插件附加信息 */
+.plugins_marketplace .plugin-list .extra-information span {
+    margin-right: 16px;
 }
