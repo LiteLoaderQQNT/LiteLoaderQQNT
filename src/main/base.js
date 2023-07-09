@@ -16,11 +16,10 @@ const LiteLoader = {
     path: {
         root: path.join(__dirname, "../../"),
         builtins: path.join(__dirname, "../../builtins"),
-        default_profile: LITELOADER_PROFILE,
+        default_profile: LITELOADER_PROFILE_CONST,
         profile: LITELOADER_PROFILE,
         config: path.join(LITELOADER_PROFILE, "config.json"),
         plugins: path.join(LITELOADER_PROFILE, "plugins"),
-        plugins_dev: path.join(LITELOADER_PROFILE, "plugins_dev"),
         plugins_data: path.join(LITELOADER_PROFILE, "plugins_data"),
         plugins_cache: path.join(LITELOADER_PROFILE, "plugins_cache")
     },
@@ -44,11 +43,25 @@ const LiteLoader = {
 }
 
 
-try {
-    const data = fs.readFileSync(LiteLoader.path.config, "utf-8");
-    LiteLoader.config = JSON.parse(data);
+if (!fs.existsSync(LiteLoader.path.plugins)) {
+    fs.mkdirSync(LiteLoader.path.plugins, { recursive: true });
 }
-catch (error) { }
+
+if (!fs.existsSync(LiteLoader.path.plugins_data)) {
+    fs.mkdirSync(LiteLoader.path.plugins_data, { recursive: true });
+}
+
+if (!fs.existsSync(LiteLoader.path.plugins_cache)) {
+    fs.mkdirSync(LiteLoader.path.plugins_cache, { recursive: true });
+}
+
+if (!fs.existsSync(LiteLoader.path.config)) {
+    fs.writeFileSync(LiteLoader.path.config, "{}", "utf-8");
+}
+
+// 读取配置文件
+const data = fs.readFileSync(LiteLoader.path.config, "utf-8");
+LiteLoader.config = JSON.parse(data);
 
 
 function output(...args) {

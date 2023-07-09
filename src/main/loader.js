@@ -9,7 +9,7 @@ class PluginLoader {
     constructor() {
         output("Start loading plugins.");
 
-        // 尝试获取插件路径
+        // 插件目录插件名
         let builtin_dirnames = [];
         let plugin_dirnames = [];
 
@@ -24,15 +24,7 @@ class PluginLoader {
         try {
             plugin_dirnames = fs.readdirSync(LiteLoader.path.plugins, "utf-8");
         } catch (error) {
-            // 目录不存在
             output("The plugins directory does not exist.");
-            output("Trying to create the directory...");
-            // 创建目录
-            fs.mkdir(LiteLoader.path.plugins, { recursive: true }, (err) => {
-                const success_message = "Directory created successfully!";
-                const failure_message = "Failed to create the plugins directory!";
-                output(err ? failure_message : success_message);
-            });
         }
 
         // 加载插件
@@ -48,7 +40,6 @@ class PluginLoader {
             }
         } catch (error) {
             output("Plugins loaded with error: ", error);
-            console.dir(error);
         }
 
         // 插件加载完成输出
