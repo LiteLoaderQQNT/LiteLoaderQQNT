@@ -22,7 +22,7 @@
                         </div>
                         <div class="q-context-menu hidden">
                             <ul class="q-pulldown-menu-list small-size">
-                                <li class="q-pulldown-menu-list-item">
+                                <li class="q-pulldown-menu-list-item" data-value="all">
                                     <span class="content">全部</span>
                                     <span class="icon">
                                         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -30,7 +30,7 @@
                                         </svg>
                                     </span>
                                 </li>
-                                <li class="q-pulldown-menu-list-item">
+                                <li class="q-pulldown-menu-list-item" data-value="extension">
                                     <span class="content">扩展</span>
                                     <span class="icon">
                                         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -38,7 +38,7 @@
                                         </svg>
                                     </span>
                                 </li>
-                                <li class="q-pulldown-menu-list-item">
+                                <li class="q-pulldown-menu-list-item" data-value="theme">
                                     <span class="content">主题</span>
                                     <span class="icon">
                                         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -46,7 +46,7 @@
                                         </svg>
                                     </span>
                                 </li>
-                                <li class="q-pulldown-menu-list-item">
+                                <li class="q-pulldown-menu-list-item" data-value="framework">
                                     <span class="content">依赖</span>
                                     <span class="icon">
                                         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -72,15 +72,23 @@
                         </div>
                         <div class="q-context-menu hidden">
                             <ul class="q-pulldown-menu-list small-size">
-                                <li class="q-pulldown-menu-list-item">
-                                    <span class="content">下载数量</span>
+                                <li class="q-pulldown-menu-list-item" data-value="random">
+                                    <span class="content">随机排序</span>
                                     <span class="icon">
                                         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M2 7L6.00001 11L14 3" stroke="currentColor" stroke-linejoin="round"></path>
                                         </svg>
                                     </span>
                                 </li>
-                                <li class="q-pulldown-menu-list-item">
+                                <li class="q-pulldown-menu-list-item" data-value="install">
+                                    <span class="content">安装数量</span>
+                                    <span class="icon">
+                                        <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M2 7L6.00001 11L14 3" stroke="currentColor" stroke-linejoin="round"></path>
+                                        </svg>
+                                    </span>
+                                </li>
+                                <li class="q-pulldown-menu-list-item" data-value="star">
                                     <span class="content">Star数量</span>
                                     <span class="icon">
                                         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -88,7 +96,7 @@
                                         </svg>
                                     </span>
                                 </li>
-                                <li class="q-pulldown-menu-list-item">
+                                <li class="q-pulldown-menu-list-item" data-value="date">
                                     <span class="content">更新日期</span>
                                     <span class="icon">
                                         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -96,7 +104,7 @@
                                         </svg>
                                     </span>
                                 </li>
-                                <li class="q-pulldown-menu-list-item">
+                                <li class="q-pulldown-menu-list-item" data-value="sequence">
                                     <span class="content">由新到旧</span>
                                     <span class="icon">
                                         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -116,7 +124,7 @@
                         </div>
                         <div class="q-context-menu hidden">
                             <ul class="q-pulldown-menu-list small-size">
-                                <li class="q-pulldown-menu-list-item">
+                                <li class="q-pulldown-menu-list-item" data-value="forward">
                                     <span class="content">正序</span>
                                     <span class="icon">
                                         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -124,7 +132,7 @@
                                         </svg>
                                     </span>
                                 </li>
-                                <li class="q-pulldown-menu-list-item">
+                                <li class="q-pulldown-menu-list-item" data-value="reverse">
                                     <span class="content">倒序</span>
                                     <span class="icon">
                                         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -150,16 +158,16 @@
                         </div>
                         <div class="q-context-menu hidden">
                             <ul class="q-pulldown-menu-list small-size">
-                                <li class="q-pulldown-menu-list-item">
-                                    <span class="content">栏目</span>
+                                <li class="q-pulldown-menu-list-item" data-value="single">
+                                    <span class="content">单列</span>
                                     <span class="icon">
                                         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M2 7L6.00001 11L14 3" stroke="currentColor" stroke-linejoin="round"></path>
                                         </svg>
                                     </span>
                                 </li>
-                                <li class="q-pulldown-menu-list-item">
-                                    <span class="content">网格</span>
+                                <li class="q-pulldown-menu-list-item" data-value="double">
+                                    <span class="content">双列</span>
                                     <span class="icon">
                                         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M2 7L6.00001 11L14 3" stroke="currentColor" stroke-linejoin="round"></path>
@@ -178,7 +186,7 @@
                         </div>
                         <div class="q-context-menu hidden">
                             <ul class="q-pulldown-menu-list small-size">
-                                <li class="q-pulldown-menu-list-item">
+                                <li class="q-pulldown-menu-list-item" data-value="loose">
                                     <span class="content">松散</span>
                                     <span class="icon">
                                         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -186,7 +194,7 @@
                                         </svg>
                                     </span>
                                 </li>
-                                <li class="q-pulldown-menu-list-item">
+                                <li class="q-pulldown-menu-list-item" data-value="compact">
                                     <span class="content">紧凑</span>
                                     <span class="icon">
                                         <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

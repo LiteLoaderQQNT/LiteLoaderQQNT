@@ -2,6 +2,7 @@
 /* 列表控制区域 */
 /**************/
 
+
 /* 高级选项按钮 */
 .plugins_marketplace .list-ctl .adv-ops-btn {
     display: flex;
@@ -94,6 +95,43 @@
 /* 插件列表区域 */
 /**************/
 
+
+/* 插件列表-列表 */
+.plugins_marketplace .single {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* 插件列表-网格 */
+.plugins_marketplace .double {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* 插件列表条目去掉外边距 */
+.plugins_marketplace .single .wrap {
+    margin: unset;
+}
+
+/* 插件列表条目去掉外边距 */
+.plugins_marketplace .double .wrap {
+    margin: unset;
+    flex-basis: calc(50% - 10px);
+}
+
+/* 插件列表-正序 */
+.plugins_marketplace .forward {
+    flex-wrap: wrap;
+}
+
+/* 插件列表-倒序 */
+.plugins_marketplace .reverse {
+    flex-direction: row-reverse;
+    flex-wrap: wrap-reverse;
+}
+
 /* 插件缩略图 */
 .plugins_marketplace .plugin-list .thumbnail {
     width: 56px;
@@ -111,7 +149,12 @@
 .plugins_marketplace .plugin-list .info .name {
     font-size: 14px;
     font-weight: var(--font-bold);
-    margin-bottom: 4px;
+    display: -webkit-box;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
 }
 
 /* 插件描述 */
@@ -144,4 +187,82 @@
 /* 插件附加信息 */
 .plugins_marketplace .plugin-list .extra-information span {
     margin-right: 16px;
+}
+
+
+/***********/
+/* 松散模式 */
+/***********/
+
+
+.plugins_marketplace .loose .wrap {
+    padding: 0px 16px;
+}
+
+.plugins_marketplace .loose .vertical-list-item {
+    margin: 16px 0px;
+}
+
+/* 插件缩略图 */
+.plugins_marketplace .loose .thumbnail {
+    width: 56px;
+    height: 56px;
+}
+
+.plugins_marketplace .loose .info {
+    margin: 0px 16px;
+}
+
+/* 插件描述 */
+.plugins_marketplace .loose .info .description {
+    margin-top: 4px;
+}
+
+/* 插件按钮容器 */
+.plugins_marketplace .loose .ops-btns {
+    gap: 8px;
+}
+
+/* 插件附加信息 */
+.plugins_marketplace .loose .extra-information span {
+    margin-right: 16px;
+}
+
+
+/***********/
+/* 紧凑模式 */
+/***********/
+
+
+.plugins_marketplace .compact .wrap {
+    padding: 0px 8px;
+}
+
+.plugins_marketplace .compact .vertical-list-item {
+    margin: 8px 0px;
+}
+
+/* 插件缩略图 */
+.plugins_marketplace .compact .thumbnail {
+    width: 52px;
+    height: 52px;
+}
+
+.plugins_marketplace .compact .info {
+    margin: 0px 8px;
+}
+
+/* 插件描述 */
+.plugins_marketplace .compact .info .description {
+    margin-top: 0px;
+}
+
+/* 插件按钮容器 */
+.plugins_marketplace .compact .ops-btns {
+    gap: 4px;
+}
+
+/* 插件附加信息 */
+.plugins_marketplace .compact .extra-information span {
+    margin-right: 8px;
 }

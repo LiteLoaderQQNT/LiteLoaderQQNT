@@ -6,15 +6,15 @@ const fs = require("fs");
 const default_config = {
     "mirrorlist": [],
     "plugin_type": [
-        "全部"
+        "all"
     ],
     "sort_order": [
-        "由新到旧",
-        "正序"
+        "random",
+        "forward"
     ],
     "list_style": [
-        "栏目",
-        "松散"
+        "single",
+        "loose"
     ]
 }
 
