@@ -15,8 +15,10 @@ function observeNewBrowserWindow(callback) {
         }
 
         // Hook BrowserWindow
-        class HookedBrowserWindow extends loaded_module.BrowserWindow {
-            constructor(original_config) {
+        // Proxy: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy
+        // 使用继承的Hook方法会导致无法使用BrowserWindow.getAllWindows()方法
+        let HookedBrowserWindow = new Proxy(loaded_module.BrowserWindow, {
+            construct(target, [original_config], newTarget) {
                 const config = {
                     ...original_config,
                     webPreferences: {
@@ -25,15 +27,21 @@ function observeNewBrowserWindow(callback) {
                         webSecurity: false
                     }
                 };
-                super(config);
-                callback(this);
+                const window = Reflect.construct(target, [config], newTarget);
+                callback(window);
+                return window;
             }
-        }
+        });
 
-        return {
-            ...loaded_module,
-            BrowserWindow: HookedBrowserWindow
-        }
+        // Proxy的方法不需要重新解构loaded_module，提高性能
+        return new Proxy(loaded_module, {
+            get(target, property, receiver) {
+                if (property === "BrowserWindow") {
+                    return HookedBrowserWindow;
+                }
+                return Reflect.get(target, property, receiver);
+            }
+        });
     }
 }
 
