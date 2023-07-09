@@ -35,7 +35,7 @@ function createPluginItem() {
 
 
 // 初始化列表控制区域
-function initListCtl(view) {
+async function initListCtl(view) {
     // 搜索框
     const search_input = view.querySelector(".search-input");
     search_input.addEventListener("change", event => {
@@ -54,7 +54,7 @@ function initListCtl(view) {
     });
 
 
-    // 选择框
+    // 选择框按钮
     const all_pulldown_menu_button = view.querySelectorAll(".q-pulldown-menu-button");
     for (const pulldown_menu_button of all_pulldown_menu_button) {
         pulldown_menu_button.addEventListener("click", event => {
@@ -75,24 +75,51 @@ function initListCtl(view) {
     });
 
 
-    // 插件类型
+    // 获取配置文件
+    const config = await plugins_marketplace.getConfig();
+
+    // 选择框
     const pulldown_menus = view.querySelectorAll(".q-pulldown-menu");
     for (const pulldown_menu of pulldown_menus) {
         const content = pulldown_menu.querySelector(".q-pulldown-menu-button .content");
         const pulldown_menu_list = pulldown_menu.querySelector(".q-pulldown-menu-list");
         const pulldown_menu_list_items = pulldown_menu_list.querySelectorAll(".q-pulldown-menu-list-item");
-        pulldown_menu_list.addEventListener("click", event => {
+
+        // 初始化选择框按钮显示内容
+        switch (pulldown_menu.dataset.id) {
+            case "plugin_type_1": content.value = config.plugin_type[0]; break;
+            case "sort_order_1": content.value = config.sort_order[0]; break;
+            case "sort_order_2": content.value = config.sort_order[1]; break;
+            case "list_style_1": content.value = config.list_style[0]; break;
+            case "list_style_2": content.value = config.list_style[1]; break;
+        }
+
+        // 选择框条目点击
+        pulldown_menu_list.addEventListener("click", async event => {
             const target = event.target.closest(".q-pulldown-menu-list-item");
-            if (target) {
+            if (target && !target.classList.contains("selected")) {
+                // 移除所有条目的选择状态
                 for (const pulldown_menu_list_item of pulldown_menu_list_items) {
                     pulldown_menu_list_item.classList.remove("selected");
                 }
+                // 添加选择状态
                 target.classList.add("selected");
+
+                // 获取选中的选项文本
                 const text_content = target.querySelector(".content").textContent;
                 content.value = text_content;
-                const value = target.dataset.value;
-                console.log(value);
 
+                // 判断是哪个选择框的，单独设置
+                switch (pulldown_menu.dataset.id) {
+                    case "plugin_type_1": config.plugin_type = [text_content]; break;
+                    case "sort_order_1": config.sort_order = [text_content, config["sort_order"][1]]; break;
+                    case "sort_order_2": config.sort_order = [config["sort_order"][0], text_content]; break;
+                    case "list_style_1": config.list_style = [text_content, config["list_style"][1]]; break;
+                    case "list_style_2": config.list_style = [config["list_style"][0], text_content]; break;
+                }
+
+                // 保存配置文件
+                await plugins_marketplace.setConfig(config);
             }
         });
     }
