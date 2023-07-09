@@ -48,6 +48,10 @@ export class PluginLoader {
             if (plugin.disabled) {
                 continue;
             }
+            //隐藏没有配置界面的插件
+            if(!(this.#plugins?.[slug]?.onConfigView)) {
+                continue;
+            }
             const name = plugin.manifest.name;
             const view = document.createElement("div");
             view.classList.add(slug, "plugin-config-view");
