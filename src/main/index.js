@@ -33,10 +33,15 @@ function observeNewBrowserWindow(callback) {
             }
         });
 
-        return {
-            ...loaded_module,
-            BrowserWindow: HookedBrowserWindow
-        }
+        // Proxy的方法不需要重新解构loaded_module，提高性能
+        return new Proxy(loaded_module, {
+            get(target, property, receiver) {
+                if (property === "BrowserWindow") {
+                    return HookedBrowserWindow;
+                }
+                return Reflect.get(target, property, receiver);
+            }
+        });
     }
 }
 
