@@ -186,7 +186,7 @@
 
 /* 插件附加信息 */
 .plugins_marketplace .plugin-list .extra-information span {
-    margin-right: 16px;
+    margin-right: 12px;
 }
 
 
@@ -225,7 +225,7 @@
 
 /* 插件附加信息 */
 .plugins_marketplace .loose .extra-information span {
-    margin-right: 16px;
+    margin-right: 12px;
 }
 
 
@@ -264,5 +264,5 @@
 
 /* 插件附加信息 */
 .plugins_marketplace .compact .extra-information span {
-    margin-right: 8px;
+    margin-right: 6px;
 }

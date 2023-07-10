@@ -19,10 +19,11 @@ function createPluginItem() {
             <div class="vertical-list-item">
                 <p class="secondary-text extra-information">
                     <span>类型：${plugin.type}</span>
-                    <span>版本号：${plugin.version}</span>
-                    <span>最后更新：${plugin.last_updated}</span>
-                    <span>开发者：
-                        <a href="${plugin.author.link}">${plugin.author.name}</a>
+                    <span>平台：${plugin.platform.toString()}</span>
+                    <span>版本：${plugin.version}</span>
+                    <span>日期：${plugin.date}</span>
+                    <span>开发：
+                        <a href="${plugin.author.link}" target="_blank">${plugin.author.name}</a>
                     </span>
                 </p>
             </div>
@@ -44,8 +45,13 @@ async function initPluginList(view) {
             name: `这里是插件名称  ${_}`,
             description: "为了测试插件市场而写的描述，为了测试插件市场而写的描述，为了测试插件市场而写的描述",
             type: "扩展",
+            platform: [
+                "Windows",
+                "Linux",
+                "MacOS"
+            ],
             version: "0.0.0",
-            last_updated: "2023-7-8 | 12:05",
+            date: "2023-7-8",
             author: {
                 name: "沫烬染",
                 link: "https://github.com/mo-jinran"
@@ -111,7 +117,7 @@ async function initListCtl(list_ctl, plugin_list) {
 
         // 初始化选择框按钮显示内容
         const setValueAndAddSelectedClass = (value) => {
-            const name = list_ctl.querySelector(`[data-value="${value}"] .content`);
+            const name = pulldown_menu.querySelector(`[data-value="${value}"] .content`);
             name.parentNode.classList.add("selected");
             content.value = name.textContent;
         };
@@ -119,6 +125,10 @@ async function initListCtl(list_ctl, plugin_list) {
         switch (pulldown_menu.dataset.id) {
             case "plugin_type_1": {
                 const value = config.plugin_type[0];
+                setValueAndAddSelectedClass(value);
+            } break;
+            case "plugin_type_2": {
+                const value = config.plugin_type[1];
                 setValueAndAddSelectedClass(value);
             } break;
             case "sort_order_1": {
@@ -163,7 +173,10 @@ async function initListCtl(list_ctl, plugin_list) {
                 // 判断是哪个选择框的，单独设置
                 switch (pulldown_menu.dataset.id) {
                     case "plugin_type_1":
-                        config.plugin_type = [item_value];
+                        config.plugin_type = [item_value, config["plugin_type"][1]];
+                        break;
+                    case "plugin_type_2":
+                        config.plugin_type = [config["plugin_type"][0], item_value];
                         break;
                     case "sort_order_1":
                         config.sort_order = [item_value, config["sort_order"][1]];

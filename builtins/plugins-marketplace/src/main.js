@@ -6,7 +6,8 @@ const fs = require("fs");
 const default_config = {
     "mirrorlist": [],
     "plugin_type": [
-        "all"
+        "all",
+        "current"
     ],
     "sort_order": [
         "random",
