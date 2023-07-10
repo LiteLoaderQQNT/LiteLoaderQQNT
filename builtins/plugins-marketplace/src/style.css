@@ -110,6 +110,11 @@
     gap: 20px;
 }
 
+/* 插件条目容器 */
+.plugins_marketplace .wrap {
+    width: 100%;
+}
+
 /* 插件列表条目去掉外边距 */
 .plugins_marketplace .single .wrap {
     margin: unset;
@@ -142,6 +147,7 @@
 /* 插件信息容器 */
 .plugins_marketplace .plugin-list .info {
     flex: 1;
+    align-self: start;
     margin: 0px 16px;
 }
 
