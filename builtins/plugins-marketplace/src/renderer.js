@@ -21,7 +21,6 @@ function createPluginItem() {
                     <span>类型：${plugin.type}</span>
                     <span>平台：${plugin.platform.toString()}</span>
                     <span>版本：${plugin.version}</span>
-                    <span>日期：${plugin.date}</span>
                     <span>开发：
                         <a href="${plugin.author.link}" target="_blank">${plugin.author.name}</a>
                     </span>
@@ -37,28 +36,62 @@ function createPluginItem() {
 
 // 初始化插件列表区域
 async function initPluginList(view) {
+    // 获取配置文件
+    const config = await plugins_marketplace.getConfig();
+
+    const plugin_list = [];
+
+    // 创建一个类型映射
+    const type_map = new Map();
+    type_map.set("core", "核心");
+    type_map.set("extension", "扩展");
+    type_map.set("theme", "主题");
+    type_map.set("framew", "依赖");
+
+    // 创建一个类型映射
+    const platform_map = new Map();
+    platform_map.set("win32", "Windows");
+    platform_map.set("linux", "Linux");
+    platform_map.set("darwin", "MacOS");
+
+
+    // 处理多个仓库源
+    for (const url of config.mirrorlist) {
+        const list = await (await fetch(url)).json();
+
+        // 将每个源的列表整合到一个列表中
+        list.forEach(item => {
+            // 检查是否已存在相同的JSON对象
+            const is_duplicate = plugin_list.some(existing_item => {
+                return existing_item.repo === item.repo && existing_item.branch === item.branch;
+            });
+
+            // 如果不存在重复的JSON对象，则添加到列表中
+            if (!is_duplicate) {
+                plugin_list.push(item);
+            }
+        });
+    }
+
+
     const pluginItem = createPluginItem();
     const fragment = document.createDocumentFragment();
-    for (let _ = 0; _ < 10; _++) {
+
+    for (const info of plugin_list) {
+        const url = `https://ghproxy.com/https://raw.githubusercontent.com/${info.repo}/${info.branch}/manifest.json`;
+        const manifest = await (await fetch(url)).json();
         const plugin_item = pluginItem({
-            thumbnail: `https://avatars.githubusercontent.com/u/66980784`,
-            name: `这里是插件名称  ${_}`,
-            description: "为了测试插件市场而写的描述，为了测试插件市场而写的描述，为了测试插件市场而写的描述",
-            type: "扩展",
-            platform: [
-                "Windows",
-                "Linux",
-                "MacOS"
-            ],
-            version: "0.0.0",
-            date: "2023-7-8",
-            author: {
-                name: "沫烬染",
-                link: "https://github.com/mo-jinran"
-            }
+            thumbnail: manifest?.thumbnail ?? "",
+            name: manifest.name,
+            description: manifest.description,
+            type: type_map.get(manifest.type),
+            platform: manifest?.platform?.map(platform => platform_map.get(platform)) ?? [],
+            version: manifest.version,
+            author: manifest.author?.[0] ?? manifest.author
         });
         fragment.appendChild(plugin_item);
     }
+
     view.appendChild(fragment);
 }
 

@@ -1,10 +1,12 @@
 // 运行在 Electron 主进程 下的插件入口
-const { ipcMain } = require("electron");
+const { ipcMain, net } = require("electron");
 const fs = require("fs");
 
 
 const default_config = {
-    "mirrorlist": [],
+    "mirrorlist": [
+        "https://ghproxy.com/https://raw.githubusercontent.com/mo-jinran/LiteLoaderQQNT-Plugin-List/main/list.json"
+    ],
     "plugin_type": [
         "all",
         "current"
