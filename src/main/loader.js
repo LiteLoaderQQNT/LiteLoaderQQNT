@@ -88,11 +88,6 @@ class PluginLoader {
             disabled: plugin_disabled
         }
 
-        if (type == "core") {
-            delete plugin.path.data;
-            delete plugin.path.cache;
-        }
-
         if (!main_path) {
             delete plugin.exports;
         }
