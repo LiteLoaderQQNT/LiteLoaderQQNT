@@ -39,7 +39,8 @@ const LiteLoader = {
     os: {
         platform: os.platform(),
     },
-    config: {}
+    config: {},
+    plugins: {}
 }
 
 
