@@ -89,15 +89,15 @@ package.json文件示例：
 | [xinyihl](https://github.com/xinyihl)   | [自定义移除侧栏](https://github.com/xinyihl/LiteLoaderQQNT-RemoveSidebar)     | 通过序号自定义移除主页的侧栏                         |
 | [谦虚](https://github.com/qianxu2001)   | [演示模式](https://github.com/qianxu2001/LiteLoaderQQNT-Plugin-Demo-mode)     | 对界面上的元素进行模糊处理以便演示或截图             |
 
-
 ### 主题
 
-| 作者                                      | 名称                                                                         | 描述                                    |
-| ----------------------------------------- | ---------------------------------------------------------------------------- | --------------------------------------- |
-| [沫烬染](https://github.com/mo-jinran)    | [测试主题](https://github.com/mo-jinran/test-theme)                          | 测试用的主题                            |
-| [MUKAPP](https://github.com/MUKAPP)       | [MSpring-Theme](https://github.com/MUKAPP/LiteLoaderQQNT-MSpring-Theme)      | LiteLoaderQQNT 主题，优雅 · 粉粉 · 细致 |
-| [festoney8](https://github.com/festoney8) | [QQNT微信风格主题](https://github.com/festoney8/LiteLoaderQQNT-Wechat-Theme) | QQNT高仿微信主题                        |
-| [XiaoHe321](https://github.com/xh321)     | [自定义 CSS 样式](https://github.com/xh321/LiteLoaderQQNT-Custom-CSS)        | 用来自定义 CSS 样式                     |
+| 作者                                      | 名称                                                                                 | 描述                                    |
+| ----------------------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------- |
+| [沫烬染](https://github.com/mo-jinran)    | [测试主题](https://github.com/mo-jinran/test-theme)                                  | 测试用的主题                            |
+| [MUKAPP](https://github.com/MUKAPP)       | [MSpring-Theme](https://github.com/MUKAPP/LiteLoaderQQNT-MSpring-Theme)              | LiteLoaderQQNT 主题，优雅 · 粉粉 · 细致 |
+| [festoney8](https://github.com/festoney8) | [QQNT微信风格主题](https://github.com/festoney8/LiteLoaderQQNT-Wechat-Theme)         | QQNT高仿微信主题                        |
+| [XiaoHe321](https://github.com/xh321)     | [自定义 CSS 样式](https://github.com/xh321/LiteLoaderQQNT-Custom-CSS)                | 用来自定义 CSS 样式                     |
+| [festoney8](https://github.com/festoney8) | [QQNT仿Telegram风格主题](https://github.com/festoney8/LiteLoaderQQNT-Telegram-Theme) | 高仿Telegram的QQNT主题                  |
 
 
 ## 数据目录

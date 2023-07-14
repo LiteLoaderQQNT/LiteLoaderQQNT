@@ -94,18 +94,11 @@ class PluginLoader {
 
         this.#plugins[slug] = plugin;
 
-        output("Found plugin:", name);
-    }
+        // 放到LiteLoader对象上
+        LiteLoader.plugins[slug] = { ...plugin };
+        delete LiteLoader.plugins[slug].exports;
 
-    get getPlugins() {
-        const plugins = {};
-        for (const [slug, plugin] of Object.entries(this.#plugins)) {
-            plugins[slug] = {
-                ...plugin,
-                exports: undefined
-            };
-        }
-        return plugins;
+        output("Found plugin:", name);
     }
 
     onLoad() {
