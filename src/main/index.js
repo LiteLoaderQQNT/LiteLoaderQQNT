@@ -79,7 +79,7 @@ ipcMain.on("LiteLoader.LiteLoader.versions", (event, message) => {
 });
 
 ipcMain.on("LiteLoader.LiteLoader.plugins", (event, message) => {
-    event.returnValue = plugin_loader.getPlugins;
+    event.returnValue = LiteLoader.plugins;
 });
 
 ipcMain.on("LiteLoader.LiteLoader.package", (event, message) => {
