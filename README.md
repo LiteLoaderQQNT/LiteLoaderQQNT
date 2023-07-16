@@ -98,7 +98,7 @@ package.json文件示例：
 | [沫烬染](https://github.com/mo-jinran)     | [窗口置顶](https://github.com/mo-jinran/window-on-top)                        | 添加窗口置顶按钮                                                 |
 | [XiaoHe321](https://github.com/xh321)      | [背景插件](https://github.com/xh321/LiteLoaderQQNT-Background-Plugin)         | 窗口背景图片                                                     |
 | [XiaoHe321](https://github.com/xh321)      | [链接跳转](https://github.com/xh321/LiteLoaderQQNT-Directly-Jump)             | 外链直接跳转，而不经过拦截页                                      |
-| [FW27623](https://github.com/FW27623)   | [自定义侧边栏按钮（原移除QQ游戏中心）](https://github.com/FW27623/remove_nav_sidebar) | 自定义侧边栏需要保留的按钮                               |
+| [FW27623](https://github.com/FW27623)      | [自定义侧边栏按钮](https://github.com/FW27623/remove_nav_sidebar)             | 自定义侧边栏需要保留的按钮                                       |
 | [cookieiz](https://github.com/cookieiz)    | [关闭QQ空间](https://github.com/cookieiz/LiteLoaderQQNT-RemoveZone)           | 移除QQ空间按钮                                                   |
 | [XiaoHe321](https://github.com/xh321)      | [关闭更新弹窗](https://github.com/xh321/LiteLoaderQQNT-Kill-Update)           | 关闭NTQQ恼人的更新弹窗                                           |
 | [沫烬染](https://github.com/mo-jinran)     | [Linux - 背景毛玻璃](https://github.com/mo-jinran/linux-qqnt-background-blur) | 给Linux下KDE桌面环境的QQNT添加背景毛玻璃效果                     |
