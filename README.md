@@ -87,25 +87,25 @@ package.json文件示例：
 
 ### 扩展
 
-| 作者                                       | 名称                                                                          | 描述                                                             |
-|--------------------------------------------|-------------------------------------------------------------------------------|----------------------------------------------------------------|
-| [沫烬染](https://github.com/mo-jinran)     | [Chii DevTools](https://github.com/mo-jinran/chii-devtools)                   | 使用Chii的DevTools进行远程调试                                   |
-| [XiaoHe321](https://github.com/xh321)      | [QQNT vConsole](https://github.com/xh321/LiteLoaderQQNT-VConsole)             | 使用腾讯自己的vConsole进行前端调试                               |
-| [沫烬染](https://github.com/mo-jinran)     | [窗口置顶](https://github.com/mo-jinran/window-on-top)                        | 添加窗口置顶按钮                                                 |
-| [XiaoHe321](https://github.com/xh321)      | [背景插件](https://github.com/xh321/LiteLoaderQQNT-Background-Plugin)         | 窗口背景图片                                                     |
-| [XiaoHe321](https://github.com/xh321)      | [链接跳转](https://github.com/xh321/LiteLoaderQQNT-Directly-Jump)             | 外链直接跳转，而不经过拦截页                                      |
-| [FW27623](https://github.com/FW27623)      | [自定义侧边栏按钮](https://github.com/FW27623/remove_nav_sidebar)             | 自定义侧边栏需要保留的按钮                                       |
-| [cookieiz](https://github.com/cookieiz)    | [关闭QQ空间](https://github.com/cookieiz/LiteLoaderQQNT-RemoveZone)           | 移除QQ空间按钮                                                   |
-| [XiaoHe321](https://github.com/xh321)      | [关闭更新弹窗](https://github.com/xh321/LiteLoaderQQNT-Kill-Update)           | 关闭NTQQ恼人的更新弹窗                                           |
-| [沫烬染](https://github.com/mo-jinran)     | [Linux - 背景毛玻璃](https://github.com/mo-jinran/linux-qqnt-background-blur) | 给Linux下KDE桌面环境的QQNT添加背景毛玻璃效果                     |
-| [XiaoHe321](https://github.com/xh321)      | [防撤回](https://github.com/xh321/LiteLoaderQQNT-Anti-Recall)                 | 目前防撤回仅当你打开聊天窗口时生效，重新进入就失效了              |
-| [谦虚](https://github.com/qianxu2001)      | [繁化姬](https://github.com/qianxu2001/LiteLoaderQQNT-Plugin-Fanhuaji)        | 将消息从繁体转化为简体                                           |
-| [xinyihl](https://github.com/xinyihl)      | [自定义移除侧栏](https://github.com/xinyihl/LiteLoaderQQNT-RemoveSidebar)     | 通过序号自定义移除主页的侧栏                                     |
-| [谦虚](https://github.com/qianxu2001)      | [演示模式](https://github.com/qianxu2001/LiteLoaderQQNT-Plugin-Demo-mode)     | 对界面上的元素进行模糊处理以便演示或截图                         |
-| [XiaoHe321](https://github.com/xh321)      | [聊天二维码解析](https://github.com/xh321/LiteLoaderQQNT-QR-Decode)           | 聊天中的图片二维码解析                                           |
-| [Gezhe14](https://github.com/Gezhe14)      | [高亮回复](https://github.com/Gezhe14/LiteLoaderQQNT-HighlightReplies)        | 高亮右键消息后的“回复”选项 ~~没错就是这么简单~~                  |
-| [d0j1a_1701](https://github.com/d0j1a1701) | [Markdown-it](https://github.com/d0j1a1701/LiteLoaderQQNT-Markdown)           | 为 QQNT 提供 Markdown 渲染                                       |
-| [Nevdev](https://github.com/Nevodev)       | [Fluentify](https://github.com/Nevodev/LL-Fluentify)                          | 为 右键菜单/表情面板 添加真亚克力模糊，同时修复二级菜单漂移的问题 |
+| 作者                                       | 名称                                                         | 描述                                                         |
+| ------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [沫烬染](https://github.com/mo-jinran)     | [Chii DevTools](https://github.com/mo-jinran/chii-devtools)  | 使用Chii的DevTools进行远程调试                               |
+| [XiaoHe321](https://github.com/xh321)      | [QQNT vConsole](https://github.com/xh321/LiteLoaderQQNT-VConsole) | 使用腾讯自己的vConsole进行前端调试                           |
+| [沫烬染](https://github.com/mo-jinran)     | [窗口置顶](https://github.com/mo-jinran/window-on-top)       | 添加窗口置顶按钮                                             |
+| [XiaoHe321](https://github.com/xh321)      | [背景插件](https://github.com/xh321/LiteLoaderQQNT-Background-Plugin) | 窗口背景图片                                                 |
+| [XiaoHe321](https://github.com/xh321)      | [链接跳转](https://github.com/xh321/LiteLoaderQQNT-Directly-Jump) | 外链直接跳转，而不经过拦截页                                 |
+| [FW27623](https://github.com/FW27623)      | [自定义侧边栏按钮](https://github.com/FW27623/remove_nav_sidebar) | 自定义侧边栏需要保留的按钮                                   |
+| [cookieiz](https://github.com/cookieiz)    | [关闭QQ空间](https://github.com/cookieiz/LiteLoaderQQNT-RemoveZone) | 移除QQ空间按钮                                               |
+| [XiaoHe321](https://github.com/xh321)      | [关闭更新弹窗](https://github.com/xh321/LiteLoaderQQNT-Kill-Update) | 关闭NTQQ恼人的更新弹窗                                       |
+| [沫烬染](https://github.com/mo-jinran)     | [Linux - 背景毛玻璃](https://github.com/mo-jinran/linux-qqnt-background-blur) | 给Linux下KDE桌面环境的QQNT添加背景毛玻璃效果                 |
+| [XiaoHe321](https://github.com/xh321)      | [防撤回](https://github.com/xh321/LiteLoaderQQNT-Anti-Recall) | 新版防撤回在QQNT打开期间均生效，重启失效                     |
+| [谦虚](https://github.com/qianxu2001)      | [繁化姬](https://github.com/qianxu2001/LiteLoaderQQNT-Plugin-Fanhuaji) | 将消息从繁体转化为简体                                       |
+| [xinyihl](https://github.com/xinyihl)      | [自定义移除侧栏](https://github.com/xinyihl/LiteLoaderQQNT-RemoveSidebar) | 通过序号自定义移除主页的侧栏                                 |
+| [谦虚](https://github.com/qianxu2001)      | [演示模式](https://github.com/qianxu2001/LiteLoaderQQNT-Plugin-Demo-mode) | 对界面上的元素进行模糊处理以便演示或截图                     |
+| [XiaoHe321](https://github.com/xh321)      | [聊天二维码解析](https://github.com/xh321/LiteLoaderQQNT-QR-Decode) | 聊天中的图片二维码解析                                       |
+| [Gezhe14](https://github.com/Gezhe14)      | [高亮回复](https://github.com/Gezhe14/LiteLoaderQQNT-HighlightReplies) | 高亮右键消息后的“回复”选项 ~~没错就是这么简单~~              |
+| [d0j1a_1701](https://github.com/d0j1a1701) | [Markdown-it](https://github.com/d0j1a1701/LiteLoaderQQNT-Markdown) | 为 QQNT 提供 Markdown 渲染                                   |
+| [Nevdev](https://github.com/Nevodev)       | [Fluentify](https://github.com/Nevodev/LL-Fluentify)         | 为 右键菜单/表情面板 添加真亚克力模糊，同时修复二级菜单漂移的问题 |
 
 ### 主题
 
