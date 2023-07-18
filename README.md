@@ -31,7 +31,7 @@ Telegram闲聊群：https://t.me/LiteLoaderQQNT
 
 ### 使用Release安装
 
-1. 下载`Release`中最新的`Source code`，解压出文件夹并放到`安装位置`，重命名文件夹为`LiteLoader`
+1. 下载`Release`中最新的`LiteLoaderQQNT.zip`，解压出`LiteLoader`文件夹并放到`安装位置`
 2. 编辑`安装位置/package.json`文件，将`main`键值改为`LiteLoader`（根据文件夹名字而修改）
 3. 重新启动QQNT，享受LiteLoaderQQNT带来的乐趣吧！
 
@@ -120,12 +120,12 @@ package.json文件示例：
 
 ## 数据目录
 
-LiteLoaderQQNT的默认数据文件夹在`用户目录/Documents/BetterQQNT`  
-修改环境变量`BETTERQQNT_PROFILE`可指定目录位置
+LiteLoaderQQNT的默认数据文件夹在`用户目录/Documents/LiteLoaderQQNT`  
+修改环境变量`LITELOADERQQNT_PROFILE`可指定目录位置
 
 ### 数据目录结构：
 ```
-BetterQQNT
+LiteLoaderQQNT
     ├─plugins           // 插件本体目录
     │   ├─my-plugin         // 插件本体
     │   └─...
