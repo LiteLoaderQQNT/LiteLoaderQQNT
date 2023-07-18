@@ -79,7 +79,8 @@ package.json文件示例：
 
 目前并不建议开发插件，加载器还在完善中...  
 插件格式基本确定，直到完善后都应该不会大改  
-插件模板：[LiteLoaderQQNT-Plugin-Template](https://github.com/mo-jinran/LiteLoaderQQNT-Plugin-Template)
+插件模板：[LiteLoaderQQNT-Plugin-Template](https://github.com/mo-jinran/LiteLoaderQQNT-Plugin-Template)  
+插件仓库：[LiteLoaderQQNT-Plugin-List](https://github.com/mo-jinran/LiteLoaderQQNT-Plugin-List)
 
 > Windows QQNT 9.8.5版本暂时无法打开自身的DevTools  
 > 请安装Chii Devtools插件或QQNT vConsole插件进行调试
