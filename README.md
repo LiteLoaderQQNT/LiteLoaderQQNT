@@ -77,8 +77,8 @@ package.json文件示例：
 
 ### 开发
 
-目前并不建议开发插件，加载器还在完善中...  
-插件格式基本确定，直到完善后都应该不会大改  
+如需上架插件市场，要使用最新的manifest格式（建议参考已上架插件，文件来源可使用仓库源码，也可用Release指定文件）  
+并在Github开源，需要打包的插件请在仓库发布Release，文件尽量使用Github Actions打包  
 插件模板：[LiteLoaderQQNT-Plugin-Template](https://github.com/mo-jinran/LiteLoaderQQNT-Plugin-Template)  
 插件仓库：[LiteLoaderQQNT-Plugin-List](https://github.com/mo-jinran/LiteLoaderQQNT-Plugin-List)
 
