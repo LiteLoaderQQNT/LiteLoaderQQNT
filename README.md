@@ -13,7 +13,6 @@ Telegram闲聊群：https://t.me/LiteLoaderQQNT
 ## 注意事项
 
 - 目前仍在开发当中，可能会存在一些问题和不足
-- 目前没有插件商店系统，暂时只能自行寻找插件
 - 仅为个人兴趣而制作，开发目的在于学习和探索
 - 能力有限，随缘更新。不过也欢迎各位来提交PR
 - 由于项目特殊性，必要时会停止开发或删除仓库
@@ -21,7 +20,7 @@ Telegram闲聊群：https://t.me/LiteLoaderQQNT
 
 ## 安装方法
 
-请先去官网安装QQNT最新版：https://im.qq.com/pcqq/index.shtml  
+请先去官网安装QQNT最新版：https://im.qq.com/  
 支持Windows, Linux, MacOS的32位与64位QQNT
 
 安装位置：
@@ -29,13 +28,13 @@ Telegram闲聊群：https://t.me/LiteLoaderQQNT
 - Linux：`QQNT的根目录/resources/app`
 - MacOS：`/Applications/QQ.app/Contents/Resources/app`
 
-### 使用Release安装
+### 使用Release安装（推荐）
 
 1. 下载`Release`中最新的`LiteLoaderQQNT.zip`，解压出`LiteLoader`文件夹并放到`安装位置`
 2. 编辑`安装位置/package.json`文件，将`main`键值改为`LiteLoader`（根据文件夹名字而修改）
 3. 重新启动QQNT，享受LiteLoaderQQNT带来的乐趣吧！
 
-### 使用Clone安装
+### 使用Clone安装（不推荐）
 
 1. 克隆`Repo`并拉取`submodule`，将文件夹放到`安装位置`，重命名文件夹为`LiteLoader`
 2. 编辑`安装位置/package.json`文件，将`main`键值改为`LiteLoader`（根据文件夹名字而修改）
@@ -61,7 +60,7 @@ Telegram闲聊群：https://t.me/LiteLoaderQQNT
 
 ```
 
-package.json文件示例：
+QQNT的package.json文件示例：
 ```
 {
     ...
