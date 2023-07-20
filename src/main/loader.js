@@ -96,6 +96,7 @@ class PluginLoader {
 
         // 放到LiteLoader对象上
         LiteLoader.plugins[slug] = { ...plugin };
+
         delete LiteLoader.plugins[slug].exports;
 
         output("Found plugin:", name);

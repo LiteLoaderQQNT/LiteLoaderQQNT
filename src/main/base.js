@@ -2,9 +2,11 @@ const path = require("path");
 const fs = require("fs");
 const os = require("os");
 const { app } = require("electron");
-const liteloader_package = require("../../package.json");
-const qqnt_package = require("../../../package.json");
 
+const { getQQInstallDir } = require("./helper.js");
+const qq_install_dir = getQQInstallDir();
+const liteloader_package = require("../../package.json");
+const qqnt_package = require(`${qq_install_dir}/resources/app/package.json`);
 
 // LiteLoaderQQNT的数据目录
 const LITELOADER_PROFILE_ENV = process.env["LITELOADERQQNT_PROFILE"];
@@ -64,13 +66,12 @@ if (!fs.existsSync(LiteLoader.path.config)) {
 const data = fs.readFileSync(LiteLoader.path.config, "utf-8");
 LiteLoader.config = JSON.parse(data);
 
-
 function output(...args) {
     console.log("\x1b[32m%s\x1b[0m", "LiteLoader:", ...args);
 }
 
-
 module.exports = {
     LiteLoader,
-    output
+    output,
+    qq_install_dir
 }
