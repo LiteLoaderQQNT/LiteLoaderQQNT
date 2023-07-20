@@ -106,6 +106,7 @@ QQNT的package.json文件示例：
 | [Gezhe14](https://github.com/Gezhe14)      | [高亮回复](https://github.com/Gezhe14/LiteLoaderQQNT-HighlightReplies) | 高亮右键消息后的“回复”选项 ~~没错就是这么简单~~              |
 | [d0j1a_1701](https://github.com/d0j1a1701) | [Markdown-it](https://github.com/d0j1a1701/LiteLoaderQQNT-Markdown) | 为 QQNT 提供 Markdown 渲染                                   |
 | [Nevdev](https://github.com/Nevodev)       | [Fluentify](https://github.com/Nevodev/LL-Fluentify)         | 为 右键菜单/表情面板 添加真亚克力模糊，同时修复二级菜单漂移的问题 |
+| [xinyihl](https://github.com/xinyihl)      | [JustF5](https://github.com/xinyihl/LiteLoaderQQNT-JustF5)         | 添加F5刷新页面 |
 
 ### 主题
 
