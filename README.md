@@ -112,7 +112,6 @@ QQNT的package.json文件示例：
 
 | 作者                                      | 名称                                                                                 | 描述                                   |
 |-------------------------------------------|--------------------------------------------------------------------------------------|--------------------------------------|
-| [沫烬染](https://github.com/mo-jinran)    | [测试主题](https://github.com/mo-jinran/test-theme)                                  | 测试用的主题                           |
 | [MUKAPP](https://github.com/MUKAPP)       | [MSpring-Theme](https://github.com/MUKAPP/LiteLoaderQQNT-MSpring-Theme)              | LiteLoaderQQNT 主题，优雅 · 粉粉 · 细致 |
 | [festoney8](https://github.com/festoney8) | [QQNT微信风格主题](https://github.com/festoney8/LiteLoaderQQNT-Wechat-Theme)         | QQNT高仿微信主题                       |
 | [XiaoHe321](https://github.com/xh321)     | [自定义 CSS 样式](https://github.com/xh321/LiteLoaderQQNT-Custom-CSS)                | 用来自定义 CSS 样式                    |
