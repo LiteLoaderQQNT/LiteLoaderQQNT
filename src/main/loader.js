@@ -111,17 +111,15 @@ class PluginLoader {
     onBrowserWindowCreated(window) {
         // 渲染进程PluginLoader
         window.webContents.on("dom-ready", () => {
-            const file_path = path.join(__dirname, "../renderer/index.js");
-            fs.readFile(file_path, "utf-8", (err, data) => {
-                if (err) throw err;
-                window.webContents.executeJavaScript(data, true);
-            });
+            const file_path = path.join(LiteLoader.path.root, "/src/renderer/index.js");
+            const code = `import("file://${file_path.replaceAll("\\", "/")}")`;
+            window.webContents.executeJavaScript(code, true).catch(() => { });
         });
 
         // 注入插件Preload
         const preloads = new Set([
             ...window.webContents.session.getPreloads(),
-            path.join(__dirname, "../preload/index.js")
+            path.join(LiteLoader.path.root, "/src/preload/index.js")
         ]);
 
         // 通知插件
