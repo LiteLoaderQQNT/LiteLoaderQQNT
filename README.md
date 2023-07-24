@@ -6,7 +6,7 @@ LiteLoaderQQNT是一个QQNT的插件加载器
 
 Telegram闲聊群：https://t.me/LiteLoaderQQNT
 
-> **QQNTim已跑路并Public archive**
+> **QQNTim已跑路并Public archive**  
 > LiteLoaderQQNT 可以与 **[QQNTim](https://github.com/Flysoft-Studio/QQNTim)** 并存，快去试试吧！  
 > 请阅读 [安装方法-与QQNTim共存]() 查看如何安装。
 
