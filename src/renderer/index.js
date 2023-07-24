@@ -1,25 +1,38 @@
-const loader_path = `file://${LiteLoader.path.root}/src/renderer/loader.js`;
-const { PluginLoader } = await import(loader_path);
-const plugin_loader = new PluginLoader();
+const index = async () => {
+    const loader_path = `file://${LiteLoader.path.root}/src/renderer/loader.js`;
+    const { PluginLoader } = await import(loader_path);
+    const plugin_loader = new PluginLoader();
 
-// 初始化
-await plugin_loader.init();
+    // 初始化
+    await plugin_loader.init();
 
-// 加载插件
-plugin_loader.onLoad();
+    // 加载插件
+    plugin_loader.onLoad();
 
-// 监听页面变化
-navigation.addEventListener("navigatesuccess", function func(event) {
-    const url = event.target.currentEntry.url;
-    // 检测是否为设置界面
-    if (url.includes("/index.html") && url.includes("#/setting")) {
-        // 移除监听
-        navigation.removeEventListener("navigatesuccess", func);
-        const interval = setInterval(() => {
-            if (document.querySelector(".setting-tab .nav-bar")) {
-                clearInterval(interval);
-                plugin_loader.onConfigView();
-            }
-        }, 100);
+    // 监听页面变化
+    navigation.addEventListener("navigatesuccess", function func(event) {
+        const url = event.target.currentEntry.url;
+        // 检测是否为设置界面
+        if (url.includes("/index.html") && url.includes("#/setting")) {
+            // 移除监听
+            navigation.removeEventListener("navigatesuccess", func);
+            const interval = setInterval(() => {
+                if (document.querySelector(".setting-tab .nav-bar")) {
+                    clearInterval(interval);
+                    plugin_loader.onConfigView();
+                }
+            }, 100);
+        }
+    });
+}
+
+
+// 注入代码
+const interval = setInterval(() => {
+    if (document.head) {
+        clearInterval(interval);
+        const script = document.createElement("script");
+        script.innerHTML = `(${index.toString()})()`;
+        document.head.appendChild(script);
     }
-});
+}, 100);

@@ -109,17 +109,13 @@ class PluginLoader {
     }
 
     onBrowserWindowCreated(window) {
-        // 渲染进程PluginLoader
-        window.webContents.on("dom-ready", () => {
-            const file_path = path.join(LiteLoader.path.root, "/src/renderer/index.js");
-            const code = `import("file://${file_path.replaceAll("\\", "/")}")`;
-            window.webContents.executeJavaScript(code, true).catch(() => { });
-        });
-
-        // 注入插件Preload
+        // 注入Preload
+        // LiteLoader最基础的API(一些信息)
+        // 还有加载渲染进程用的脚本
         const preloads = new Set([
             ...window.webContents.session.getPreloads(),
-            path.join(LiteLoader.path.root, "/src/preload/index.js")
+            path.join(LiteLoader.path.root, "/src/preload/index.js"),
+            path.join(LiteLoader.path.root, "/src/renderer/index.js"),
         ]);
 
         // 通知插件
