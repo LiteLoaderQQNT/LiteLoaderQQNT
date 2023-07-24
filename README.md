@@ -6,14 +6,15 @@ LiteLoaderQQNT是一个QQNT的插件加载器
 
 Telegram闲聊群：https://t.me/LiteLoaderQQNT
 
+> **QQNTim已跑路并Public archive**
 > LiteLoaderQQNT 可以与 **[QQNTim](https://github.com/Flysoft-Studio/QQNTim)** 并存，快去试试吧！  
 > 请阅读 [安装方法-与QQNTim共存]() 查看如何安装。
 
 
 ## 注意事项
 
-> 暂时不要将 Windows QQNT 更新到官网的 9.9.1 版本！暂未适配
-> 虽然早已去除文件校验, 但加载器目前无法注入代码到渲染进程(preload不受影响)
+> 暂时不要将 Windows QQNT 更新到官网的 9.9.1 版本！暂未适配  
+> 虽然早已去除文件校验, 但加载器目前无法注入代码到渲染进程(preload不受影响)  
 > 也就是说在页面执行代码的插件都失效了, 除了主要功能在主进程的插件(比如防撤回)
 
 - 目前仍在开发当中，可能会存在一些问题和不足
@@ -44,7 +45,7 @@ Telegram闲聊群：https://t.me/LiteLoaderQQNT
 2. 编辑`安装位置/package.json`文件，将`main`键值改为`LiteLoader`（根据文件夹名字而修改）
 3. 重新启动QQNT，享受LiteLoaderQQNT带来的乐趣吧！
 
-### 与QQNTim共存
+### 与QQNTim共存（不推荐）
 
 1. 请先仅执行`使用Release安装`或`使用Clone安装`的**第一步骤**
 2. 按照QQNTim的安装教程执行，具体请阅读QQNTim的[使用手册-安装](https://github.com/Flysoft-Studio/QQNTim/blob/dev/MANUAL.md#安装)
