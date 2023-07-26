@@ -34,15 +34,54 @@ Telegram闲聊群：https://t.me/LiteLoaderQQNT
 
 ### 使用Release安装（推荐）
 
-1. 下载`Release`中最新的`LiteLoaderQQNT.zip`，解压出`LiteLoader`文件夹并放到`安装位置`
-2. 编辑`安装位置/package.json`文件，将`main`键值改为`LiteLoader`（根据文件夹名字而修改）
-3. 重新启动QQNT，享受LiteLoaderQQNT带来的乐趣吧！
+1. 下载`Release`中最新的`LiteLoaderQQNT.zip`，解压出内含的`LiteLoader`文件夹并将文件夹整体移动至`安装位置`。
+移动后的`安装位置`文件夹应呈现如下结构：
+```
+├─app_launcher
+├─LiteLoader    
+├─package.json
+└─...
+```
+2. 编辑`安装位置/package.json`文件，
+```
+├─app_launcher
+├─LiteLoader    
+├─package.json <- 这个文件
+└─...
+```
+将`main`键值改为`LiteLoader`（根据文件夹名字而修改）
+```
+{
+    ...
+    "homepage": "https://im.qq.com",
+    "sideEffects": true,
+    "main": "LiteLoader",   <- 修改这里
+    ...
+}
+```
+3. 将`package.json`保存后，重新启动QQNT，享受LiteLoaderQQNT带来的乐趣吧！
 
 ### 使用Clone安装（不推荐）
 
 1. 克隆`Repo`并拉取`submodule`，将文件夹放到`安装位置`，重命名文件夹为`LiteLoader`
-2. 编辑`安装位置/package.json`文件，将`main`键值改为`LiteLoader`（根据文件夹名字而修改）
-3. 重新启动QQNT，享受LiteLoaderQQNT带来的乐趣吧！
+2. 编辑`安装位置/package.json`文件，
+```
+├─app_launcher
+├─LiteLoader    
+├─package.json <- 这个文件
+└─...
+```
+将`main`键值改为`LiteLoader`（根据文件夹名字而修改）
+```
+{
+    ...
+    "homepage": "https://im.qq.com",
+    "sideEffects": true,
+    "main": "LiteLoader",   <- 修改这里
+    ...
+}
+```
+3. 将`package.json`保存后，重新启动QQNT，享受LiteLoaderQQNT带来的乐趣吧！
 
 ### 与QQNTim共存（不推荐）
 
