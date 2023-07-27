@@ -6,15 +6,16 @@ LiteLoaderQQNT是一个QQNT的插件加载器
 
 Telegram闲聊群：https://t.me/LiteLoaderQQNT
 
-> **QQNTim已跑路并Public archive**  
-> LiteLoaderQQNT 可以与 **[QQNTim](https://github.com/Flysoft-Studio/QQNTim)** 并存，快去试试吧！  
-> 请阅读 [安装方法-与QQNTim共存]() 查看如何安装。
+> **QQNTim项目已经Public archive，不再发布新功能**  
+> LiteLoaderQQNT 可以与 **[QQNTim](https://github.com/Flysoft-Studio/QQNTim)** 并存，但是不推荐！  
+> 如有需要请阅读 [安装方法-与QQNTim共存]() 查看如何安装。
+> 
+> QQNTim 能与 LiteLoaderQQNT 最后一个可以共存的 Windows QQNT 版本为9.9.0，高于此版本，您只能安装 LiteLoaderQQNT！
 
 
 ## 注意事项
 
-> Windows QQNT 9.9.1即将完成适配  
-> 目前就差 file:// 协议无法使用
+> Windows QQNT 9.9.1即将完成适配，目前就差 file:// 协议无法使用
 
 - 目前仍在开发当中，可能会存在一些问题和不足
 - 仅为个人兴趣而制作，开发目的在于学习和探索
@@ -151,6 +152,12 @@ my-plugin
     └─...
 ```
 
+
+## 其他信息：
+
+再次声明：本项目仅仅用于学习用途，与 QQNT 开发者没有任何关系，项目完全开源，并非是为了动 QQNT 开发者饭碗而立的项目；如果可以，也请支持一下 QQ 会员。
+
+小声说一句，由于项目特殊性，不建议宣传，避免项目倒下。
 
 ## 开源协议
 
