@@ -99,7 +99,7 @@ QQNT的package.json文件示例：
 | [XiaoHe321](https://github.com/xh321)      | [背景插件](https://github.com/xh321/LiteLoaderQQNT-Background-Plugin)         | 窗口背景图片                                                      |
 | [XiaoHe321](https://github.com/xh321)      | [链接跳转](https://github.com/xh321/LiteLoaderQQNT-Directly-Jump)             | 外链直接跳转，而不经过拦截页                                        |
 | [FW27623](https://github.com/FW27623)      | [自定义侧边栏按钮](https://github.com/FW27623/remove_nav_sidebar)             | 自定义侧边栏需要保留的按钮                                          |
-| [cookieiz](https://github.com/cookieiz)    | [关闭 QQ 空间](https://github.com/cookieiz/LiteLoaderQQNT-RemoveZone)         | 移除 QQ 空间按钮                                                  |
+| [Zhoneym](https://github.com/Zhoneym)    | [关闭 QQ 空间](https://github.com/Zhoneym/LiteLoaderQQNT-RemoveZone)         | 移除 QQ 空间按钮                                                  |
 | [XiaoHe321](https://github.com/xh321)      | [关闭更新弹窗](https://github.com/xh321/LiteLoaderQQNT-Kill-Update)           | 关闭 NTQQ 恼人的更新弹窗                                           |
 | [沫烬染](https://github.com/mo-jinran)     | [Linux - 背景毛玻璃](https://github.com/mo-jinran/linux-qqnt-background-blur) | 给 Linux 下 KDE 桌面环境的 QQNT 添加背景毛玻璃效果                   |
 | [XiaoHe321](https://github.com/xh321)      | [防撤回](https://github.com/xh321/LiteLoaderQQNT-Anti-Recall)                 | 新版防撤回在 QQNT 打开期间均生效，重启失效                          |
