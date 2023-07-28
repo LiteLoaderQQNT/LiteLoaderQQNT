@@ -14,11 +14,11 @@ export class PluginConfigView {
         // 处理点击
         this.nav_bar.addEventListener("click", event => {
             const target = event.target.closest(".nav-item");
-            if (target && !target.classList.contains("qwq")) {
+            if (target) {
                 this.nav_bar.childNodes.forEach(node => {
-                    node.classList?.remove("nav-item-active", "qwq");
+                    node.classList?.remove("nav-item-active");
                 });
-                target.classList.add("nav-item-active", "qwq");
+                target.classList.add("nav-item-active");
                 // 内容显示
                 const contains_liteloader = target.classList.contains("liteloader");
                 this.setting_content.style.display = contains_liteloader ? "none" : "block";
@@ -28,10 +28,6 @@ export class PluginConfigView {
         // 基本样式
         const style = document.createElement("style");
         style.textContent = `
-        .liteloader.disabled {
-            pointer-events: none;
-            opacity: 0.5;
-        }
         .liteloader.dividing_line {
             margin: 5% 30%;
             border: initial;
@@ -59,7 +55,7 @@ export class PluginConfigView {
 
 
     // 导航栏条目
-    createNavItme(name, view, enable) {
+    createNavItme(name, view) {
         const nav_item = this.nav_bar.querySelector(".nav-item").cloneNode(true);
         nav_item.classList.remove("nav-item-active");
         nav_item.classList.add("liteloader");
@@ -90,10 +86,6 @@ export class PluginConfigView {
         });
         nav_item.querySelector(".q-icon").textContent = null;
         nav_item.querySelector(".name").textContent = name;
-        // 禁用插件
-        if (!enable) {
-            nav_item.classList.add("disabled");
-        }
         this.nav_bar.appendChild(nav_item);
     }
 }
