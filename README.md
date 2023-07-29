@@ -14,7 +14,7 @@ Telegram闲聊群：https://t.me/LiteLoaderQQNT
 ## 注意事项
 
 > Windows QQNT 9.9.1即将完成适配  
-> 目前就差 file:// 协议无法使用
+> 目前 file:// 协议需要替换为 llqqnt://local-file/ ，用法完全一致，但仍需大家的测试。协议草案阶段，可能会有修改和变动。
 
 - 目前仍在开发当中，可能会存在一些问题和不足
 - 仅为个人兴趣而制作，开发目的在于学习和探索
@@ -85,8 +85,8 @@ QQNT的package.json文件示例：
 插件模板：[LiteLoaderQQNT-Plugin-Template](https://github.com/mo-jinran/LiteLoaderQQNT-Plugin-Template)  
 插件仓库：[LiteLoaderQQNT-Plugin-List](https://github.com/mo-jinran/LiteLoaderQQNT-Plugin-List)
 
-> Windows QQNT 9.8.5版本暂时无法打开自身的DevTools  
-> 请安装Chii Devtools插件或QQNT vConsole插件进行调试
+> Windows QQNT 9.8.5版本及以上暂时无法打开自身的DevTools  
+> 请安装Chii Devtools插件（推荐）或QQNT vConsole插件进行调试
 
 
 ### 扩展
