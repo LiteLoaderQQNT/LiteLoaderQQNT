@@ -1,5 +1,6 @@
 const { Module } = require("module");
 const { app, ipcMain, session, net, protocol } = require("electron");
+const path = require("path");
 const { LiteLoader } = require("./base.js");
 const { PluginLoader } = require("./loader.js");
 
@@ -24,9 +25,7 @@ function observeNewBrowserWindow(callback) {
                         ...original_config?.webPreferences,
                         devTools: true,
                         webSecurity: false,
-                        additionalArguments: [
-                            "--fetch-schemes=app,llqqnt"
-                        ]
+                        additionalArguments: ["--fetch-schemes=app,llqqnt"]
                     }
                 };
                 const window = Reflect.construct(target, [config], newTarget);
@@ -65,8 +64,27 @@ app.on("ready", () => {
         }
     };
 
-    ses.protocol.handle("llqqnt", protocolHandler);
-    protocol.handle("llqqnt", protocolHandler);
+    //新版本Electron
+    if (protocol.handle) {
+        ses.protocol.handle("llqqnt", protocolHandler);
+        protocol.handle("llqqnt", protocolHandler);
+    }
+    //老版本Electron没有handle
+    else {
+        const oldProtocolHandler = (req, callback) => {
+            const { host, pathname } = new URL(req.url);
+
+            if (host === "local-file") {
+                callback({
+                    path: path.normalize(decodeURIComponent(pathname))
+                });
+            } else {
+                callback({ path: "" });
+            }
+        };
+        ses.protocol.registerFileProtocol("llqqnt", oldProtocolHandler);
+        protocol.handle("llqqnt", oldProtocolHandler);
+    }
 });
 
 // 监听窗口创建
