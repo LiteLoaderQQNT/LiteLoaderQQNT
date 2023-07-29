@@ -51,17 +51,29 @@ function observeNewBrowserWindow(callback) {
 // 插件加载器
 const plugin_loader = new PluginLoader();
 
+const protocolHandler = (req) => {
+    const { host, pathname } = new URL(req.url);
+    if (host === "local-file") {
+        return net.fetch("file://" + decodeURI(pathname));
+    } else if (host === "api") {
+    }
+};
+
+const oldProtocolHandler = (req, callback) => {
+    const { host, pathname } = new URL(req.url);
+
+    if (host === "local-file") {
+        callback({
+            path: path.normalize(decodeURIComponent(pathname))
+        });
+    } else {
+        callback({ path: "" });
+    }
+};
+
 // 让插件加载只执行一次
 app.on("ready", () => {
     plugin_loader.onLoad();
-
-    const protocolHandler = (req) => {
-        const { host, pathname } = new URL(req.url);
-        if (host === "local-file") {
-            return net.fetch("file://" + decodeURI(pathname));
-        } else if (host === "api") {
-        }
-    };
 
     //新版本Electron
     if (protocol.handle) {
@@ -69,18 +81,7 @@ app.on("ready", () => {
     }
     //老版本Electron没有handle
     else {
-        const oldProtocolHandler = (req, callback) => {
-            const { host, pathname } = new URL(req.url);
-
-            if (host === "local-file") {
-                callback({
-                    path: path.normalize(decodeURIComponent(pathname))
-                });
-            } else {
-                callback({ path: "" });
-            }
-        };
-        protocol.handle("llqqnt", oldProtocolHandler);
+        protocol.registerFileProtocol("llqqnt", oldProtocolHandler);
     }
 });
 
@@ -89,36 +90,16 @@ observeNewBrowserWindow((window) => {
     //加载自定义协议
     const ses = window.webContents.session;
 
-    if (ses.protocol.isProtocolRegistered("llqqnt")) {
-        return;
-    }
-
-    const protocolHandler = (req) => {
-        const { host, pathname } = new URL(req.url);
-        if (host === "local-file") {
-            return net.fetch("file://" + decodeURI(pathname));
-        } else if (host === "api") {
+    //协议未注册，才需要注册
+    if (!ses.protocol.isProtocolRegistered("llqqnt")) {
+        //新版本Electron
+        if (ses.protocol.handle) {
+            ses.protocol.handle("llqqnt", protocolHandler);
         }
-    };
-
-    //新版本Electron
-    if (protocol.handle) {
-        ses.protocol.handle("llqqnt", protocolHandler);
-    }
-    //老版本Electron没有handle
-    else {
-        const oldProtocolHandler = (req, callback) => {
-            const { host, pathname } = new URL(req.url);
-
-            if (host === "local-file") {
-                callback({
-                    path: path.normalize(decodeURIComponent(pathname))
-                });
-            } else {
-                callback({ path: "" });
-            }
-        };
-        ses.protocol.registerFileProtocol("llqqnt", oldProtocolHandler);
+        //老版本Electron没有handle
+        else {
+            ses.protocol.registerFileProtocol("llqqnt", oldProtocolHandler);
+        }
     }
 
     // DevTools切换
