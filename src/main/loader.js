@@ -80,9 +80,9 @@ class PluginLoader {
         const plugin = {
             manifest: manifest,
             path: {
-                plugin: plugin_path,
-                data: plugin_data_path,
-                cache: plugin_cache_path
+                plugin: plugin_path.replaceAll("\\","/"),
+                data: plugin_data_path.replaceAll("\\","/"),
+                cache: plugin_cache_path.replaceAll("\\","/")
             },
             exports: main_path && !plugin_disabled ? require(file_path) : null,
             disabled: plugin_disabled

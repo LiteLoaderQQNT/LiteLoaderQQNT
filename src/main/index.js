@@ -1,8 +1,7 @@
 const { Module } = require("module");
-const { app, ipcMain } = require("electron");
+const { app, ipcMain, session, net, protocol } = require("electron");
 const { LiteLoader } = require("./base.js");
 const { PluginLoader } = require("./loader.js");
-
 
 // 监听窗口创建
 function observeNewBrowserWindow(callback) {
@@ -24,7 +23,10 @@ function observeNewBrowserWindow(callback) {
                     webPreferences: {
                         ...original_config?.webPreferences,
                         devTools: true,
-                        webSecurity: false
+                        webSecurity: false,
+                        additionalArguments: [
+                            "--fetch-schemes=app,llqqnt"
+                        ]
                     }
                 };
                 const window = Reflect.construct(target, [config], newTarget);
@@ -42,22 +44,33 @@ function observeNewBrowserWindow(callback) {
                 return Reflect.get(target, property, receiver);
             }
         });
-    }
+    };
 }
-
 
 // 插件加载器
 const plugin_loader = new PluginLoader();
 
-
 // 让插件加载只执行一次
 app.on("ready", () => {
     plugin_loader.onLoad();
+
+    //加载自定义协议
+    const ses = session.fromPartition("persist:qqnt_9210");
+
+    const protocolHandler = (req) => {
+        const { host, pathname } = new URL(req.url);
+        if (host === "local-file") {
+            return net.fetch("file://" + decodeURI(pathname));
+        } else if (host === "api") {
+        }
+    };
+
+    ses.protocol.handle("llqqnt", protocolHandler);
+    protocol.handle("llqqnt", protocolHandler);
 });
 
-
 // 监听窗口创建
-observeNewBrowserWindow(window => {
+observeNewBrowserWindow((window) => {
     // DevTools切换
     window.webContents.on("before-input-event", (event, input) => {
         if (input.key == "F12" && input.type == "keyUp") {
@@ -68,7 +81,6 @@ observeNewBrowserWindow(window => {
     // 触发窗口创建
     plugin_loader.onBrowserWindowCreated(window);
 });
-
 
 ipcMain.on("LiteLoader.LiteLoader.path", (event, message) => {
     event.returnValue = LiteLoader.path;
