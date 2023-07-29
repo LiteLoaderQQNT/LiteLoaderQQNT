@@ -1,7 +1,10 @@
 const { Module } = require("module");
 const { app, ipcMain, session, net, protocol } = require("electron");
+const path = require("path");
 const { LiteLoader } = require("./base.js");
 const { PluginLoader } = require("./loader.js");
+
+app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
 
 // 监听窗口创建
 function observeNewBrowserWindow(callback) {
@@ -24,9 +27,7 @@ function observeNewBrowserWindow(callback) {
                         ...original_config?.webPreferences,
                         devTools: true,
                         webSecurity: false,
-                        additionalArguments: [
-                            "--fetch-schemes=app,llqqnt"
-                        ]
+                        additionalArguments: ["--fetch-schemes=app,llqqnt"]
                     }
                 };
                 const window = Reflect.construct(target, [config], newTarget);
@@ -54,8 +55,43 @@ const plugin_loader = new PluginLoader();
 app.on("ready", () => {
     plugin_loader.onLoad();
 
+    const protocolHandler = (req) => {
+        const { host, pathname } = new URL(req.url);
+        if (host === "local-file") {
+            return net.fetch("file://" + decodeURI(pathname));
+        } else if (host === "api") {
+        }
+    };
+
+    //新版本Electron
+    if (protocol.handle) {
+        protocol.handle("llqqnt", protocolHandler);
+    }
+    //老版本Electron没有handle
+    else {
+        const oldProtocolHandler = (req, callback) => {
+            const { host, pathname } = new URL(req.url);
+
+            if (host === "local-file") {
+                callback({
+                    path: path.normalize(decodeURIComponent(pathname))
+                });
+            } else {
+                callback({ path: "" });
+            }
+        };
+        protocol.handle("llqqnt", oldProtocolHandler);
+    }
+});
+
+// 监听窗口创建
+observeNewBrowserWindow((window) => {
     //加载自定义协议
-    const ses = session.fromPartition("persist:qqnt_9210");
+    const ses = window.webContents.session;
+
+    if (ses.protocol.isProtocolRegistered("llqqnt")) {
+        return;
+    }
 
     const protocolHandler = (req) => {
         const { host, pathname } = new URL(req.url);
@@ -65,12 +101,26 @@ app.on("ready", () => {
         }
     };
 
-    ses.protocol.handle("llqqnt", protocolHandler);
-    protocol.handle("llqqnt", protocolHandler);
-});
+    //新版本Electron
+    if (protocol.handle) {
+        ses.protocol.handle("llqqnt", protocolHandler);
+    }
+    //老版本Electron没有handle
+    else {
+        const oldProtocolHandler = (req, callback) => {
+            const { host, pathname } = new URL(req.url);
 
-// 监听窗口创建
-observeNewBrowserWindow((window) => {
+            if (host === "local-file") {
+                callback({
+                    path: path.normalize(decodeURIComponent(pathname))
+                });
+            } else {
+                callback({ path: "" });
+            }
+        };
+        ses.protocol.registerFileProtocol("llqqnt", oldProtocolHandler);
+    }
+
     // DevTools切换
     window.webContents.on("before-input-event", (event, input) => {
         if (input.key == "F12" && input.type == "keyUp") {
