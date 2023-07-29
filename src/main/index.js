@@ -1,5 +1,5 @@
 const { Module } = require("module");
-const { app, ipcMain, session, net, protocol } = require("electron");
+const { app, ipcMain, net, protocol } = require("electron");
 const path = require("path");
 const { LiteLoader } = require("./base.js");
 const { PluginLoader } = require("./loader.js");
@@ -55,9 +55,10 @@ const protocolHandler = (req) => {
     const { host, pathname } = new URL(req.url);
     if (host === "local-file") {
         return net.fetch("file://" + decodeURI(pathname));
-    } else if (host === "api") {
     }
-};
+    else if (host === "api") {
+    }
+}
 
 const oldProtocolHandler = (req, callback) => {
     const { host, pathname } = new URL(req.url);
@@ -66,15 +67,14 @@ const oldProtocolHandler = (req, callback) => {
         callback({
             path: path.normalize(decodeURIComponent(pathname))
         });
-    } else {
+    }
+    else {
         callback({ path: "" });
     }
-};
+}
 
 // 让插件加载只执行一次
 app.on("ready", () => {
-    plugin_loader.onLoad();
-
     //新版本Electron
     if (protocol.handle) {
         protocol.handle("llqqnt", protocolHandler);
@@ -83,6 +83,9 @@ app.on("ready", () => {
     else {
         protocol.registerFileProtocol("llqqnt", oldProtocolHandler);
     }
+
+    // 加载插件
+    plugin_loader.onLoad();
 });
 
 // 监听窗口创建
