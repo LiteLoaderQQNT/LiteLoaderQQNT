@@ -44,6 +44,18 @@ const LiteLoader = {
 }
 
 
+// 将LiteLoader对象挂载到全局
+Object.defineProperty(
+    global,
+    "LiteLoader",
+    {
+        value: LiteLoader,
+        writable: false,
+        configurable: false
+    }
+);
+
+
 if (!fs.existsSync(LiteLoader.path.plugins)) {
     fs.mkdirSync(LiteLoader.path.plugins, { recursive: true });
 }
