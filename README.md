@@ -6,15 +6,11 @@ LiteLoaderQQNT是一个QQNT的插件加载器
 
 Telegram闲聊群：https://t.me/LiteLoaderQQNT
 
-> **QQNTim已跑路并Public archive**  
-> LiteLoaderQQNT 可以与 **[QQNTim](https://github.com/Flysoft-Studio/QQNTim)** 并存，快去试试吧！  
-> 请阅读 [安装方法-与QQNTim共存]() 查看如何安装。
-
 
 ## 注意事项
 
-> Windows QQNT 9.9.1即将完成适配  
-> 目前 file:// 协议需要替换为 llqqnt://local-file/ ，用法完全一致，但仍需大家的测试。协议草案阶段，可能会有修改和变动。
+> Windows QQNT 9.9.1-15293已适配并正常使用（需Clone仓库安装）（部分插件暂未适配）  
+> Windows QQNT 9.9.1-15489未适配并无法使用（需Clone仓库安装）（preload环境寄了）
 
 - 目前仍在开发当中，可能会存在一些问题和不足
 - 仅为个人兴趣而制作，开发目的在于学习和探索
@@ -44,14 +40,10 @@ Telegram闲聊群：https://t.me/LiteLoaderQQNT
 2. 编辑`安装位置/package.json`文件，将`main`键值改为`LiteLoader`（根据文件夹名字而修改）
 3. 重新启动QQNT，享受LiteLoaderQQNT带来的乐趣吧！
 
-### 与QQNTim共存（不推荐）
-
-1. 请先仅执行`使用Release安装`或`使用Clone安装`的**第一步骤**
-2. 按照QQNTim的安装教程执行，具体请阅读QQNTim的[使用手册-安装](https://github.com/Flysoft-Studio/QQNTim/blob/dev/MANUAL.md#安装)
-3. 重新启动QQNT，享受LiteLoaderQQNT带来的乐趣吧！
+Windows QQNT 9.9.1以上版本，需运行`LiteLoader\patch`内对应版本的PowerShell脚本  
+文件修补需要约40秒左右（取决于电脑性能）（建议打开终端运行PowerShell脚本，修补速度会快很多）
 
 应与package.json文件同级：
-
 ```
 ├─app_launcher
 ├─LiteLoader    <--在这
@@ -128,7 +120,7 @@ QQNT的package.json文件示例：
 LiteLoaderQQNT的默认数据文件夹在`用户目录/Documents/LiteLoaderQQNT`  
 修改环境变量`LITELOADERQQNT_PROFILE`可指定目录位置
 
-### 数据目录结构：
+数据目录结构：
 ```
 LiteLoaderQQNT
     ├─plugins           // 插件本体目录
@@ -140,15 +132,7 @@ LiteLoaderQQNT
     ├─plugins_data      // 插件数据目录
     │   ├─my-plugin
     │   └─...
-    └─config.json       // 配置文件（不是给插件用的
-```
-
-### 插件目录结构：
-```
-my-plugin
-    ├─manifest.json     // 存放插件信息
-    ├─main.js           // 存在插件入口
-    └─...
+    └─config.json       // LiteLoader配置文件
 ```
 
 
