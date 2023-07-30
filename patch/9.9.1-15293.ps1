@@ -1,4 +1,4 @@
-# 强制结束QQ进程
+﻿# 强制结束QQ进程
 Stop-Process -Name "QQ" -Force -ErrorAction SilentlyContinue
 
 # 要修补的.exe文件路径
@@ -75,7 +75,7 @@ while ($true) {
     # 更新进度条
     $bytesProcessed += $readBytes
     $percentComplete = ($bytesProcessed / $fileSize) * 100
-    Write-Progress -Activity "Processing File" -Status "Progress" -PercentComplete $percentComplete
+    Write-Progress -Activity "正在修补QQ.exe..." -Status "当前进度：" -PercentComplete $percentComplete
 }
 
 # 关闭文件流
@@ -83,4 +83,4 @@ $sourceStream.Close()
 $targetStream.Close()
 
 # 完成时显示100%的进度
-Write-Progress -Activity "Processing File" -Status "Completed" -PercentComplete 100
+Write-Progress -Activity "正在修补QQ.exe..." -Status "修补完成！" -PercentComplete 100
