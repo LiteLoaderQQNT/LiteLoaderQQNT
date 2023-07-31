@@ -28,11 +28,8 @@ const index = async () => {
 
 
 // 注入代码
-const interval = setInterval(() => {
-    if (document.head) {
-        clearInterval(interval);
-        const script = document.createElement("script");
-        script.innerHTML = `(${index.toString()})()`;
-        document.head.appendChild(script);
-    }
-}, 100);
+window.addEventListener("DOMContentLoaded", () => {
+    const script = document.createElement("script");
+    script.textContent = `(${index.toString()})()`;
+    document.head.appendChild(script);
+});
