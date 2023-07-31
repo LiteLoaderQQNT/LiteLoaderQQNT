@@ -25,7 +25,6 @@ const LiteLoader = {
     },
     versions: {
         qqnt: qqnt_package.version,
-        betterQQNT: liteloader_package.version, // 即将废弃
         liteLoader: liteloader_package.version,
         node: process.versions.node,
         chrome: process.versions.chrome,
@@ -33,7 +32,6 @@ const LiteLoader = {
     },
     package: {
         qqnt: qqnt_package,
-        betterQQNT: liteloader_package, // 即将废弃
         liteLoader: liteloader_package
     },
     os: {
