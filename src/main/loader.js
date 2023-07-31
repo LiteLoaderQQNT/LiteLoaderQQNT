@@ -104,7 +104,7 @@ class PluginLoader {
     onLoad() {
         // 加载插件
         for (const [slug, plugin] of Object.entries(this.#plugins)) {
-            plugin.exports?.onLoad?.(plugin, LiteLoader);
+            plugin.exports?.onLoad?.(plugin);
         }
     }
 
