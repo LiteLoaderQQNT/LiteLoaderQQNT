@@ -69,36 +69,45 @@ class PluginLoader {
         }
 
         // manifest与路径
-        const { slug, name, type } = manifest;
+        const { manifest_version, slug, name } = manifest;
         const plugin_data_path = path.join(LiteLoader.path.plugins_data, slug);
         const plugin_cache_path = path.join(LiteLoader.path.plugins_cache, slug);
         const main_path = manifest.injects?.main ?? "";
-        const file_path = path.join(plugin_path, main_path);
         const plugin_disabled = LiteLoader.config?.disabled?.includes(slug) ?? false;
 
         // 保存到插件列表
-        const plugin = {
+        this.#plugins[slug] = {
             manifest: manifest,
             path: {
-                plugin: plugin_path.replaceAll("\\","/"),
-                data: plugin_data_path.replaceAll("\\","/"),
-                cache: plugin_cache_path.replaceAll("\\","/")
+                plugin: plugin_path,
+                data: plugin_data_path,
+                cache: plugin_cache_path
             },
-            exports: main_path && !plugin_disabled ? require(file_path) : null,
+            exports: main_path,
             disabled: plugin_disabled
         }
 
-        if (!main_path) {
-            delete plugin.exports;
+        // 没有渲染进程以及禁用
+        if (!main_path || plugin_disabled) {
+            delete this.#plugins[slug].exports;
+        }
+        else {
+            const file_path = path.join(plugin_path, main_path);
+            this.#plugins[slug].exports = require(file_path);
         }
 
-        this.#plugins[slug] = plugin;
+        // 禁用不兼容插件
+        if (Number(manifest_version) != 3) {
+            output("Found incompatible plugin:", name);
+            delete this.#plugins[slug];
+        }
+        else {
+            output("Found plugin:", name);
+        }
 
         // 放到LiteLoader对象上
-        LiteLoader.plugins[slug] = { ...plugin };
+        LiteLoader.plugins[slug] = { ...this.#plugins[slug] };
         delete LiteLoader.plugins[slug].exports;
-
-        output("Found plugin:", name);
     }
 
     onLoad() {
