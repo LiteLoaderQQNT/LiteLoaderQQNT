@@ -76,7 +76,7 @@ LiteLoader.config = JSON.parse(data);
 
 
 function output(...args) {
-    console.log("\x1b[32m%s\x1b[0m", "LiteLoader:", ...args);
+    console.log("\x1b[32m%s\x1b[0m", "[LiteLoader]", ...args);
 }
 
 
