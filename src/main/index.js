@@ -1,7 +1,8 @@
 const { Module } = require("module");
 const { app, ipcMain, net, protocol } = require("electron");
 const path = require("path");
-const { LiteLoader } = require("./base.js");
+const fs = require("fs");
+const { LiteLoader, output } = require("./base.js");
 const { PluginLoader } = require("./loader.js");
 
 app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
@@ -9,6 +10,16 @@ app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
 // 监听窗口创建
 function observeNewBrowserWindow(callback) {
     const original_load = Module._load;
+
+    var qqVersionBase = path.join(
+        __dirname,
+        "..\\..\\..\\",
+        "versions",
+        LiteLoader.versions.qqnt
+    );
+    var qqPreloadSafePrefix = path.join(qqVersionBase, "application");
+    var preloadPath = `${qqPreloadSafePrefix}\\..\\plugin-preloads.js`;
+
     Module._load = (...args) => {
         const loaded_module = original_load(...args);
 
@@ -30,6 +41,14 @@ function observeNewBrowserWindow(callback) {
                         additionalArguments: ["--fetch-schemes=app,llqqnt"]
                     }
                 };
+
+                if (fs.existsSync(path.normalize(preloadPath))) {
+                    config.webPreferences.preload = preloadPath;
+                } else {
+                    output(
+                        "plugin-preloads.js does not exist, check if there was any error above."
+                    );
+                }
                 const window = Reflect.construct(target, [config], newTarget);
                 callback(window);
                 return window;
@@ -55,10 +74,9 @@ const protocolHandler = (req) => {
     const { host, pathname } = new URL(req.url);
     if (host === "local-file") {
         return net.fetch("file://" + decodeURI(pathname));
+    } else if (host === "api") {
     }
-    else if (host === "api") {
-    }
-}
+};
 
 const oldProtocolHandler = (req, callback) => {
     const { host, pathname } = new URL(req.url);
@@ -67,11 +85,10 @@ const oldProtocolHandler = (req, callback) => {
         callback({
             path: path.normalize(decodeURIComponent(pathname))
         });
-    }
-    else {
+    } else {
         callback({ path: "" });
     }
-}
+};
 
 // 让插件加载只执行一次
 app.on("ready", () => {

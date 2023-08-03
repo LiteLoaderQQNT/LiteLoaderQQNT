@@ -10,7 +10,7 @@ Telegram闲聊群：https://t.me/LiteLoaderQQNT
 ## 注意事项
 
 > Windows QQNT 9.9.1-15293已适配并正常使用（需Clone仓库安装）（部分插件暂未适配）  
-> Windows QQNT 9.9.1-15489未适配并无法使用（需Clone仓库安装）（preload环境寄了）
+> Windows QQNT 9.9.1-15489已适配并正常使用（需Clone仓库安装）（部分插件暂未适配，但preload已复活）
 
 - 目前仍在开发当中，可能会存在一些问题和不足
 - 仅为个人兴趣而制作，开发目的在于学习和探索
