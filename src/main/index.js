@@ -32,7 +32,7 @@ function observeNewBrowserWindow(callback) {
                     }
                 };
                 if (LiteLoader.os.platform == "win32") {
-                    const qqVersionBase = path.join(__dirname, "../../../", "versions", LiteLoader.versions.qqnt);
+                    const qqVersionBase = path.join(LiteLoader.path.root, "../versions", LiteLoader.versions.qqnt);
                     const preloadPath = `${path.join(qqVersionBase, "application")}\\..\\plugin-preloads.js`
                     if (fs.existsSync(path.normalize(preloadPath))) {
                         config.webPreferences.preload = preloadPath;
@@ -64,22 +64,45 @@ const plugin_loader = new PluginLoader();
 
 const protocolHandler = (req) => {
     const { host, pathname } = new URL(req.url);
-    if (host === "local-file") {
-        return net.fetch("file://" + decodeURI(pathname));
+    const filepath = path.normalize(decodeURI(pathname));
+    switch (host) {
+        case "local-file":
+            return net.fetch(`file://${path.join(filepath)}`);
+        case "plugins-dir":
+            return net.fetch(`file://${path.join(LiteLoader.path.plugins, filepath)}`);
+        case "plugins-data":
+            return net.fetch(`file://${path.join(LiteLoader.path.plugins_data, filepath)}`);
+        case "plugins-cache":
+            return net.fetch(`file://${path.join(LiteLoader.path.plugins_cache, filepath)}`);
+        case "liteloader-dir":
+            return net.fetch(`file://${path.join(LiteLoader.path.root, filepath)}`);
+        case "builtins-dir":
+            return net.fetch(`file://${path.join(LiteLoader.path.builtins, filepath)}`);
+        default:
+            return net.fetch("");
     }
-};
+}
 
 const oldProtocolHandler = (req, callback) => {
     const { host, pathname } = new URL(req.url);
-    if (host === "local-file") {
-        callback({
-            path: path.normalize(decodeURIComponent(pathname))
-        });
+    const filepath = path.normalize(decodeURIComponent(pathname));
+    switch (host) {
+        case "local-file":
+            return callback({ path: path.join(filepath) });
+        case "plugins-dir":
+            return callback({ path: path.join(LiteLoader.path.plugins, filepath) });
+        case "plugins-data":
+            return callback({ path: path.join(LiteLoader.path.plugins_data, filepath) });
+        case "plugins-cache":
+            return callback({ path: path.join(LiteLoader.path.plugins_cache, filepath) });
+        case "liteloader-dir":
+            return callback({ path: path.join(LiteLoader.path.root, filepath) });
+        case "builtins-dir":
+            return callback({ path: path.join(LiteLoader.path.builtins, filepath) });
+        default:
+            return callback({ path: "" });
     }
-    else {
-        callback({ path: "" });
-    }
-};
+}
 
 // 让插件加载只执行一次
 app.on("ready", () => {

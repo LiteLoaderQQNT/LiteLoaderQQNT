@@ -64,7 +64,7 @@ class PluginLoader {
     #preprocessing() {
         output("Preprocessing plugins' preloads...");
 
-        const qqVersionBase = path.join(__dirname, "../../../", "versions", LiteLoader.versions.qqnt);
+        const qqVersionBase = path.join(LiteLoader.path.root, "../versions", LiteLoader.versions.qqnt);
         const dest = path.join(qqVersionBase, "plugin-preloads.js");
 
         const code_block = (title, content) => {
