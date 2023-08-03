@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
-const { app } = require("electron");
+const { app, ipcMain } = require("electron");
 const liteloader_package = require("../../package.json");
 const qqnt_package = require("../../../package.json");
 
@@ -42,7 +42,7 @@ const LiteLoader = {
 }
 
 
-// 将LiteLoader对象挂载到全局
+// 将LiteLoader对象挂载到global
 Object.defineProperty(
     global,
     "LiteLoader",
@@ -50,6 +50,14 @@ Object.defineProperty(
         value: LiteLoader,
         writable: false,
         configurable: false
+    }
+);
+
+
+// 将LiteLoader对象挂载到window
+ipcMain.on("LiteLoader.LiteLoader.LiteLoader",
+    (event, message) => {
+        event.returnValue = LiteLoader;
     }
 );
 

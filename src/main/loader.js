@@ -19,14 +19,16 @@ class PluginLoader {
                 LiteLoader.path.builtins,
                 "utf-8"
             );
-        } catch (error) {
+        }
+        catch (error) {
             output("The builtins directory does not exist.");
         }
 
         // 外置第三方插件
         try {
             plugin_dirnames = fs.readdirSync(LiteLoader.path.plugins, "utf-8");
-        } catch (error) {
+        }
+        catch (error) {
             output("The plugins directory does not exist.");
         }
 
@@ -34,20 +36,15 @@ class PluginLoader {
         try {
             // 获取单个插件目录名
             for (const builtin_dirname of builtin_dirnames) {
-                const plugin_path = path.join(
-                    LiteLoader.path.builtins,
-                    builtin_dirname
-                );
+                const plugin_path = path.join(LiteLoader.path.builtins, builtin_dirname);
                 this.#loadPlugin(plugin_path);
             }
             for (const plugin_dirname of plugin_dirnames) {
-                const plugin_path = path.join(
-                    LiteLoader.path.plugins,
-                    plugin_dirname
-                );
+                const plugin_path = path.join(LiteLoader.path.plugins, plugin_dirname);
                 this.#loadPlugin(plugin_path);
             }
-        } catch (error) {
+        }
+        catch (error) {
             output("Plugins loaded with error: ", error);
         }
 
@@ -57,69 +54,47 @@ class PluginLoader {
         const has_plugins_message = `Done! ${plugins_length} plugins loaded!`;
         output(plugins_length == 0 ? not_plugins_message : has_plugins_message);
 
-        //对preload脚本进行预处理，合并
+        // 合并 Preload
+        if (LiteLoader.os.platform == "win32") {
+            this.#preprocessing();
+        }
+    }
+
+    //对preload脚本进行预处理，合并
+    #preprocessing() {
         output("Preprocessing plugins' preloads...");
 
-        var qqVersionBase = path.join(
-            __dirname,
-            "..\\..\\..\\",
-            "versions",
-            LiteLoader.versions.qqnt
-        );
-
+        const qqVersionBase = path.join(__dirname, "../../../", "versions", LiteLoader.versions.qqnt);
         const dest = path.join(qqVersionBase, "plugin-preloads.js");
-        var preloadContents =
-            "// LiteLoaderQQNT 自动合并的 Preload 文件，请勿修改，否则可能会被覆盖。 \n";
-        preloadContents += `// 生成时间：${new Date().toLocaleString()} \n`;
-        preloadContents += `
-// 原始 preload.js
-{
-    const { contextBridge, ipcRenderer } = require("electron");
-    contextBridge.exposeInMainWorld("electron", {
-        load: (file) => {
-        require("./major.node").load(file, module);
-        }
-    });
 
-    require("./major.node").load("p_preload", module);
-}
-        `;
-        preloadContents +=
-            "\n// LLQQNT preload/index.js" +
-            "\n{\n" +
-            fs.readFileSync(
-                path.join(LiteLoader.path.root, "src/preload/index.js"),
-                {
-                    encoding: "utf-8"
-                }
-            ) +
-            "\n}\n";
-        preloadContents +=
-            "\n// LLQQNT renderer/index.js" +
-            "\n{\n" +
-            fs.readFileSync(
-                path.join(LiteLoader.path.root, "src/renderer/index.js"),
-                {
-                    encoding: "utf-8"
-                }
-            ) +
-            "\n}";
+        const code_block = (title, content) => {
+            let str = "";
+            str += `\n// ${title}`;
+            str += "\n{\n";
+            str += content;
+            str += "\n}";
+            return str;
+        }
+
+        const hook = fs.readFileSync(path.join(LiteLoader.path.root, "src/preload/hook.js"), "utf-8");
+        const api = fs.readFileSync(path.join(LiteLoader.path.root, "src/preload/index.js"), "utf-8");
+        const loader = fs.readFileSync(path.join(LiteLoader.path.root, "src/renderer/index.js"), "utf-8");
+
+        let preloadContents = "";
+        preloadContents += "// LiteLoaderQQNT 自动合并的 Preload 文件，请勿修改，否则可能会被覆盖。\n";
+        preloadContents += `// 生成时间：${new Date().toLocaleString()} \n`;
+        preloadContents += code_block("原始 preload.js", hook);
+        preloadContents += code_block("LiteLoader 对象", api);
+        preloadContents += code_block("渲染进程 Loader", loader);
 
         for (const [slug, plugin] of Object.entries(this.#plugins)) {
             const preload_path = plugin.manifest.injects?.preload;
             if (preload_path) {
-                preloadContents +=
-                    `\n\n// ${plugin.manifest.name} preload.js` +
-                    "\n{\n" +
-                    fs.readFileSync(
-                        path.join(plugin.path.plugin, preload_path),
-                        {
-                            encoding: "utf-8"
-                        }
-                    ) +
-                    "\n}";
+                const preload = fs.readFileSync(path.join(plugin.path.plugin, preload_path), "utf-8");
+                preloadContents += code_block(`插件：${plugin.manifest.name}`, preload);
             }
         }
+
         fs.writeFileSync(dest, preloadContents, { encoding: "utf-8" });
         output("Preprocessing plugins' preloads done!");
     }
@@ -130,7 +105,8 @@ class PluginLoader {
         try {
             const data = fs.readFileSync(file_path, "utf-8");
             return JSON.parse(data);
-        } catch (err) {
+        }
+        catch (err) {
             // 出错就返回null，没有获取到
             return null;
         }
@@ -146,13 +122,9 @@ class PluginLoader {
         // manifest与路径
         const { manifest_version, slug, name } = manifest;
         const plugin_data_path = path.join(LiteLoader.path.plugins_data, slug);
-        const plugin_cache_path = path.join(
-            LiteLoader.path.plugins_cache,
-            slug
-        );
+        const plugin_cache_path = path.join(LiteLoader.path.plugins_cache, slug);
         const main_path = manifest.injects?.main ?? "";
-        const plugin_disabled =
-            LiteLoader.config?.disabled?.includes(slug) ?? false;
+        const plugin_disabled = LiteLoader.config?.disabled?.includes(slug) ?? false;
 
         // 保存到插件列表
         this.#plugins[slug] = {
@@ -169,7 +141,8 @@ class PluginLoader {
         // 没有渲染进程以及禁用
         if (!main_path || plugin_disabled) {
             delete this.#plugins[slug].exports;
-        } else {
+        }
+        else {
             const file_path = path.join(plugin_path, main_path);
             this.#plugins[slug].exports = require(file_path);
         }
@@ -179,13 +152,13 @@ class PluginLoader {
             output("Found incompatible plugin:", name);
             delete this.#plugins[slug];
             return;
-        } else {
+        }
+        else {
             output("Found plugin:", name);
         }
 
         // 放到LiteLoader对象上
-        LiteLoader.plugins[slug] = { ...this.#plugins[slug] };
-
+        LiteLoader.plugins[slug] = { ...this.#plugins[slug] }
         delete LiteLoader.plugins[slug].exports;
     }
 
@@ -197,10 +170,28 @@ class PluginLoader {
     }
 
     onBrowserWindowCreated(window) {
-        // 通知插件
+        // 注入Preload
+        // LiteLoader最基础的API(一些信息)
+        // 还有加载渲染进程用的脚本
+        const preloads = new Set([
+            ...window.webContents.session.getPreloads(),
+            path.join(LiteLoader.path.root, "/src/preload/index.js"),
+            path.join(LiteLoader.path.root, "/src/renderer/index.js"),
+        ]);
+
+        // 加载插件
         for (const [slug, plugin] of Object.entries(this.#plugins)) {
             plugin.exports?.onBrowserWindowCreated?.(window, plugin);
+            const preload_path = plugin.manifest.injects?.preload;
+            // 存在preload就放Set里
+            if (preload_path) {
+                const file_path = path.join(plugin.path.plugin, preload_path);
+                preloads.add(file_path);
+            }
         }
+
+        // 加载Set中的Preload脚本
+        window.webContents.session.setPreloads([...preloads]);
     }
 }
 

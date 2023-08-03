@@ -1,5 +1,5 @@
 const { Module } = require("module");
-const { app, ipcMain, net, protocol } = require("electron");
+const { app, net, protocol } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const { LiteLoader, output } = require("./base.js");
@@ -10,16 +10,6 @@ app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
 // 监听窗口创建
 function observeNewBrowserWindow(callback) {
     const original_load = Module._load;
-
-    var qqVersionBase = path.join(
-        __dirname,
-        "..\\..\\..\\",
-        "versions",
-        LiteLoader.versions.qqnt
-    );
-    var qqPreloadSafePrefix = path.join(qqVersionBase, "application");
-    var preloadPath = `${qqPreloadSafePrefix}\\..\\plugin-preloads.js`;
-
     Module._load = (...args) => {
         const loaded_module = original_load(...args);
 
@@ -41,13 +31,15 @@ function observeNewBrowserWindow(callback) {
                         additionalArguments: ["--fetch-schemes=app,llqqnt"]
                     }
                 };
-
-                if (fs.existsSync(path.normalize(preloadPath))) {
-                    config.webPreferences.preload = preloadPath;
-                } else {
-                    output(
-                        "plugin-preloads.js does not exist, check if there was any error above."
-                    );
+                if (LiteLoader.os.platform == "win32") {
+                    const qqVersionBase = path.join(__dirname, "../../../", "versions", LiteLoader.versions.qqnt);
+                    const preloadPath = `${path.join(qqVersionBase, "application")}\\..\\plugin-preloads.js`
+                    if (fs.existsSync(path.normalize(preloadPath))) {
+                        config.webPreferences.preload = preloadPath;
+                    }
+                    else {
+                        output("plugin-preloads.js does not exist, check if there was any error above.");
+                    }
                 }
                 const window = Reflect.construct(target, [config], newTarget);
                 callback(window);
@@ -74,18 +66,17 @@ const protocolHandler = (req) => {
     const { host, pathname } = new URL(req.url);
     if (host === "local-file") {
         return net.fetch("file://" + decodeURI(pathname));
-    } else if (host === "api") {
     }
 };
 
 const oldProtocolHandler = (req, callback) => {
     const { host, pathname } = new URL(req.url);
-
     if (host === "local-file") {
         callback({
             path: path.normalize(decodeURIComponent(pathname))
         });
-    } else {
+    }
+    else {
         callback({ path: "" });
     }
 };
@@ -131,28 +122,4 @@ observeNewBrowserWindow((window) => {
 
     // 触发窗口创建
     plugin_loader.onBrowserWindowCreated(window);
-});
-
-ipcMain.on("LiteLoader.LiteLoader.path", (event, message) => {
-    event.returnValue = LiteLoader.path;
-});
-
-ipcMain.on("LiteLoader.LiteLoader.versions", (event, message) => {
-    event.returnValue = LiteLoader.versions;
-});
-
-ipcMain.on("LiteLoader.LiteLoader.plugins", (event, message) => {
-    event.returnValue = LiteLoader.plugins;
-});
-
-ipcMain.on("LiteLoader.LiteLoader.package", (event, message) => {
-    event.returnValue = LiteLoader.package;
-});
-
-ipcMain.on("LiteLoader.LiteLoader.os", (event, message) => {
-    event.returnValue = LiteLoader.os;
-});
-
-ipcMain.on("LiteLoader.LiteLoader.config", (event, message) => {
-    event.returnValue = LiteLoader.config;
 });
