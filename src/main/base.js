@@ -24,7 +24,7 @@ const LiteLoader = {
         plugins_cache: path.join(LITELOADER_PROFILE, "plugins_cache")
     },
     versions: {
-        qqnt: qqnt_package.version,
+        qqnt: os.platform() == "win32" ? require("../../../versions/config.json").curVersion : qqnt_package.version,
         liteLoader: liteloader_package.version,
         node: process.versions.node,
         chrome: process.versions.chrome,
