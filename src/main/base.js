@@ -2,7 +2,6 @@ const path = require("path");
 const fs = require("fs");
 const os = require("os");
 const { app, ipcMain } = require("electron");
-const { app } = require("electron");
 
 const { getQQInstallDir } = require("./helper.js");
 const qq_install_dir = getQQInstallDir();
