@@ -2,7 +2,7 @@ const { Module } = require("module");
 const { app, net, protocol } = require("electron");
 const path = require("path");
 const fs = require("fs");
-const { LiteLoader, output } = require("./base.js");
+const { LiteLoader, output, qq_install_dir } = require("./base.js");
 const { PluginLoader } = require("./loader.js");
 
 app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
@@ -32,8 +32,8 @@ function observeNewBrowserWindow(callback) {
                     }
                 };
                 if (LiteLoader.os.platform == "win32") {
-                    const qqVersionBase = path.join(LiteLoader.path.root, "../versions", LiteLoader.versions.qqnt);
-                    const preloadPath = `${path.join(qqVersionBase, "application")}\\..\\plugin-preloads.js`
+                    const qqVersionBase = `${qq_install_dir}/resources/app/versions/${LiteLoader.versions.qqnt}/`;
+                    const preloadPath = `${path.join(qqVersionBase, "application")}\\..\\plugin-preloads.js`;
                     if (fs.existsSync(path.normalize(preloadPath))) {
                         config.webPreferences.preload = preloadPath;
                     }

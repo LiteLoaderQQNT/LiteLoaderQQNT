@@ -2,15 +2,16 @@ const path = require("path");
 const fs = require("fs");
 const os = require("os");
 const { app, ipcMain } = require("electron");
-const liteloader_package = require("../../package.json");
-const qqnt_package = require("../../../package.json");
 
+const { getQQInstallDir } = require("./helper.js");
+const qq_install_dir = getQQInstallDir();
+const liteloader_package = require("../../package.json");
+const qqnt_package = require(`${qq_install_dir}/resources/app/package.json`);
 
 // LiteLoaderQQNT的数据目录
 const LITELOADER_PROFILE_ENV = process.env["LITELOADERQQNT_PROFILE"];
 const LITELOADER_PROFILE_CONST = path.join(app.getPath("documents"), "LiteLoaderQQNT");
 const LITELOADER_PROFILE = LITELOADER_PROFILE_ENV || LITELOADER_PROFILE_CONST;
-
 
 const LiteLoader = {
     path: {
@@ -24,7 +25,7 @@ const LiteLoader = {
         plugins_cache: path.join(LITELOADER_PROFILE, "plugins_cache")
     },
     versions: {
-        qqnt: os.platform() == "win32" ? require("../../../versions/config.json").curVersion : qqnt_package.version,
+        qqnt: os.platform() == "win32" ? require(`${qq_install_dir}/resources/app/versions/config.json`).curVersion : qqnt_package.version,
         liteLoader: liteloader_package.version,
         node: process.versions.node,
         chrome: process.versions.chrome,
@@ -40,7 +41,6 @@ const LiteLoader = {
     config: {},
     plugins: {}
 }
-
 
 // 将LiteLoader对象挂载到global
 Object.defineProperty(
@@ -82,13 +82,12 @@ if (!fs.existsSync(LiteLoader.path.config)) {
 const data = fs.readFileSync(LiteLoader.path.config, "utf-8");
 LiteLoader.config = JSON.parse(data);
 
-
 function output(...args) {
     console.log("\x1b[32m%s\x1b[0m", "[LiteLoader]", ...args);
 }
 
-
 module.exports = {
     LiteLoader,
-    output
+    output,
+    qq_install_dir
 }
