@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
+const { app, ipcMain } = require("electron");
 const { app } = require("electron");
 
 const { getQQInstallDir } = require("./helper.js");
@@ -26,8 +27,7 @@ const LiteLoader = {
         plugins_cache: path.join(LITELOADER_PROFILE, "plugins_cache")
     },
     versions: {
-        qqnt: qqnt_package.version,
-        betterQQNT: liteloader_package.version, // 即将废弃
+        qqnt: os.platform() == "win32" ? require("../../../versions/config.json").curVersion : qqnt_package.version,
         liteLoader: liteloader_package.version,
         node: process.versions.node,
         chrome: process.versions.chrome,
@@ -35,7 +35,6 @@ const LiteLoader = {
     },
     package: {
         qqnt: qqnt_package,
-        betterQQNT: liteloader_package, // 即将废弃
         liteLoader: liteloader_package
     },
     os: {
@@ -44,6 +43,26 @@ const LiteLoader = {
     config: {},
     plugins: {}
 }
+
+
+// 将LiteLoader对象挂载到global
+Object.defineProperty(
+    global,
+    "LiteLoader",
+    {
+        value: LiteLoader,
+        writable: false,
+        configurable: false
+    }
+);
+
+
+// 将LiteLoader对象挂载到window
+ipcMain.on("LiteLoader.LiteLoader.LiteLoader",
+    (event, message) => {
+        event.returnValue = LiteLoader;
+    }
+);
 
 
 if (!fs.existsSync(LiteLoader.path.plugins)) {
@@ -67,7 +86,7 @@ const data = fs.readFileSync(LiteLoader.path.config, "utf-8");
 LiteLoader.config = JSON.parse(data);
 
 function output(...args) {
-    console.log("\x1b[32m%s\x1b[0m", "LiteLoader:", ...args);
+    console.log("\x1b[32m%s\x1b[0m", "[LiteLoader]", ...args);
 }
 
 module.exports = {

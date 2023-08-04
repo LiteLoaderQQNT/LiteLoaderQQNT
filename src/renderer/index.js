@@ -1,5 +1,5 @@
 const index = async () => {
-    const loader_path = `file://${LiteLoader.path.root}/src/renderer/loader.js`;
+    const loader_path = `llqqnt://local-file/${LiteLoader.path.root}/src/renderer/loader.js`;
     const { PluginLoader } = await import(loader_path);
     const plugin_loader = new PluginLoader();
 
@@ -28,11 +28,8 @@ const index = async () => {
 
 
 // 注入代码
-const interval = setInterval(() => {
-    if (document.head) {
-        clearInterval(interval);
-        const script = document.createElement("script");
-        script.innerHTML = `(${index.toString()})()`;
-        document.head.appendChild(script);
-    }
-}, 100);
+window.addEventListener("DOMContentLoaded", () => {
+    const script = document.createElement("script");
+    script.textContent = `(${index.toString()})()`;
+    document.head.appendChild(script);
+});

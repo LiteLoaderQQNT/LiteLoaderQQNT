@@ -5,7 +5,7 @@ export class PluginLoader {
 
     async init() {
         // 导入PluginConfigView
-        const plugin_config_view_path = `file://${LiteLoader.path.root}/src/renderer/config.js`;
+        const plugin_config_view_path = `llqqnt://local-file/${LiteLoader.path.root}/src/renderer/config.js`;
         const { PluginConfigView } = await import(plugin_config_view_path);
         this.#PluginConfigView = PluginConfigView;
 
@@ -17,7 +17,7 @@ export class PluginLoader {
             const plugin_path = plugin.path.plugin;
             const renderer_path_name = plugin.manifest.injects?.renderer;
             if (renderer_path_name) {
-                const path = `file://${plugin_path}/${renderer_path_name}`;
+                const path = `llqqnt://local-file/${plugin_path}/${renderer_path_name}`;
                 const { onLoad, onConfigView } = await import(path);
                 this.#plugins[slug] = {
                     onLoad,
