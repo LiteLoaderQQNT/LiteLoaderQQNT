@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { LiteLoader, output } = require("./base.js");
+const { LiteLoader, output, qq_install_dir } = require("./base.js");
 
 class PluginLoader {
     // 插件列表
@@ -64,7 +64,7 @@ class PluginLoader {
     #preprocessing() {
         output("Preprocessing plugins' preloads...");
 
-        const qqVersionBase = path.join(LiteLoader.path.root, "../versions", LiteLoader.versions.qqnt);
+        const qqVersionBase = `${qq_install_dir}/resources/app/versions/${LiteLoader.versions.qqnt}/`;
         const dest = path.join(qqVersionBase, "plugin-preloads.js");
 
         const code_block = (title, content) => {

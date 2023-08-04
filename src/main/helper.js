@@ -36,7 +36,6 @@ function getQQInstallDir() {
         return path.join(__dirname, "../../../../../");
     }
 }
-console.log(getQQInstallDir());
 
 module.exports = {
     getQQInstallDir

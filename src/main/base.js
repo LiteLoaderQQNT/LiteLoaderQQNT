@@ -13,7 +13,6 @@ const LITELOADER_PROFILE_ENV = process.env["LITELOADERQQNT_PROFILE"];
 const LITELOADER_PROFILE_CONST = path.join(app.getPath("documents"), "LiteLoaderQQNT");
 const LITELOADER_PROFILE = LITELOADER_PROFILE_ENV || LITELOADER_PROFILE_CONST;
 
-
 const LiteLoader = {
     path: {
         root: path.join(__dirname, "../../"),
@@ -26,7 +25,7 @@ const LiteLoader = {
         plugins_cache: path.join(LITELOADER_PROFILE, "plugins_cache")
     },
     versions: {
-        qqnt: os.platform() == "win32" ? require("../../../versions/config.json").curVersion : qqnt_package.version,
+        qqnt: os.platform() == "win32" ? require(`${qq_install_dir}/resources/app/versions/config.json`).curVersion : qqnt_package.version,
         liteLoader: liteloader_package.version,
         node: process.versions.node,
         chrome: process.versions.chrome,
@@ -42,7 +41,6 @@ const LiteLoader = {
     config: {},
     plugins: {}
 }
-
 
 // 将LiteLoader对象挂载到global
 Object.defineProperty(
