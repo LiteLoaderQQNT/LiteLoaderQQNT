@@ -26,20 +26,22 @@ Telegram 闲聊群：https://t.me/LiteLoaderQQNT
 正常情况下，需要将含有 LiteLoaderQQNT 本体的文件夹放到 `QQNT安装目录/resources/app` 下。
 对于不同系统，默认情况下此位置位置可能为：
 
-- Windows: ` C:\Program Files\Tencent\QQNT`
-- Linux: `QQNT安装目录/resources/app`
+- Windows: `C:\Program Files\Tencent\QQNT\resources\app`
+- Linux: `/opt/QQ/resources/app`
 - MacOS: `/Applications/QQ.app/Contents/Resources/app`
 
-应与 package.json 文件同级：
+安装完成后的目录结构应类似于这样：
 
+```
 ├─app_launcher
-├─LiteLoader    <--在这
+├─LiteLoader    <--含有 LiteLoader 本体的文件夹
 │  ├─builtins
 │  ├─src
 │  ├─package.json
 │  └─...
-├─package.json
+├─package.json  <--需要修改的 package.json
 └─...
+```
 
 ### 从 Releases 中下载稳定版的方式进行安装
 
@@ -53,27 +55,27 @@ Telegram 闲聊群：https://t.me/LiteLoaderQQNT
 1. 确保你的系统装有 [Git](https://git-scm.com/downloads)。
 2. 在终端中打开上文提到的 LiteLoaderQQNT 需要安装到的位置。
 3. 终端中用 `git clone https://github.com/mo-jinran/LiteLoaderQQNT.git `拉取仓库到`LiteLoaderQQNT` 文件夹下，读写时可能需要 root 权限或管理员权限运行。
-4. 用 `cd LiteLoaderQQNT && git submodule update --init --recursive` 拉取子模块。读写时可能需要 root权限或管理员权限运行。
+4. 用 `cd LiteLoaderQQNT && git submodule update --init --recursive` 拉取子模块。读写时可能需要 root 权限或管理员权限运行。
 5. 将 `LiteLoaderQQNT` 文件夹上一级处的 `package.json` 中 `"main"` 键对应的值修改到 `"LiteLoaderQQNT"`，这里的键值即为解压出来的文件夹名称。
-5. 至此，安装完成。
+6. 至此，安装完成。
 
 
 ## 针对 Windows 版 QQNT 9.9.1 及以上版本的安装方法
 
 在新版 QQNT 中，对于 `package.json` 的完整性验证被加上了。因此对于新版 QQNT，只能通过其他方案加载 LiteLoaderQQNT。
-下面的安装方法为使用 Release 下载 `LiteLoaderQQNT.zip` 的方式安装，如需使用 git clone 方式安装可能需要重命名 clone 下来的文件夹到 `LiteLoader`。
+下面的安装方法为使用 Release 下载 `LiteLoaderQQNT.zip` 的方式安装，如需使用 git clone 方式安装可能需要额外重命名 clone 下来的文件夹到 `LiteLoader`。
 
 ### 使用 Launcher （推荐，闭源）
 
 1. 前往 releases 中下载最新的 `LiteLoaderQQNT.zip` 以及额外的 Launcher（`LiteLoaderQQNT-Launcher_x64.exe` 或 `LiteLoaderQQNT-Launcher_x86.exe`），Launcher 可以只用x86版本。
 2. 将额外下载的 Launcher 移动到 QQNT 安装目录下 QQ.exe 同级目录（未修改安装位置情况下默认在 `C:\Program Files\Tencent\QQNT`）。
-3. 解压 `LiteLoaderQQNT.zip` 的 `LiteLoader` 文件夹到[安装方法中提到的安装位置](#%E5%AE%89%E8%A3%85%E4%BD%8D%E7%BD%AE)，并且此文件夹只能够名为 `LiteLoader`。
+3. 解压 `LiteLoaderQQNT.zip` 的 `LiteLoader` 文件夹到[上面的安装方法中提到的安装位置](#%E5%AE%89%E8%A3%85%E4%BD%8D%E7%BD%AE)，并且此文件夹只能够名为 `LiteLoader`。
 4. 至此，安装完成。但是为了加载 LiteLoaderQQNT，运行 QQ 的时候需要运行 QQ 对应目录下的 Launcher。为了方便使用，可以修改快捷方式指向或者修改注册表配置映像劫持。
 
 ### 使用 Patch （不推荐，开源）
 
 1. 前往 releases 中下载最新的 `LiteLoaderQQNT.zip`。
-2. 解压 `LiteLoaderQQNT.zip` 的 `LiteLoader` 文件夹到[安装方法中提到的安装位置](#%E5%AE%89%E8%A3%85%E4%BD%8D%E7%BD%AE)，并且此文件夹只能够名为 `LiteLoader`。
+2. 解压 `LiteLoaderQQNT.zip` 的 `LiteLoader` 文件夹到[上面的安装方法中提到的安装位置](#%E5%AE%89%E8%A3%85%E4%BD%8D%E7%BD%AE)，并且此文件夹只能够名为 `LiteLoader`。
 3. 使用管理员权限运行解压出来的 LiteLoader 目录下 patch 目录内的脚本，并等待修补完成。一些用户运行 ps1 脚本可能会出现报错，可以根据 patch 目录内的脚本手动修改。
 4. 修改 `LiteLoader` 文件夹上一级处的`package.json`，将其中的 `"main": "/app_launcher/index.js"` 那一行改为`"main": "LiteLoader"`，这里的 `"LiteLoader"` 即为解压出来的文件夹的名字。
 5. 至此，安装完成，并且去除完整性验证的 Patch 将永久生效。
@@ -94,10 +96,11 @@ Telegram 闲聊群：https://t.me/LiteLoaderQQNT
 LiteLoaderQQNT 的默认数据文件夹在 `用户目录/Documents/LiteLoaderQQNT`，修改环境变量 `LITELOADERQQNT_PROFILE` 可指定目录位置。
 
 数据目录结构：
+
 ```
 LiteLoaderQQNT
     ├─plugins           // 插件本体目录
-    │   ├─my-plugin         // 插件本体
+    │   ├─my-plugin     // 插件本体
     │   └─...
     ├─plugins_cache     // 插件缓存目录
     │   ├─my-plugin
