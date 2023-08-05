@@ -13,7 +13,7 @@ Telegram 闲聊群：https://t.me/LiteLoaderQQNT
 - 仅为个人兴趣而制作，开发目的在于学习和探索。
 - 能力有限，随缘更新。不过也欢迎各位来提交PR。
 - 由于项目特殊性，必要时会停止开发或删除仓库。
-- 对于 Windows 版 QQNT 9.9.1 以及更高版本还有 Mac 版 QQNT 6.9.18 以及更高版本，由于对于 `package.json` 的完整性校验，下方对于旧版本的[安装方法](#安装方法)栏目可能不适用。新 Windows 版安装可按照下方的[针对 Windows 版 QQNT 9.9.1 及以上版本的安装方法](#针对-windows-版-qqnt-991-及以上版本的安装方法)，而 MacOS 目前只能通过安装老版本 QQNT 来解决。不过目前 [App Store 版 QQ](itms-apps://itunes.apple.com/app/id451108668) 仍然不含有对于 `package.json` 的完整性校验。
+- 对于 Windows 版 QQNT 9.9.1 以及更高版本还有 Mac 版 QQNT 6.9.18 以及更高版本，由于 `package.json` 被添加了完整性校验，下方对于旧版本的[安装方法](#安装方法)栏目可能不适用。对于新 Windows 版 QQNT 安装 LiteLoader 可按照下方的[针对 Windows 版 QQNT 9.9.1 及以上版本的安装方法](#针对-windows-版-qqnt-991-及以上版本的安装方法)，而 MacOS 目前只能通过安装老版本 QQNT 来解决。不过目前 [App Store 版 QQ](itms-apps://itunes.apple.com/app/id451108668) 仍然不含有对于 `package.json` 的完整性校验。
 - 安装时请**不要修改** LiteLoader 文件夹内的 `package.json`。可能需要修改的 `package.json` 仅为 LiteLoader 上一级目录处的（即 `QQNT安装目录/resources/app/package.json`）。
 
 
