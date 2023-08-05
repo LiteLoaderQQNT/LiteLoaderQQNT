@@ -13,11 +13,14 @@ Telegram 闲聊群：https://t.me/LiteLoaderQQNT
 - 仅为个人兴趣而制作，开发目的在于学习和探索。
 - 能力有限，随缘更新。不过也欢迎各位来提交PR。
 - 由于项目特殊性，必要时会停止开发或删除仓库。
-- 对于 Windows 版 QQNT 9.9.1 以及更高版本还有 Mac 版 QQNT 6.9.18 以及更高版本，由于 `package.json` 被添加了完整性校验，下方对于旧版本的[安装方法](#安装方法)栏目可能不适用。对于新 Windows 版 QQNT 安装 LiteLoader 可按照下方的[针对 Windows 版 QQNT 9.9.1 及以上版本的安装方法](#针对-windows-版-qqnt-991-及以上版本的安装方法)，而 MacOS 目前只能通过安装老版本 QQNT 来解决。不过目前 [App Store 版 QQ](itms-apps://itunes.apple.com/app/id451108668) 仍然不含有对于 `package.json` 的完整性校验。
-- 安装时请**不要修改** LiteLoader 文件夹内的 `package.json`。可能需要修改的 `package.json` 仅为 LiteLoader 上一级目录处的（即 `QQNT安装目录/resources/app/package.json`）。
 
 
 ## 安装方法
+
+由于 `package.json` 在 Windows 版 QQNT 9.9.1 还有 Mac 版 QQNT 6.9.18 被添加了完整性校验，除去 Windows 版 9.9.1-15717 外，下方对于旧版本的[安装方法](#安装方法)栏目可能不适用。对于新 Windows 版 QQNT 安装 LiteLoader 可按照最下方的[针对 Windows 版 QQNT 9.9.1 及以上版本的安装方法](#针对-windows-版-qqnt-991-及以上版本的安装方法)。MacOS 目前只能通过安装老版本 QQNT 来解决，不过目前 [App Store 版 QQ](itms-apps://itunes.apple.com/app/id451108668) 仍然不含的完整性校验。
+
+安装时请**不要修改** LiteLoader 文件夹内的 `package.json`。可能需要修改的 `package.json` 仅为 LiteLoader 上一级目录处的（即 `QQNT安装目录/resources/app/package.json`）。
+
 
 安装 LiteLoaderQQNT 之前，确保你安装好了基于 QQNT 架构的 QQ。安装分为从 Releases 中下载稳定版（推荐）和通过 git clone 安装。
 
@@ -55,14 +58,14 @@ Telegram 闲聊群：https://t.me/LiteLoaderQQNT
 }
 ```
 
-### 从 Releases 中下载稳定版的方式进行安装
+### 从 Releases 中下载稳定版的方式进行安装（对于不含完整性验证的 QQNT）
 
 1. 从 Releases 中下载最新的 `LiteLoaderQQNT.zip`。
 2. 解压 `LiteLoaderQQNT.zip` 的 `LiteLoader` 文件夹到上方提到的安装位置。
 3. 修改 `LiteLoader` 文件夹上一级处的`package.json`，将其中的 `"main": "/app_launcher/index.js"` 那一行改为`"main": "LiteLoader"`，这里的 `"LiteLoader"` 即为解压出来的文件夹的名字。
 4. 至此，安装完成。
 
-### 使用 git clone 的方式安装（不推荐，不稳定且较麻烦，适合高阶用户。）
+### 使用 git clone 的方式安装（对于不含完整性验证的 QQNT）（不推荐，适合高阶用户。）
 
 1. 确保你的系统装有 [Git](https://git-scm.com/downloads)。
 2. 在终端中打开上文提到的 LiteLoaderQQNT 需要安装到的位置。
@@ -71,23 +74,22 @@ Telegram 闲聊群：https://t.me/LiteLoaderQQNT
 5. 将 `LiteLoaderQQNT` 文件夹上一级处的 `package.json` 中 `"main"` 键对应的值修改到 `"LiteLoaderQQNT"`，这里的键值即为解压出来的文件夹名称。
 6. 至此，安装完成。
 
-
-## 针对 Windows 版 QQNT 9.9.1 及以上版本的安装方法
+### 针对 Windows 版 QQNT 9.9.1 及以上版本的安装方法
 
 在新版 QQNT 中，对于 `package.json` 的完整性验证被加上了。因此对于新版 QQNT，只能通过其他方案加载 LiteLoaderQQNT。
 下面的安装方法为使用 Release 下载 `LiteLoaderQQNT.zip` 的方式安装，如需使用 git clone 方式安装可能需要额外重命名 clone 下来的文件夹到 `LiteLoader`。
 
-### 使用 Launcher （推荐，闭源）
+使用 Launcher （推荐，闭源）：
 
 1. 前往 releases 中下载最新的 `LiteLoaderQQNT.zip` 以及额外的 Launcher（`LiteLoaderQQNT-Launcher_x64.exe` 或 `LiteLoaderQQNT-Launcher_x86.exe`），Launcher 可以只用x86版本。
 2. 将额外下载的 Launcher 移动到 QQNT 安装目录下 QQ.exe 同级目录（未修改安装位置情况下默认在 `C:\Program Files\Tencent\QQNT`）。
-3. 解压 `LiteLoaderQQNT.zip` 的 `LiteLoader` 文件夹到[上面的安装方法中提到的安装位置](#%E5%AE%89%E8%A3%85%E4%BD%8D%E7%BD%AE)，并且此文件夹只能够名为 `LiteLoader`。
+3. 解压 `LiteLoaderQQNT.zip` 的 `LiteLoader` 文件夹到上方提到的安装位置，并且此文件夹只能够名为 `LiteLoader`。
 4. 至此，安装完成。但是为了加载 LiteLoaderQQNT，运行 QQ 的时候需要运行 QQ 对应目录下的 Launcher。为了方便使用，可以修改快捷方式指向或者修改注册表配置映像劫持。
 
-### 使用 Patch （不推荐，开源）
+使用 Patch （不推荐，开源）：
 
 1. 前往 releases 中下载最新的 `LiteLoaderQQNT.zip`。
-2. 解压 `LiteLoaderQQNT.zip` 的 `LiteLoader` 文件夹到[上面的安装方法中提到的安装位置](#%E5%AE%89%E8%A3%85%E4%BD%8D%E7%BD%AE)，并且此文件夹只能够名为 `LiteLoader`。
+2. 解压 `LiteLoaderQQNT.zip` 的 `LiteLoader` 文件夹到上方提到的安装位置。
 3. 使用管理员权限运行解压出来的 LiteLoader 目录下 patch 目录内的脚本，并等待修补完成。一些用户运行 ps1 脚本可能会出现报错，可以根据 patch 目录内的脚本手动修改。
 4. 修改 `LiteLoader` 文件夹上一级处的`package.json`，将其中的 `"main": "/app_launcher/index.js"` 那一行改为`"main": "LiteLoader"`，这里的 `"LiteLoader"` 即为解压出来的文件夹的名字。
 5. 至此，安装完成，并且去除完整性验证的 Patch 将永久生效。
