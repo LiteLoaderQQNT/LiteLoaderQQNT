@@ -62,14 +62,14 @@ Telegram 闲聊群：https://t.me/LiteLoaderQQNT
 
 1. 从 Releases 中下载最新的 `LiteLoaderQQNT.zip`。
 2. 解压 `LiteLoaderQQNT.zip` 的 `LiteLoader` 文件夹到上方提到的安装位置。
-3. 修改 `LiteLoader` 文件夹上一级处的`package.json`，将其中的 `"main": "/app_launcher/index.js"` 那一行改为`"main": "LiteLoader"`，这里的 `"LiteLoader"` 即为解压出来的文件夹的名字。
+3. 修改 `LiteLoader` 文件夹上一级处的 `package.json`，将其中的 `"main": "/app_launcher/index.js"` 那一行改为 `"main": "LiteLoader"`，这里的 `"LiteLoader"` 即为解压出来的文件夹的名字。
 4. 至此，安装完成。
 
 ### 使用 git clone 的方式安装（对于不含完整性验证的 QQNT）（不推荐，适合高阶用户）
 
 1. 确保你的系统装有 [Git](https://git-scm.com/downloads)。
 2. 在终端中打开上文提到的 LiteLoaderQQNT 需要安装到的位置。
-3. 终端中用 `git clone https://github.com/mo-jinran/LiteLoaderQQNT.git `拉取仓库到`LiteLoaderQQNT` 文件夹下，读写时可能需要 root 权限或管理员权限运行。
+3. 终端中用 `git clone https://github.com/mo-jinran/LiteLoaderQQNT.git` 拉取仓库到 `LiteLoaderQQNT` 文件夹下，读写时可能需要 root 权限或管理员权限运行。
 4. 用 `cd LiteLoaderQQNT && git submodule update --init --recursive` 拉取子模块。读写时可能需要 root 权限或管理员权限运行。
 5. 将 `LiteLoaderQQNT` 文件夹上一级处的 `package.json` 中 `"main"` 键对应的值修改到 `"LiteLoaderQQNT"`，这里的键值即为解压出来的文件夹名称。
 6. 至此，安装完成。
