@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { LiteLoader, output, qq_install_dir } = require("./base.js");
+const { output, qq_install_dir } = require("./base.js");
 
 class PluginLoader {
     // 插件列表

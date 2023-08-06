@@ -2,7 +2,7 @@ const { Module } = require("module");
 const { app, net, protocol } = require("electron");
 const path = require("path");
 const fs = require("fs");
-const { LiteLoader, output, qq_install_dir } = require("./base.js");
+const { output, qq_install_dir } = require("./base.js");
 const { PluginLoader } = require("./loader.js");
 
 app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
