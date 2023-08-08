@@ -79,7 +79,8 @@ Telegram 闲聊群：https://t.me/LiteLoaderQQNT
 
 ### 安装方法
 
-对于 `Windows QQNT 9.9.1` 的 15293 版本 与 15489 版本，安装后请阅读 [启动方法](#启动方法)
+**目前最新的 15820 版本，安装 LiteLoaderQQNT 后会不定时随机延迟关闭 QQ。**  
+对于 `Windows QQNT 9.9.1` 版本（除 15717 版本外），安装后请阅读 [启动方法](#启动方法)
 
 从 Releases 中下载稳定版的方式进行安装（推荐）
 
@@ -100,11 +101,9 @@ Telegram 闲聊群：https://t.me/LiteLoaderQQNT
 
 ### 启动方法
 
-**仅适用于 Windows 并且仅适用于 15293 与 15489 版本才需阅读这段教程！**  
 由于 `Windows QQNT 9.9.1` 版本和 `MacOS QQNT 6.9.18` 版本开始被添加文件校验，  
-LiteLoaderQQNT 不支持 15034 与 15240 版本，仅对 15293 与 15489 版本提供兼容支持。  
 MacOS 目前只能通过安装老版本 QQNT 来解决，不过目前 App Store 仍然不含文件校验。  
-更老版本 QQNT 以及目前官网最新 15717 版本没有添加文件校验，所以无需阅读这段教程。
+更老版本 QQNT 以及 Windows 9.9.1-15717 版本没有添加文件校验，所以无需阅读这段教程。
 
 使用 Launcher （闭源软件，不麻烦，推荐）：
 
