@@ -156,7 +156,9 @@ $qq_pather = {
                     $buffer[$i + 12] -eq $original_bytes[12]
                 ) {
                     $matched = $true
-                    $buffer[$i..($i + 12)] = $replace_bytes
+                    for ($j = 0; $j -lt 13; $j++) {
+                        $buffer[$i + $j] = $replace_bytes[$j]
+                    }
                 }
             }
         }
@@ -203,7 +205,8 @@ $qqDirPath = {
     $reg2 = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\QQ"
     if (Test-Path $reg1) {
         $filePath = Get-ItemPropertyValue $reg1 "UninstallString"
-    } elseif (Test-Path $reg2) {
+    }
+    elseif (Test-Path $reg2) {
         $filePath = Get-ItemPropertyValue $reg2 "UninstallString"
     }
     return $filePath.Substring(0, $filePath.LastIndexOf("\"))
