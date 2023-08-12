@@ -79,6 +79,7 @@ Telegram 闲聊群：https://t.me/LiteLoaderQQNT
 
 #### 不带签名校验的 QQ
 
+> [!NOTE]
 > Win QQ 9.9.0-xxxxx 及 9.9.1-15717, Mac 6.9.18 之前
 
 1. 修改 `package.json` 中 `main` 的值为加载器的文件夹路径 (`LiteLoader`)，随后保存
@@ -93,10 +94,12 @@ Telegram 闲聊群：https://t.me/LiteLoaderQQNT
     }
     ```
 
-> 注意：请**不要修改** LiteLoader 文件夹内的 `package.json`，应该修改 `QQNT 安装目录/resources/app/package.json`。
+> [!WARNING]
+> 请**不要修改** LiteLoader 文件夹内的 `package.json`，应该修改 `QQNT 安装目录/resources/app/package.json`。
 
 #### 带签名校验的 QQ
 
+> [!NOTE]
 > Win QQ 9.9.1-xxxxx (除 9.9.1-15717) 及之后, Mac 6.9.18 及之后
 
 - 法 1：Patch (开源，麻烦，不推荐)
@@ -109,6 +112,7 @@ Telegram 闲聊群：https://t.me/LiteLoaderQQNT
   2. 将额外下载的 Launcher 移动到 QQNT 安装目录下 QQ.exe 同级目录。
   3. 至此，安装完成。为了加载 LiteLoaderQQNT，你需要以后**每次运行都使用 Launcher** 而不是 QQ。
 
+> [!TIP]
 > 如果 Launcher 或 Patch 运行失败无反应请尝试使用管理员权限运行重试
 
 
