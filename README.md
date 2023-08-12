@@ -112,7 +112,7 @@ Telegram 闲聊群：https://t.me/LiteLoaderQQNT
   2. 将额外下载的 Launcher 移动到 QQNT 安装目录下 QQ.exe 同级目录。
   3. 至此，安装完成。为了加载 LiteLoaderQQNT，你需要以后**每次运行都使用 Launcher** 而不是 QQ。
 
-> [!TIP]
+> [!NOTE]
 > 如果 Launcher 或 Patch 运行失败无反应请尝试使用管理员权限运行重试
 
 
