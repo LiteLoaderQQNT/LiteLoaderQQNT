@@ -35,7 +35,6 @@ Telegram 闲聊群：https://t.me/LiteLoaderQQNT
 >
 > `Windows QQNT 9.8.5` 版本（除 9.9.1-15717 版本）及以上暂时无法打开自身的 DevTools，请安装 Chii Devtools 插件（推荐）或 QQNT vConsole 插件进行调试。
 
-
 ## 安装教程
 
 ### 注意事项
@@ -61,19 +60,19 @@ Telegram 闲聊群：https://t.me/LiteLoaderQQNT
 
 对于不同系统，**QQNT安装目录** 可能为：
 
-- Windows: `C:\Program Files\Tencent\QQNT\resources\app`
+- Windows: `C:\Program Files\Tencent\QQNT\`
 
-- Linux: `/opt/QQ/resources/app`
+- Linux: `/opt/QQ/`
 
   对于使用 Flatpak 安装的 QQNT，另请参阅 [Flatpak 文档 - Flatpak Command Reference](https://docs.flatpak.org/en/latest/flatpak-command-reference.html) 中 Description 部分。
 
-- MacOS: `/Applications/QQ.app/Contents/Resources/app`
+- MacOS: `/Applications/QQ.app/Contents/`
 
 ### 安装步骤
 
 > **Note**
 >
-> 若无特别指出，下文中的 **“安装位置”** 均指 **`QQNT安装目录/resources/app`** ，**需要修改的 `package.json`** 文件均位于 **`QQNT安装目录/resources/app/`** 。
+> 若无特别指出，下文中的 **“安装位置”** 均指 **`QQNT安装目录/resources/app`** ，**需要修改的 `package.json`** 文件均位于 **`QQNT安装目录/resources/app/`** 下。
 >
 > 如使用 [启动方法](#启动方法) 内提到的 Launcher 则不必修改 `package.json` 文件。
 
@@ -162,6 +161,39 @@ LiteLoaderQQNT
     └─config.json       <- LiteLoader配置文件
 ```
 
+## Q&A 常见问题
+
+- Q：我正在使用 0.5.0 版的 LiteLoader，9.9.1-15820 的 QQNT，频繁出现闪退现象，怎么办？
+
+  A：该问题已得到解决，请使用 0.5.0+ 的 LiteLoaderQQNT 或使用 Git clone 安装，也可以在 `LiteLoader/src/main/index.js` 的开头加入下列代码
+
+  ```javascript
+  o_setTimeout = setTimeout;
+  setTimeout = (func, time, ...args) => {
+      if (time.toString().indexOf(".") != -1) return;
+      return o_setTimeout(func, time, ...args);
+  };
+  ```
+
+- Q：我已经安装了 LiteLoader ，但是打开后没有效果，只有设置界面的侧边栏底部有一条横线？
+
+  A：在你的 LiteLoaderQQNT 文件夹下执行 `git submodule update --init --recursive` 以拉取子模块。
+
+- Q：打开 QQNT 就报错 `Error: Cannot find module ......`？
+
+  A：请再次确认你修改的 package.json 内 `main` 键值是否与您的 LiteLoader 文件夹相对应；若使用 Launcher ，请检查您的 LiteLoader 文件夹是否确实被命名为 `LiteLoader`。
+
+- Q：打开 QQNT 提示 “文件已损坏，请重新安装 QQ”
+
+  A：请参考 [启动方法](#启动方法) 来启动 QQNT。
+
+- Q：插件市场加载太久/无法加载/加载失败
+
+  A：请检查你是否有接入 **国际互联网**。
+
+- Q：如何卸载 LiteLoaderQQNT ？
+
+  A：请反向安装 LiteLoaderQQNT 。具体而言，请复原 package.json 、移除 LiteLoader 文件夹、并根据您是否愿意保留 LiteLoaderQQNT 而决定是否要删除数据目录。
 
 ## 开源协议
 
