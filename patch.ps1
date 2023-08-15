@@ -184,11 +184,7 @@ $qq_pather = {
 foreach ($name in $patch_hashtable.Keys) {
     $listbox.Items.Add($name)
 }
-$bit = (Get-Content -Path ".\resources\app\package.json" -Raw | ConvertFrom-Json).eleArch
-$fileInfo = (Get-Item "qq.exe").VersionInfo.FileVersion
-# 根据文件信息和位数构建要匹配的字符串
-$matchingString = $fileInfo + "_" + $bit
-Write-Host $matchingString
+
 # 判断列表中是否存在匹配项
 $listbox.Add_SelectionChanged(
     {
@@ -203,12 +199,6 @@ $listbox.Add_SelectionChanged(
     }
 )
 
-if ($matchingString -in $patch_hashtable.Keys) {
-    $matchingItem = $listbox.Items | Where-Object { $_ -eq $matchingString }
-    # 选中匹配项
-    $listbox.SelectedItem = $matchingItem
-}
-
 #底部区域 - 按钮
 $qqDirPath = {
     $filePath = $null
@@ -222,14 +212,23 @@ $qqDirPath = {
     }
     return $filePath.Substring(0, $filePath.LastIndexOf("\"))
 }
-
+$path = & $qqDirPath
+$bit = (Get-Content -Path ($path+"\resources\app\package.json") -Raw | ConvertFrom-Json).eleArch
+$fileInfo = (Get-Item "qq.exe").VersionInfo.FileVersion
+# 根据文件信息和位数构建要匹配的字符串
+$matchingString = $fileInfo + "_" + $bit
+Write-Host $matchingString
+if ($matchingString -in $patch_hashtable.Keys) {
+    $matchingItem = $listbox.Items | Where-Object { $_ -eq $matchingString }
+    # 选中匹配项
+    $listbox.SelectedItem = $matchingItem
+}
 $button.Add_Click(
     {
         $button.Visibility = [Windows.Visibility]::Hidden
         $listbox.IsEnabled = $false
         $textblock.Text = "正在初始化..."
 
-        $path = & $qqDirPath
         $original_bytes = $patch_hashtable[$listbox.SelectedItem].original
         $replace_bytes = $patch_hashtable[$listbox.SelectedItem].replace
         $updateProgress = {
