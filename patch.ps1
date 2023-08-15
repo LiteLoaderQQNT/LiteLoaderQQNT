@@ -205,10 +205,8 @@ $listbox.Add_SelectionChanged(
 
 if ($matchingString -in $patch_hashtable.Keys) {
     $matchingItem = $listbox.Items | Where-Object { $_ -eq $matchingString }
-    
     # 选中匹配项
     $listbox.SelectedItem = $matchingItem
-    $listbox.$selectedItem
 }
 
 #底部区域 - 按钮
