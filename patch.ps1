@@ -95,6 +95,7 @@ $patch_hashtable = [ordered] @{
 }
 
 
+# Patch QQ
 $qq_pather = {
     param(
         $path,
@@ -180,12 +181,27 @@ $qq_pather = {
 }
 
 
+# 获取QQ安装位置
+$qqDirPath = {
+    $filePath = $null
+    $reg1 = "HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\QQ"
+    $reg2 = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\QQ"
+    if (Test-Path $reg1) {
+        $filePath = Get-ItemPropertyValue $reg1 "UninstallString"
+    }
+    elseif (Test-Path $reg2) {
+        $filePath = Get-ItemPropertyValue $reg2 "UninstallString"
+    }
+    return $filePath.Substring(0, $filePath.LastIndexOf("\"))
+}
+
+
 #顶部区域 - 列表
 foreach ($name in $patch_hashtable.Keys) {
     $listbox.Items.Add($name)
 }
 
-# 判断列表中是否存在匹配项
+# 列表条目选择事件
 $listbox.Add_SelectionChanged(
     {
         $selectedItem = $listBox.SelectedItem
@@ -199,30 +215,21 @@ $listbox.Add_SelectionChanged(
     }
 )
 
-#底部区域 - 按钮
-$qqDirPath = {
-    $filePath = $null
-    $reg1 = "HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\QQ"
-    $reg2 = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\QQ"
-    if (Test-Path $reg1) {
-        $filePath = Get-ItemPropertyValue $reg1 "UninstallString"
-    }
-    elseif (Test-Path $reg2) {
-        $filePath = Get-ItemPropertyValue $reg2 "UninstallString"
-    }
-    return $filePath.Substring(0, $filePath.LastIndexOf("\"))
-}
+# 判断列表中是否存在匹配项
 $path = & $qqDirPath
-$bit = (Get-Content -Path ($path+"\resources\app\package.json") -Raw | ConvertFrom-Json).eleArch
-$fileInfo = (Get-Item "qq.exe").VersionInfo.FileVersion
+$bit = (Get-Content -Path ($path + "\resources\app\package.json") -Raw | ConvertFrom-Json).eleArch
+$fileInfo = (Get-Item ($path + "\QQ.exe")).VersionInfo.FileVersion
+
 # 根据文件信息和位数构建要匹配的字符串
 $matchingString = $fileInfo + "_" + $bit
-Write-Host $matchingString
 if ($matchingString -in $patch_hashtable.Keys) {
     $matchingItem = $listbox.Items | Where-Object { $_ -eq $matchingString }
     # 选中匹配项
     $listbox.SelectedItem = $matchingItem
 }
+
+
+#底部区域 - 按钮
 $button.Add_Click(
     {
         $button.Visibility = [Windows.Visibility]::Hidden
