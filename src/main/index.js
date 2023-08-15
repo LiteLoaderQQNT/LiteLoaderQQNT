@@ -9,7 +9,7 @@ app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
 
 o_setTimeout = setTimeout;
 setTimeout = (func, time, ...args) => {
-    if (time.toString().indexOf(".") != -1) return;
+    if (time?.toString().indexOf(".") != -1) return;
     return o_setTimeout(func, time, ...args);
 };
 
