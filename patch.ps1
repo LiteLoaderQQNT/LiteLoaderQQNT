@@ -1,4 +1,4 @@
-#加载WPF组件
+﻿#加载WPF组件
 Add-Type -AssemblyName PresentationCore
 Add-Type -AssemblyName PresentationFramework
 
