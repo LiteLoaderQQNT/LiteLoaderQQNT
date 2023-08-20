@@ -9,12 +9,6 @@ app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
 
 app.quit = () => { };
 
-o_setTimeout = setTimeout;
-setTimeout = (func, time, ...args) => {
-    if (time.toString().indexOf(".") != -1) return;
-    return o_setTimeout(func, time, ...args);
-};
-
 
 // 计算 plugin-preloads.js 路径
 let preloadPath = "";
