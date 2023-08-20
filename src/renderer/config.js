@@ -10,7 +10,8 @@ export class PluginConfigView {
         this.liteloader_setting_content.classList.add("liteloader");
         this.liteloader_setting_content.classList.add("setting-main__content");
         this.liteloader_setting_content.style.display = "none";
-        this.setting_main.appendChild(this.liteloader_setting_content);
+        const wrapper = this.setting_main.querySelector(".wrapper"); // 兼容新版本
+        (wrapper ?? this.setting_main).appendChild(this.liteloader_setting_content);
         // 处理点击
         this.nav_bar.addEventListener("click", event => {
             const target = event.target.closest(".nav-item");
@@ -39,6 +40,10 @@ export class PluginConfigView {
             height: calc(100% - 70px);
             margin-bottom: 20px;
             overflow-y: scroll;
+        }
+        .wrapper .liteloader.setting-main__content {
+            height: 100%;
+            margin-bottom: unset;
         }
         `;
         document.head.appendChild(style);
