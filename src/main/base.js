@@ -64,6 +64,12 @@ ipcMain.on("LiteLoader.LiteLoader.LiteLoader",
     }
 );
 
+ipcMain.on("LiteLoader.LiteLoader.exit",
+    (event, message) => {
+        app.exit();
+    }
+);
+
 
 if (!fs.existsSync(LiteLoader.path.plugins)) {
     fs.mkdirSync(LiteLoader.path.plugins, { recursive: true });

@@ -7,9 +7,11 @@ const { PluginLoader } = require("./loader.js");
 
 app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
 
+app.quit=()=>{};
+
 o_setTimeout = setTimeout;
 setTimeout = (func, time, ...args) => {
-    if (time?.toString().indexOf(".") != -1) return;
+    if (time.toString().indexOf(".") != -1) return;
     return o_setTimeout(func, time, ...args);
 };
 
@@ -165,7 +167,7 @@ observeNewBrowserWindow((window) => {
             ses.protocol.registerFileProtocol("llqqnt", oldProtocolHandler);
         }
     }
-
+    
     // DevTools切换
     window.webContents.on("before-input-event", (event, input) => {
         if (input.key == "F12" && input.type == "keyUp") {
