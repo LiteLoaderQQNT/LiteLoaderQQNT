@@ -2,18 +2,35 @@ const { Module } = require("module");
 const { app, net, protocol } = require("electron");
 const path = require("path");
 const fs = require("fs");
-const { output, qq_install_dir } = require("./base.js");
+const { output, qq_install_dir, relativeRootPath } = require("./base.js");
 const { PluginLoader } = require("./loader.js");
 
 app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
 
-app.quit=()=>{};
+app.quit = () => { };
 
 o_setTimeout = setTimeout;
 setTimeout = (func, time, ...args) => {
     if (time.toString().indexOf(".") != -1) return;
     return o_setTimeout(func, time, ...args);
 };
+
+
+// 计算 plugin-preloads.js 路径
+let preloadPath = "";
+if (LiteLoader.os.platform == "win32") {
+    const basePath = `${qq_install_dir}\\resources\\app\\versions\\${LiteLoader.versions.qqnt}`;
+    preloadPath = `${basePath}\\application\\..\\plugin-preloads.js`;
+}
+if (LiteLoader.os.platform == "linux") {
+    const basePath = relativeRootPath(`${qq_install_dir}/resources/app/`);
+    preloadPath = `${basePath}\\${LiteLoader.path.profile}\\plugin-preloads.js`;
+}
+if (LiteLoader.os.platform == "darwin") {
+    const basePath = relativeRootPath(`${qq_install_dir}/Resources/app/application`);
+    preloadPath = `${basePath}\\${LiteLoader.path.profile}\\plugin-preloads.js`;
+}
+
 
 // 监听窗口创建
 function observeNewBrowserWindow(callback) {
@@ -39,19 +56,11 @@ function observeNewBrowserWindow(callback) {
                         additionalArguments: ["--fetch-schemes=app,llqqnt"]
                     }
                 };
-                if (LiteLoader.os.platform == "win32") {
-                    const qqVersionBase = `${qq_install_dir}/resources/app/versions/${LiteLoader.versions.qqnt}/`;
-                    const preloadPath = `${path.join(
-                        qqVersionBase,
-                        "application"
-                    )}\\..\\plugin-preloads.js`;
-                    if (fs.existsSync(path.normalize(preloadPath))) {
-                        config.webPreferences.preload = preloadPath;
-                    } else {
-                        output(
-                            "plugin-preloads.js does not exist, check if there was any error above."
-                        );
-                    }
+                if (fs.existsSync(path.normalize(preloadPath))) {
+                    config.webPreferences.preload = preloadPath;
+                }
+                else {
+                    output("plugin-preloads.js does not exist, check if there was any error above.");
                 }
                 const window = Reflect.construct(target, [config], newTarget);
                 callback(window);
@@ -167,7 +176,7 @@ observeNewBrowserWindow((window) => {
             ses.protocol.registerFileProtocol("llqqnt", oldProtocolHandler);
         }
     }
-    
+
     // DevTools切换
     window.webContents.on("before-input-event", (event, input) => {
         if (input.key == "F12" && input.type == "keyUp") {

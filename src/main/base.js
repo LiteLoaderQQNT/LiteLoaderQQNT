@@ -97,7 +97,22 @@ function output(...args) {
 }
 
 
+// 计算要在路径后面拼接多少"../"才能到根目录
+function relativeRootPath(inputPath) {
+    let normalizedPath = path.normalize(inputPath);
+    if (normalizedPath.endsWith(path.sep)) {
+        normalizedPath = normalizedPath.slice(0, -1);
+    }
+    const pathParts = normalizedPath.split(path.sep);
+    const levels = pathParts.length - 1;
+    const backsteps = `..${path.sep}`.repeat(levels);
+    const relativeRootPath = `${normalizedPath}/${backsteps}`;
+    return relativeRootPath;
+}
+
+
 module.exports = {
     output,
-    qq_install_dir
+    qq_install_dir,
+    relativeRootPath
 }

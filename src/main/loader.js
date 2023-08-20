@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { output, qq_install_dir } = require("./base.js");
+const { output, qq_install_dir, relativeRootPath } = require("./base.js");
 
 class PluginLoader {
     // 插件列表
@@ -55,17 +55,12 @@ class PluginLoader {
         output(plugins_length == 0 ? not_plugins_message : has_plugins_message);
 
         // 合并 Preload
-        if (LiteLoader.os.platform == "win32") {
-            this.#preprocessing();
-        }
+        this.#preprocessing();
     }
 
     //对preload脚本进行预处理，合并
     #preprocessing() {
         output("Preprocessing plugins' preloads...");
-
-        const qqVersionBase = `${qq_install_dir}/resources/app/versions/${LiteLoader.versions.qqnt}/`;
-        const dest = path.join(qqVersionBase, "plugin-preloads.js");
 
         const code_block = (title, content) => {
             let str = "";
@@ -94,6 +89,12 @@ class PluginLoader {
                 preloadContents += code_block(`插件：${plugin.manifest.name}`, preload);
             }
         }
+
+        // 计算 plugin-preloads.js 路径
+        const winBasePath = path.join(qq_install_dir, "/resources/app/versions/", LiteLoader.versions.qqnt);
+        const unixBasePath = path.join(relativeRootPath(qq_install_dir), LiteLoader.path.profile);
+        const basePath = LiteLoader.os.platform == "win32" ? winBasePath : unixBasePath;
+        const dest = path.join(basePath, "plugin-preloads.js");
 
         fs.writeFileSync(dest, preloadContents, { encoding: "utf-8" });
         output("Preprocessing plugins' preloads done!");
