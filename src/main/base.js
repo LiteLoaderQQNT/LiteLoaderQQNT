@@ -1,7 +1,6 @@
 const { app, ipcMain } = require("electron");
 const path = require("path");
 const fs = require("fs");
-const os = require("os");
 
 
 const qq_install_dir = path.join(process.execPath, "../");
@@ -27,7 +26,7 @@ const LiteLoader = {
         plugins_cache: path.join(LITELOADER_PROFILE, "plugins_cache")
     },
     versions: {
-        qqnt: os.platform() == "win32" ? require(`${qq_install_dir}/resources/app/versions/config.json`).curVersion : qqnt_package.version,
+        qqnt: process.platform == "win32" ? require(`${qq_install_dir}/resources/app/versions/config.json`).curVersion : qqnt_package.version,
         liteLoader: liteloader_package.version,
         node: process.versions.node,
         chrome: process.versions.chrome,
@@ -38,7 +37,7 @@ const LiteLoader = {
         liteLoader: liteloader_package
     },
     os: {
-        platform: os.platform(),
+        platform: process.platform,
     },
     config: {},
     plugins: {}
