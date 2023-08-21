@@ -11,19 +11,20 @@ app.quit = () => { };
 
 
 // 计算 plugin-preloads.js 路径
-let preloadPath = "";
-if (LiteLoader.os.platform == "win32") {
-    const basePath = `${qq_install_dir}\\resources\\app\\versions\\${LiteLoader.versions.qqnt}`;
-    preloadPath = `${basePath}\\application\\..\\plugin-preloads.js`;
-}
-if (LiteLoader.os.platform == "linux") {
-    const basePath = relativeRootPath(`${qq_install_dir}/resources/app/`);
-    preloadPath = `${basePath}\\${LiteLoader.path.profile}\\plugin-preloads.js`;
-}
-if (LiteLoader.os.platform == "darwin") {
-    const basePath = relativeRootPath(`${qq_install_dir}/Resources/app/application`);
-    preloadPath = `${basePath}\\${LiteLoader.path.profile}\\plugin-preloads.js`;
-}
+const preloadPath = (() => {
+    if (LiteLoader.os.platform == "win32") {
+        const basePath = `${qq_install_dir}\\resources\\app\\versions\\${LiteLoader.versions.qqnt}`;
+        return `${basePath}\\application\\..\\plugin-preloads.js`;
+    }
+    if (LiteLoader.os.platform == "linux") {
+        const basePath = relativeRootPath(`${qq_install_dir}/resources/app`);
+        return `${basePath}${LiteLoader.path.profile}/plugin-preloads.js`;
+    }
+    if (LiteLoader.os.platform == "darwin") {
+        const basePath = relativeRootPath(`${qq_install_dir}/Resources/app/application`);
+        return `${basePath}${LiteLoader.path.profile}/plugin-preloads.js`;
+    }
+})();
 
 
 // 监听窗口创建

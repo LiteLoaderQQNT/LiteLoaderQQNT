@@ -3,9 +3,29 @@ const path = require("path");
 const fs = require("fs");
 
 
-const qq_install_dir = path.join(process.execPath, "../");
+const qq_install_dir = (() => {
+    if (process.platform == "win32") {
+        return path.join(process.execPath, "../").slice(0, -1);
+    }
+    if (process.platform == "linux") {
+        return path.join(process.execPath, "../").slice(0, -1);
+    }
+    if (process.platform == "darwin") {
+        return path.join(process.execPath, "../../").slice(0, -1);
+    }
+})();
 const liteloader_package = require("../../package.json");
-const qqnt_package = require(`${qq_install_dir}/resources/app/package.json`);
+const qqnt_package = (() => {
+    if (process.platform == "win32") {
+        return require(`${qq_install_dir}/resources/app/package.json`)
+    }
+    if (process.platform == "linux") {
+        return require(`${qq_install_dir}/resources/app/package.json`)
+    }
+    if (process.platform == "darwin") {
+        return require(`${qq_install_dir}/Resources/app/package.json`)
+    }
+})();
 
 
 // LiteLoaderQQNT的数据目录
@@ -99,12 +119,12 @@ function output(...args) {
 // 计算要在路径后面拼接多少"../"才能到根目录
 function relativeRootPath(inputPath) {
     let normalizedPath = path.normalize(inputPath);
-    if (normalizedPath.endsWith(path.sep)) {
+    if (normalizedPath.endsWith("/")) {
         normalizedPath = normalizedPath.slice(0, -1);
     }
-    const pathParts = normalizedPath.split(path.sep);
+    const pathParts = normalizedPath.split("/");
     const levels = pathParts.length - 1;
-    const backsteps = `..${path.sep}`.repeat(levels);
+    const backsteps = "../".repeat(levels).slice(0, -1);
     const relativeRootPath = `${normalizedPath}/${backsteps}`;
     return relativeRootPath;
 }

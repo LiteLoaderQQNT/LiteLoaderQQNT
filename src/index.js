@@ -10,4 +10,13 @@ require("./main/index.js");
 
 // 继续执行QQNT启动
 output("Starting QQNT...");
-require(`${qq_install_dir}/resources/app/app_launcher/index.js`);
+
+if (process.platform == "win32") {
+    return require(`${qq_install_dir}/resources/app/app_launcher/index.js`);
+}
+if (process.platform == "linux") {
+    return require(`${qq_install_dir}/resources/app/app_launcher/index.js`);
+}
+if (process.platform == "darwin") {
+    return require(`${qq_install_dir}/Resources/app/app_launcher/index.js`);
+}
