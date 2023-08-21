@@ -171,28 +171,10 @@ class PluginLoader {
     }
 
     onBrowserWindowCreated(window) {
-        // 注入Preload
-        // LiteLoader最基础的API(一些信息)
-        // 还有加载渲染进程用的脚本
-        const preloads = new Set([
-            ...window.webContents.session.getPreloads(),
-            path.join(LiteLoader.path.root, "/src/preload/index.js"),
-            path.join(LiteLoader.path.root, "/src/renderer/index.js"),
-        ]);
-
         // 加载插件
         for (const [slug, plugin] of Object.entries(this.#plugins)) {
             plugin.exports?.onBrowserWindowCreated?.(window, plugin);
-            const preload_path = plugin.manifest.injects?.preload;
-            // 存在preload就放Set里
-            if (preload_path) {
-                const file_path = path.join(plugin.path.plugin, preload_path);
-                preloads.add(file_path);
-            }
         }
-
-        // 加载Set中的Preload脚本
-        window.webContents.session.setPreloads([...preloads]);
     }
 }
 
