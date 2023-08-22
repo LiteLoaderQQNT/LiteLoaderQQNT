@@ -31,9 +31,7 @@ LiteLoaderQQNT 主页：https://llqqnt.mukapp.top
 插件模板：[LiteLoaderQQNT-Plugin-Template](https://github.com/mo-jinran/LiteLoaderQQNT-Plugin-Template)  
 插件仓库：[LiteLoaderQQNT-Plugin-List](https://github.com/mo-jinran/LiteLoaderQQNT-Plugin-List)
 
-> Windows QQNT 9.8.5 版本（除 9.9.1-15717 版本）及以上暂时无法打开自身的 DevTools，请安装 Chii Devtools 插件
->
-> **目前最新的 9.9.2 - 16183 版本已能正常使用，但如果遇到运行不正确的地方请及时提交`ISSUE`**  
+> 高版本 QQNT 无法打开自身的 DevTools，请安装第三方调试插件（推荐 Chii Devtools 插件）
 
 
 ## 📖 安装教程
