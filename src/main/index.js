@@ -37,10 +37,7 @@ function observeNewBrowserWindow(callback) {
             return loaded_module;
         }
 
-        // Hook BrowserWindow
-        // Proxy: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy
-        // 使用继承的Hook方法会导致无法使用BrowserWindow.getAllWindows()方法
-        let HookedBrowserWindow = new Proxy(loaded_module.BrowserWindow, {
+        let ProxyBrowserWindow = new Proxy(loaded_module.BrowserWindow, {
             construct(target, [original_config], newTarget) {
                 const config = {
                     ...original_config,
@@ -63,16 +60,32 @@ function observeNewBrowserWindow(callback) {
             }
         });
 
-        // Proxy的方法不需要重新解构loaded_module，提高性能
-        return new Proxy(loaded_module, {
+        let ProxyMenu = new Proxy(loaded_module.Menu, {
             get(target, property, receiver) {
-                if (property === "BrowserWindow") {
-                    return HookedBrowserWindow;
+                if (property == "buildFromTemplate") {
+                    return (template) => {
+                        const quit_item = template.find(item => item.id == "quit");
+                        quit_item && (quit_item.click = () => app.exit());
+                        return Reflect.get(target, property, receiver)(template);
+                    }
                 }
                 return Reflect.get(target, property, receiver);
             }
         });
-    };
+
+        // Proxy的方法不需要重新解构loaded_module，提高性能
+        return new Proxy(loaded_module, {
+            get(target, property, receiver) {
+                if (property == "BrowserWindow") {
+                    return ProxyBrowserWindow;
+                }
+                if (property == "Menu") {
+                    return ProxyMenu;
+                }
+                return Reflect.get(target, property, receiver);
+            }
+        });
+    }
 }
 
 // 插件加载器
