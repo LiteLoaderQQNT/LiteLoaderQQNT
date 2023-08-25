@@ -3,12 +3,14 @@
     "version": "0.5.2",
     "description": "QQNT的插件加载器：LiteLoaderQQNT —— 轻量 · 简洁 · 开源",
     "main": "./src/index.js",
-    "author": {
-        "name": "沫烬染",
-        "email": "mojinran@outlook.com"
-    },
+    "private": true,
     "license": "MIT",
+    "author": {
+        "name": "LiteLoaderQQNT",
+        "url": "https://github.com/LiteLoaderQQNT"
+    },
     "homepage": "https://llqqnt.mukapp.top",
+    "bugs": "https://github.com/LiteLoaderQQNT/LiteLoaderQQNT/issues"
     "repository": {
         "type": "git",
         "url": "https://github.com/mo-jinran/LiteLoaderQQNT.git"
