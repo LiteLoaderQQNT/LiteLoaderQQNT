@@ -202,7 +202,7 @@ $button.Add_Click(
         $original_bytes2 =  [byte[]] @(0xB1, 0xA0, 0xA2, 0xAA, 0xA0, 0xA6, 0xA4, 0xEF, 0xAB, 0xB2, 0xAE, 0xAF, 0x00)
         $replace_bytes2 =   [byte[]] @(0xA3, 0xA0, 0xA2, 0xAA, 0xA0, 0xA6, 0xA4, 0xEF, 0xAB, 0xB2, 0xAE, 0xAF, 0x00)
 
-        if(-not (Test-Path ($path + "\resources\app\backage.json"))){
+        if(-not (Select-String -Path ($path + "\resources\app\package.json") -Pattern "LiteLoader" -Quiet)){
             Copy-Item -Path ($path + "\resources\app\package.json") -Destination ($path + "\resources\app\backage.json") -Force
         }
         Copy-Item -Path ($path + "\resources\app\launcher.json") -Destination ($path + "\resources\app\bauncher.json") -Force
