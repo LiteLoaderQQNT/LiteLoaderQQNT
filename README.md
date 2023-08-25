@@ -67,7 +67,7 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 └─...
 ```
 
-需要修改的 `package.json` 的示例（仅 Linux & MacOS 版需要修改）：  
+需要修改的 `package.json` 的示例（仅 Linux & MacOS 版，`Windows QQNT 9.9.1-15717`版，或者其他低于 `Windows QQNT 9.9.1` 的版本需要修改，因为这些版本没有或不需要启动器，同时也不需要用Patch脚本，所以需要手动修改）：  
 将 `"main": "./app_launcher/index.js"` 改为 `"main": "./LiteLoader"`
 
 ```diff
@@ -90,7 +90,7 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 
 1. 从 Releases 中下载最新的 `LiteLoaderQQNT.zip`。
 2. 解压出 `LiteLoaderQQNT.zip` 内的  `LiteLoader` 文件夹到 [安装位置](#安装位置)。
-3. Linux & MacOS 请按照 [安装位置](#安装位置) 中的说明对`package.json`进行修改，Windows 版无需此步。
+3. Linux & MacOS 请按照 [安装位置](#安装位置) 中的说明对`package.json`进行修改；Windows 中，高于 `Windows QQNT 9.9.1` 的版本（不包含`15717`）无需此步。
 4. 至此，安装完成。
 
 使用 git clone 的方式安装（不推荐，适合高阶用户）
@@ -98,7 +98,7 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 1. 确保你的系统装有 [Git](https://git-scm.com/downloads)。
 2. 在终端中打开上文提到的 LiteLoaderQQNT 需要安装到的位置。
 3. 输入 `git clone https://github.com/LiteLoaderQQNT/LiteLoaderQQNT.git --recursive LiteLoader` 拉取项目与子模块。
-4. Linux & MacOS 请按照 [安装位置](#安装位置) 中的说明对`package.json`进行修改，Windows 版无需此步。
+4. Linux & MacOS 请按照 [安装位置](#安装位置) 中的说明对`package.json`进行修改；Windows 中，高于 `Windows QQNT 9.9.1` 的版本（不包含`15717`）无需此步。
 5. 至此，安装完成。
 
 通过 AUR 安装（仅限 Arch Linux 和 Arch-based Linux）
@@ -112,9 +112,9 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 
 由于 `Windows QQNT 9.9.1` 版本和 `MacOS QQNT 6.9.18` 版本开始被添加文件校验，  
 MacOS 目前只能通过安装 App Store 版 QQNT 来解决（仍然不含文件校验），或安装老版本。  
-更老版本 QQNT 以及 Windows 9.9.1-15717 版本没有添加文件校验，所以无需阅读这段教程。
+更老版本 QQNT 以及 `Windows 9.9.1-15717` 版本没有添加文件校验，所以无需阅读这段教程。
 
-以下教程仅针对高于`Windows QQNT 9.9.1`（不包含`15717`版本）的用户，其他系统和版本的用户**请忽略本节**，直接点开QQ就能用。
+以下教程仅针对高于`Windows QQNT 9.9.1`（不包含`15717`版本）的用户；而其他系统和版本的用户**请忽略本节**，正确按照上面 [安装方法](#安装方法) 操作后直接点开QQ就能用。
 
 **以下两种方式任选其一即可**
 
