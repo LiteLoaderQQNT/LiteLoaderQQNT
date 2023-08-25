@@ -1,11 +1,11 @@
 [submodule "builtins/LiteLoaderQQNT-Native-Style-Framework"]
     path = builtins/LiteLoaderQQNT-Native-Style-Framework
-    url = https://github.com/mo-jinran/LiteLoaderQQNT-Native-Style-Framework.git
+    url = https://github.com/LiteLoaderQQNT/LiteLoaderQQNT-Native-Style-Framework.git
 
 [submodule "builtins/LiteLoaderQQNT-Config-View"]
     path = builtins/LiteLoaderQQNT-Config-View
-    url = https://github.com/mo-jinran/LiteLoaderQQNT-Config-View.git
+    url = https://github.com/LiteLoaderQQNT/LiteLoaderQQNT-Config-View.git
 
 [submodule "builtins/LiteLoaderQQNT-Plugins-Marketplace"]
     path = builtins/LiteLoaderQQNT-Plugins-Marketplace
-    url = https://github.com/mo-jinran/LiteLoaderQQNT-Plugins-Marketplace.git
+    url = https://github.com/LiteLoaderQQNT/LiteLoaderQQNT-Plugins-Marketplace.git
