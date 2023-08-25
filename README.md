@@ -37,8 +37,11 @@ LiteLoaderQQNT 主页：https://llqqnt.mukapp.top
 ## 📖 安装教程
 
 安装 LiteLoaderQQNT 之前，确保你安装好了基于 QQNT 架构的 QQ。安装分为从 Releases 中下载稳定版（推荐）和通过 git clone 安装。  
+
 新版本框架安装时 Windows **无需且不要修改**  `QQNT安装目录/resources/app/package.json`。
+
 Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json`。
+
 若你的系统需要修改，请**不要修改** LiteLoader 文件夹内的 `package.json`。**应该修改** `QQNT安装目录/resources/app/package.json`。
 
 ### 安装位置
@@ -110,6 +113,7 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 由于 `Windows QQNT 9.9.1` 版本和 `MacOS QQNT 6.9.18` 版本开始被添加文件校验，  
 MacOS 目前只能通过安装 App Store 版 QQNT 来解决（仍然不含文件校验），或安装老版本。  
 更老版本 QQNT 以及 Windows 9.9.1-15717 版本没有添加文件校验，所以无需阅读这段教程。
+
 以下教程仅针对高于`Windows QQNT 9.9.1`（不包含`15717`版本）的用户，其他系统和版本的用户**请忽略本节**，直接点开QQ就能用。
 
 **以下两种方式任选其一即可**
