@@ -175,6 +175,13 @@ class PluginLoader {
         for (const [slug, plugin] of Object.entries(this.#plugins)) {
             plugin.exports?.onBrowserWindowCreated?.(window, plugin);
         }
+        // 注入Preload
+        const preloads = new Set([
+            ...window.webContents.session.getPreloads(),
+            path.join(LiteLoader.path.profile, "plugin-preloads.js"),
+        ]);
+        // 加载Set中的Preload脚本
+        window.webContents.session.setPreloads([...preloads]);
     }
 }
 
