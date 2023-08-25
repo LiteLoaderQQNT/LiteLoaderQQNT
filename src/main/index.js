@@ -170,6 +170,8 @@ app.on("ready", () => {
 
 // 监听窗口创建
 observeNewBrowserWindow((window) => {
+    LiteLoaderFunc._loadWindowSendFunc(window);
+
     //加载自定义协议
     const ses = window.webContents.session;
 

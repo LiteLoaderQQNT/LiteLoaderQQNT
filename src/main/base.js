@@ -2,7 +2,6 @@ const { app, ipcMain } = require("electron");
 const path = require("path");
 const fs = require("fs");
 
-
 const qq_install_dir = (() => {
     if (process.platform == "win32") {
         return path.join(process.execPath, "../").slice(0, -1);
@@ -17,22 +16,23 @@ const qq_install_dir = (() => {
 const liteloader_package = require("../../package.json");
 const qqnt_package = (() => {
     if (process.platform == "win32") {
-        return require(`${qq_install_dir}/resources/app/package.json`)
+        return require(`${qq_install_dir}/resources/app/package.json`);
     }
     if (process.platform == "linux") {
-        return require(`${qq_install_dir}/resources/app/package.json`)
+        return require(`${qq_install_dir}/resources/app/package.json`);
     }
     if (process.platform == "darwin") {
-        return require(`${qq_install_dir}/Resources/app/package.json`)
+        return require(`${qq_install_dir}/Resources/app/package.json`);
     }
 })();
 
-
 // LiteLoaderQQNT的数据目录
 const LITELOADER_PROFILE_ENV = process.env["LITELOADERQQNT_PROFILE"];
-const LITELOADER_PROFILE_CONST = path.join(app.getPath("documents"), "LiteLoaderQQNT");
+const LITELOADER_PROFILE_CONST = path.join(
+    app.getPath("documents"),
+    "LiteLoaderQQNT"
+);
 const LITELOADER_PROFILE = LITELOADER_PROFILE_ENV || LITELOADER_PROFILE_CONST;
-
 
 const LiteLoader = {
     path: {
@@ -46,7 +46,11 @@ const LiteLoader = {
         plugins_cache: path.join(LITELOADER_PROFILE, "plugins_cache")
     },
     versions: {
-        qqnt: process.platform == "win32" ? require(`${qq_install_dir}/resources/app/versions/config.json`).curVersion : qqnt_package.version,
+        qqnt:
+            process.platform == "win32"
+                ? require(`${qq_install_dir}/resources/app/versions/config.json`)
+                      .curVersion
+                : qqnt_package.version,
         liteLoader: liteloader_package.version,
         node: process.versions.node,
         chrome: process.versions.chrome,
@@ -57,38 +61,54 @@ const LiteLoader = {
         liteLoader: liteloader_package
     },
     os: {
-        platform: process.platform,
+        platform: process.platform
     },
     config: {},
     plugins: {}
-}
+};
 
+var windowSendFuncList = new Map();
+
+global.LiteLoaderFunc = {
+    _loadWindowSendFunc: (window) => {
+        if (!windowSendFuncList.get(window.id)) {
+            const original_send =
+                (window.webContents.__qqntim_original_object &&
+                    window.webContents.__qqntim_original_object.send) ||
+                window.webContents.send;
+            windowSendFuncList.set(window.id, original_send);
+        }
+    },
+    SendMessage: (window, ...args) => {
+        if (windowSendFuncList.get(window.id)) {
+            return windowSendFuncList
+                .get(window.id)
+                .apply(window.webContents, [...args]);
+        } else {
+            const original_send =
+                (window.webContents.__qqntim_original_object &&
+                    window.webContents.__qqntim_original_object.send) ||
+                window.webContents.send;
+            return original_send.apply(window.webContents, [...args]);
+        }
+    }
+};
 
 // 将LiteLoader对象挂载到global
-Object.defineProperty(
-    global,
-    "LiteLoader",
-    {
-        value: LiteLoader,
-        writable: false,
-        configurable: false
-    }
-);
-
+Object.defineProperty(global, "LiteLoader", {
+    value: LiteLoader,
+    writable: false,
+    configurable: false
+});
 
 // 将LiteLoader对象挂载到window
-ipcMain.on("LiteLoader.LiteLoader.LiteLoader",
-    (event, message) => {
-        event.returnValue = LiteLoader;
-    }
-);
+ipcMain.on("LiteLoader.LiteLoader.LiteLoader", (event, message) => {
+    event.returnValue = LiteLoader;
+});
 
-ipcMain.on("LiteLoader.LiteLoader.exit",
-    (event, message) => {
-        app.exit();
-    }
-);
-
+ipcMain.on("LiteLoader.LiteLoader.exit", (event, message) => {
+    app.exit();
+});
 
 if (!fs.existsSync(LiteLoader.path.plugins)) {
     fs.mkdirSync(LiteLoader.path.plugins, { recursive: true });
@@ -106,15 +126,14 @@ if (!fs.existsSync(LiteLoader.path.config)) {
     fs.writeFileSync(LiteLoader.path.config, "{}", "utf-8");
 }
 
-
 // 读取配置文件
-LiteLoader.config = JSON.parse(fs.readFileSync(LiteLoader.path.config, "utf-8"));
-
+LiteLoader.config = JSON.parse(
+    fs.readFileSync(LiteLoader.path.config, "utf-8")
+);
 
 function output(...args) {
     console.log("\x1b[32m%s\x1b[0m", "[LiteLoader]", ...args);
 }
-
 
 // 计算要在路径后面拼接多少"../"才能到根目录
 function relativeRootPath(inputPath) {
@@ -129,9 +148,8 @@ function relativeRootPath(inputPath) {
     return relativeRootPath;
 }
 
-
 module.exports = {
     output,
     qq_install_dir,
     relativeRootPath
-}
+};
