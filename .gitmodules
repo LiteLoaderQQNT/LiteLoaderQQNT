@@ -1,11 +1,19 @@
+# 核心接口
+[submodule "builtins/LiteLoaderQQNT-Core-API"]
+	path = builtins/LiteLoaderQQNT-Core-API
+	url = https://github.com/LiteLoaderQQNT/LiteLoaderQQNT-Core-API.git
+
+# 样式框架
 [submodule "builtins/LiteLoaderQQNT-Native-Style-Framework"]
     path = builtins/LiteLoaderQQNT-Native-Style-Framework
     url = https://github.com/LiteLoaderQQNT/LiteLoaderQQNT-Native-Style-Framework.git
 
+# 配置界面
 [submodule "builtins/LiteLoaderQQNT-Config-View"]
     path = builtins/LiteLoaderQQNT-Config-View
     url = https://github.com/LiteLoaderQQNT/LiteLoaderQQNT-Config-View.git
 
+# 插件市场
 [submodule "builtins/LiteLoaderQQNT-Plugins-Marketplace"]
     path = builtins/LiteLoaderQQNT-Plugins-Marketplace
     url = https://github.com/LiteLoaderQQNT/LiteLoaderQQNT-Plugins-Marketplace.git
