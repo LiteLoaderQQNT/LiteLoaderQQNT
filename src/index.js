@@ -1,8 +1,12 @@
+const { app } = require("electron");
 const { output, qq_install_dir } = require("./main/base.js");
 
 // 初始化
 output("Initializing...");
 output(`Found QQNT installation at ${qq_install_dir}.`);
+
+app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
+app.quit = () => { };
 
 // 加载
 require("./main/index.js");

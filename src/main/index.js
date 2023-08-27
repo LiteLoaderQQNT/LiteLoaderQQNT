@@ -5,10 +5,6 @@ const fs = require("fs");
 const { output, qq_install_dir, relativeRootPath } = require("./base.js");
 const { PluginLoader } = require("./loader.js");
 
-app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
-
-app.quit = () => { };
-
 
 // 计算 plugin-preloads.js 路径
 const preloadPath = (() => {
@@ -170,8 +166,6 @@ app.on("ready", () => {
 
 // 监听窗口创建
 observeNewBrowserWindow((window) => {
-    LiteLoaderFunc._loadWindowSendFunc(window);
-
     //加载自定义协议
     const ses = window.webContents.session;
 

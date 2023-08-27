@@ -28,10 +28,7 @@ const qqnt_package = (() => {
 
 // LiteLoaderQQNT的数据目录
 const LITELOADER_PROFILE_ENV = process.env["LITELOADERQQNT_PROFILE"];
-const LITELOADER_PROFILE_CONST = path.join(
-    app.getPath("documents"),
-    "LiteLoaderQQNT"
-);
+const LITELOADER_PROFILE_CONST = path.join(app.getPath("documents"), "LiteLoaderQQNT");
 const LITELOADER_PROFILE = LITELOADER_PROFILE_ENV || LITELOADER_PROFILE_CONST;
 
 const LiteLoader = {
@@ -46,11 +43,7 @@ const LiteLoader = {
         plugins_cache: path.join(LITELOADER_PROFILE, "plugins_cache")
     },
     versions: {
-        qqnt:
-            process.platform == "win32"
-                ? require(`${qq_install_dir}/resources/app/versions/config.json`)
-                      .curVersion
-                : qqnt_package.version,
+        qqnt: process.platform == "win32" ? require(`${qq_install_dir}/resources/app/versions/config.json`).curVersion : qqnt_package.version,
         liteLoader: liteloader_package.version,
         node: process.versions.node,
         chrome: process.versions.chrome,
@@ -67,48 +60,28 @@ const LiteLoader = {
     plugins: {}
 };
 
-var windowSendFuncList = new Map();
-
-global.LiteLoaderFunc = {
-    _loadWindowSendFunc: (window) => {
-        if (!windowSendFuncList.get(window.id)) {
-            const original_send =
-                (window.webContents.__qqntim_original_object &&
-                    window.webContents.__qqntim_original_object.send) ||
-                window.webContents.send;
-            windowSendFuncList.set(window.id, original_send);
-        }
-    },
-    SendMessage: (window, ...args) => {
-        if (windowSendFuncList.get(window.id)) {
-            return windowSendFuncList
-                .get(window.id)
-                .apply(window.webContents, [...args]);
-        } else {
-            const original_send =
-                (window.webContents.__qqntim_original_object &&
-                    window.webContents.__qqntim_original_object.send) ||
-                window.webContents.send;
-            return original_send.apply(window.webContents, [...args]);
-        }
-    }
-};
-
 // 将LiteLoader对象挂载到global
-Object.defineProperty(global, "LiteLoader", {
-    value: LiteLoader,
-    writable: false,
-    configurable: false
-});
+Object.defineProperty(
+    global,
+    "LiteLoader",
+    {
+        value: LiteLoader,
+        writable: false,
+        configurable: false
+    }
+);
 
 // 将LiteLoader对象挂载到window
-ipcMain.on("LiteLoader.LiteLoader.LiteLoader", (event, message) => {
-    event.returnValue = LiteLoader;
-});
+ipcMain.on(
+    "LiteLoader.LiteLoader.LiteLoader",
+    (event, message) => void (event.returnValue = LiteLoader)
+);
 
-ipcMain.on("LiteLoader.LiteLoader.exit", (event, message) => {
-    app.exit();
-});
+ipcMain.on(
+    "LiteLoader.LiteLoader.exit",
+    (event, message) => void app.exit()
+);
+
 
 if (!fs.existsSync(LiteLoader.path.plugins)) {
     fs.mkdirSync(LiteLoader.path.plugins, { recursive: true });
