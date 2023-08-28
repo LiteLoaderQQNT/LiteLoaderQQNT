@@ -83,6 +83,8 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 }
 ```
 
+注意，在`MacOS`下修改时请直接使用惯用的编辑器（ `VSCode` , `Sublime Text` 等均可， `Xcode` 除外）修改 `package.json` 文件，需要在 `系统设置->隐私与安全性->App管理` 中添加并允许编辑器修改和删除其他应用程序，修改时会弹出提示要求输入管理员密码确认。
+
 ### 安装方法
 
 #### 支持矩阵
@@ -90,8 +92,7 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 | 系统或版本                                  | 启动器（Launcher） | Patch脚本 | 手动修改Package.json       |
 | ------------------------------------------- | ------------------ | --------- | -------------------------- |
 | Linux QQ                                    | 无需               | 无需      | 需要                       |
-| MacOS QQNT 6.9.18 及以上（不支持）          | 无需                | 无需      | 需要                       |
-| MacOS QQNT 6.9.18 以下或者 App Store 版     | 无需               | 无需      | 需要                       |
+| MacOS QQNT 6.9.18 **以外**的官网版或者 App Store 版  | 无需         | 无需      | 需要                       |
 | Windows QQNT 9.9.1 版本以下                 | 无需               | 无需      | 需要                       |
 | Windows QQNT 9.9.1-15717                    | 无需               | 无需      | 需要                       |
 | Windows QQNT 9.9.1版本及以上（不包含15717） | 可用               | 可用      | 不要修改，若修改请恢复原状 |
