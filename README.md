@@ -144,7 +144,7 @@ MacOS 目前只能通过安装 App Store 版 QQNT 来解决（仍然不含文件
 3. 在 LiteLoader 目录内以**管理员模式**运行`patch.ps1`脚本
 4. 在弹出的新窗口直接点击下方按钮开始Patch（新版本Patch脚本无需再选择QQ版本）
 5. 至此，安装完成。经过 Patch 后去除了文件校验的 QQ.exe 将永久生效直到重新用安装包安装。
-6. 如果无法正常使用（例如Patch完毕后启动，提示QQ损坏），建议重装一次QQ并手动删除上次Patch遗留下来的`QQNT安装目录/resources/app/backage.json`文件。
+6. 如果无法正常使用（例如Patch完毕后启动，提示QQ损坏），建议重装一次QQ并手动删除上次Patch遗留下来的`QQNT安装目录/resources/app/package.json`文件。
 
 > 如果 Launcher 或 Patch 运行失败无反应请尝试使用管理员权限运行重试
 
