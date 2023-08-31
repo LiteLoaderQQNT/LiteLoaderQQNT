@@ -184,6 +184,13 @@ $qqDirPath = {
     elseif (Test-Path $reg2) {
         $filePath = Get-ItemPropertyValue $reg2 "UninstallString"
     }
+    if ($filePath -eq $null){
+        $levelsToGoUp = 3
+        $filePath = Get-Location
+        for ($i = 1; $i -lt $levelsToGoUp; $i++) {
+            $filePath = [System.IO.Path]::GetDirectoryName($filePath)
+        }
+    }
     return $filePath.Substring(0, $filePath.LastIndexOf("\"))
 }
 
