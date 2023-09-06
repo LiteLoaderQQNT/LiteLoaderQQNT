@@ -102,7 +102,7 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 
 1. 安装[Python3.11+](https://www.python.org/downloads/)
 2. 命令行执行`pip install llqqntinstaller-py`
-3. 命令行执行`python -m llqqntinstaller`
+3. 命令行执行`python -m llqqntinstaller --use-git-proxy --proxy <你的代理>`
 4. 按照流程进行安装
 
 从 Releases 中下载稳定版的方式进行安装（推荐）
