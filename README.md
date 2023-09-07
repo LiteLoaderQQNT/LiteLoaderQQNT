@@ -142,7 +142,7 @@ MacOS 目前只能通过安装 App Store 版 QQNT 来解决（仍然不含文件
 1. 若你之前修改过`package.json`，请将被修改的 `package.json` 文件内容还原（必须跟QQ原始的文件一样），如果无法恢复建议重装一次QQ；若是你新安装的QQ，则无需操作。
 2. 从 releases 中下载额外的 Launcher（`LiteLoaderQQNT-Launcher_x64.exe` 或 `LiteLoaderQQNT-Launcher_x86.exe`），Launcher 可以只用x86版本。
 3. 将额外下载的 Launcher 移动到 QQNT 安装目录下 QQ.exe 同级目录。
-4. 至此，安装完成。为了加载 LiteLoaderQQNT，你需要每次运行都使用 Launcher 而不是 QQ。（可以将QQ的快捷方式目标程序修改为 Launcher ）
+4. 至此，安装完成。为了加载 LiteLoaderQQNT，你需要每次运行都使用 Launcher 而不是 QQ（可以将QQ的快捷方式目标程序修改为 Launcher），且需要以管理员身份运行（可以在文件属性-兼容性中勾选以管理员身份运行）。
 
 使用 Patch （开源方法）：
 
