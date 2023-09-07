@@ -98,6 +98,13 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 
 对于 `Windows QQNT 9.9.1` 版本（除 15717 版本外）以上，安装后请阅读 [启动方法](#启动方法)
 
+使用[`LLQQNTInstaller`](https://github.com/kaixinol/LLQQNTInstaller.py)安装
+
+1. 安装[Python3.11+](https://www.python.org/downloads/)
+2. 命令行执行`pip install llqqntinstaller-py`
+3. 命令行执行`python -m llqqntinstaller --use-git-proxy --proxy <你的代理>`
+4. 按照流程进行安装
+
 从 Releases 中下载稳定版的方式进行安装（推荐）
 
 1. 从 Releases 中下载最新的 `LiteLoaderQQNT.zip`。
