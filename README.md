@@ -105,6 +105,7 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 2. 命令行执行`pip install llqqntinstaller-py`
 3. 命令行执行`python -m llqqntinstaller --use-git-proxy --proxy <你的代理>`
 4. 按照流程进行安装
+5. 按照程序提示说明安装完毕后可直接启动QQ，无需看下面的内容了
 
 从 Releases 中下载稳定版的方式进行安装（推荐）
 
