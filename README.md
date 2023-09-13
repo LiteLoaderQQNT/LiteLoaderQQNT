@@ -89,7 +89,7 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 
 #### 支持矩阵
 
-| 系统或版本                                  | 启动器（Launcher） | Patch脚本 | 手动修改Package.json       |
+| 系统或版本                                  | 启动器（Launcher） | Patch脚本和程序 | 手动修改Package.json       |
 | ------------------------------------------- | ------------------ | --------- | -------------------------- |
 | Linux QQ                                    | 无需               | 无需      | 需要                       |
 | MacOS QQNT 6.9.18 **以外**的官网版或者 App Store 版  | 无需         | 无需      | 需要                       |
@@ -136,7 +136,7 @@ MacOS 目前只能通过安装 App Store 版 QQNT 来解决（仍然不含文件
 
 以下教程仅针对可用启动器或Patch脚本的QQ（参见上方[支持矩阵](#支持矩阵)）；而其他系统和版本的用户**请忽略本节**，正确按照上面 [安装方法](#安装方法) 操作后直接点开QQ就能用。
 
-**以下两种方式任选其一即可**
+**以下三种方式任选其一即可**
 
 使用 Launcher （闭源软件）：
 
@@ -145,12 +145,20 @@ MacOS 目前只能通过安装 App Store 版 QQNT 来解决（仍然不含文件
 3. 将额外下载的 Launcher 移动到 QQNT 安装目录下 QQ.exe 同级目录。
 4. 至此，安装完成。为了加载 LiteLoaderQQNT，你需要每次运行都使用 Launcher 而不是 QQ（可以将QQ的快捷方式目标程序修改为 Launcher），且需要以管理员身份运行（可以在文件属性-兼容性中勾选以管理员身份运行）。
 
-使用 Patch （开源方法）：
+使用全自动 Patch 程序（开源方法）：
+
+1. 去[LiteLoaderQQNT-PatcherNFixer](https://github.com/xh321/LiteLoaderQQNT-PatcherNFixer/releases)下载最新版本的修补程序。
+2. 下载后直接打开即可，它会自动搜索`QQ`的安装位置。
+3. 点击一键修补。
+4. 至此，修补完成。经过 Patch 后去除了文件校验的 QQ.exe 将永久生效直到重新用安装包安装。
+5. 如果无法正常使用（提示QQ损坏），可再次打开修补程序，点击一键修复提示QQ损坏。（目前最高支持到`9.9.2-16183`，更高版本可能无效）
+
+使用 Patch Powershell 脚本（开源方法）：
 
 1. 若你之前修改过`package.json`，请将被修改的 `package.json` 文件内容还原（必须跟QQ原始的文件一样，一个字一个换行都不能变（换行是`LF`））；若是你新安装的QQ，则无需操作。
-2. 确保你有权限能够执行本地PowerShell脚本文件（系统设置 > 开发者选项 > PowerShell中的设置）
-3. 在 LiteLoader 目录内以**管理员模式**运行`patch.ps1`脚本
-4. 在弹出的新窗口直接点击下方按钮开始Patch（新版本Patch脚本无需再选择QQ版本）
+2. 确保你有权限能够执行本地PowerShell脚本文件（系统设置 > 开发者选项 > PowerShell中的设置）。
+3. 以**管理员模式**运行`patch.ps1`脚本（任何路径均可，它会自动搜索`QQ`的安装位置）。
+4. 在弹出的新窗口直接点击下方按钮开始Patch（新版本Patch脚本无需再选择QQ版本）。
 5. 至此，安装完成。经过 Patch 后去除了文件校验的 QQ.exe 将永久生效直到重新用安装包安装。
 6. 如果无法正常使用（例如Patch完毕后启动，提示QQ损坏），建议重装一次QQ并手动删除上次Patch遗留下来的`QQNT安装目录/resources/app/backage.json`文件。
 
