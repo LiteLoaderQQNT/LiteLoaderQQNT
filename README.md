@@ -7,6 +7,16 @@ Telegram 闲聊群：https://t.me/LiteLoaderQQNT
 LiteLoaderQQNT 主页：https://llqqnt.mukapp.top
 
 
+
+## ⚠️ 从0.5.3版本升级上来的请注意
+
+0.5.3版本内置的插件商店采用了ghproxy.com作为 Github 代理加速，但现在这个网站访问不稳定，这可能会导致你整个QQ加载插件缓慢，设置页不出LiteLoaderQQNT的菜单，所以 0.5.4 版本已经移除了这个代理加速，你目前需要自行挂全局代理才能比较快速地访问插件（自定义代理设置项规划中）。
+
+但是，由于这个代理源会写入配置文件，你更新到 0.5.4 版本后，还会用这个代理。你需要手动去你的 LiteLoaderQQNT [数据目录](#数据目录) 下，删除`config.json`，重启QQ即可。
+
+
+
+
 ## ⚠️ 注意事项
 
 > 本项目仅为个人兴趣而制作，开发目的在于学习和探索，一切开发皆在学习，请勿用于非法用途。  
@@ -96,8 +106,11 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 | Windows QQNT 9.9.1 版本以下                 | 无需               | 无需      | 需要                       |
 | Windows QQNT 9.9.1-15717                    | 无需               | 无需      | 需要                       |
 | Windows QQNT 9.9.1版本及以上（不包含15717） | 可用               | 可用      | 不要修改，若修改请恢复原状 |
+| Windows QQNT 9.9.2-16183以上（不包含16183） | 不可用 | 不可用 | 不可用 |
 
 对于 `Windows QQNT 9.9.1` 版本（除 15717 版本外）以上，安装后请阅读 [启动方法](#启动方法)
+
+对于 `Windows QQNT 9.9.1-16183`以上（不包含16183），目前暂无法使用框架，但已经有解决方案，仍需一段时间开发，请耐心等待
 
 使用[`LLQQNTInstaller`](https://github.com/kaixinol/LLQQNTInstaller.py)安装
 
@@ -133,7 +146,7 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 
 由于 `Windows QQNT 9.9.1` 版本和 `MacOS QQNT 6.9.18` 版本开始被添加文件校验，  
 MacOS 目前只能通过安装 App Store 版 QQNT 来解决（仍然不含文件校验），或安装老版本。  
-更老版本 QQNT 以及 `Windows 9.9.1-15717` 版本没有添加文件校验，所以无需阅读这段教程。
+更老版本 QQNT 以及 `Windows 9.9.1-15717` 版本没有添加文件校验（但目前这个版本寄了，无法登录），所以无需阅读这段教程。
 
 以下教程仅针对可用启动器或Patch脚本的QQ（参见上方[支持矩阵](#支持矩阵)）；而其他系统和版本的用户**请忽略本节**，正确按照上面 [安装方法](#安装方法) 操作后直接点开QQ就能用。
 
