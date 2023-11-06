@@ -48,7 +48,11 @@ LiteLoaderQQNT 主页：https://llqqnt.mukapp.top
 
 ## 📖 安装教程
 
-安装 LiteLoaderQQNT 之前，确保你安装好了基于 QQNT 架构的 QQ。安装分为从 Releases 中下载稳定版（推荐）和通过 git clone 安装。  
+安装 LiteLoaderQQNT 之前，确保你安装好了基于 QQNT 架构的 QQ。安装分为**使用安装脚本安装（推荐）**、从 Releases 中下载稳定版、通过 git clone 安装。  
+
+如果你打算通过安装脚本安装，请直接跳到[使用安装脚本安装](#使用安装脚本安装)，你只需要看这一小节即可。
+
+通过`git clone` 安装时请务必记得更新子模块，否则会导致框架无法正常使用。
 
 新版本框架安装时新版 Windows QQNT **无需且不要修改**  `QQNT安装目录/resources/app/package.json`。
 
@@ -103,18 +107,28 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 
 | 系统或版本                                  | 启动器（Launcher） | Patch脚本和程序 | 手动修改Package.json       |
 | ------------------------------------------- | ------------------ | --------- | -------------------------- |
-| Linux QQ                                    | 无需               | 无需      | 需要                       |
-| MacOS QQNT 6.9.18 **以外**的官网版或者 App Store 版  | 无需         | 无需      | 需要                       |
-| Windows QQNT 9.9.1 版本以下                 | 无需               | 无需      | 需要                       |
-| Windows QQNT 9.9.1-15717                    | 无需               | 无需      | 需要                       |
-| Windows QQNT 9.9.1版本及以上（不包含15717） | 可用               | 可用      | 不要修改，若修改请恢复原状 |
-| Windows QQNT 9.9.2-16183以上（不包含16183） | 不可用 | 不可用 | 不可用 |
+| Linux QQ 16183以下（包含16183）                | 无需               | 可用   | 需要                       |
+| MacOS QQNT 6.9.18 **以外**的官网版或者 App Store 版  | 无需         | 可用            | 需要                       |
+| Windows QQNT 9.9.1 版本以下                 | 无需               | 可用            | 需要                       |
+| Windows QQNT 9.9.1-15717                    | 无需               | 可用            | 需要                       |
+| Windows QQNT 9.9.1版本及以上（不包含15717）但低于或等于16183 | 可用               | 可用      | 不要修改，若修改请恢复原状 |
+| 任何系统 16183 以上（不包含16183） | 不可用 | 不可用 | 不可用 |
 
 对于 `Windows QQNT 9.9.1` 版本（除 15717 版本外）以上，安装后请阅读 [启动方法](#启动方法)
 
-对于 `Windows QQNT 9.9.1-16183`以上（不包含16183），目前暂无法使用框架，但已经有解决方案，仍需一段时间开发，请耐心等待
+对于 `任何系统的 16183 `以上（不包含16183），目前暂无法使用框架，**但已经有解决方案**，仍需一段时间开发，请耐心等待
 
-使用[`LLQQNTInstaller`](https://github.com/kaixinol/LLQQNTInstaller.py)安装
+#### 使用安装脚本安装
+
+*你可以使用安装脚本进行方便地安装。但请注意，目前所有脚本仅支持16183版本及以下。*
+
+1. 单独下载安装脚本（[Linux](https://raw.githubusercontent.com/LiteLoaderQQNT/LiteLoaderQQNT/main/scripts/install_linux.sh)；[MacOS](https://raw.githubusercontent.com/LiteLoaderQQNT/LiteLoaderQQNT/main/scripts/install_macos.sh)；[Windows](https://raw.githubusercontent.com/LiteLoaderQQNT/LiteLoaderQQNT/main/scripts/install_windows.ps1)）
+2. MacOS/Linux开启终端，执行sh脚本（**注意，需要你QQ安装在默认目录才能成功安装**）；Windows则使用powershell执行脚本
+3. 根据提示进行安装与修补
+4. 安装结束
+5. 你**不需要**看本文档其余部分，直接开启QQ即可
+
+#### 使用[`LLQQNTInstaller`](https://github.com/kaixinol/LLQQNTInstaller.py)安装
 
 1. 安装[Python3.11+](https://www.python.org/downloads/)
 2. 命令行执行`pip install llqqntinstaller-py`
@@ -122,14 +136,14 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 4. 按照流程进行安装
 5. 按照程序提示说明安装完毕后可直接启动QQ，无需看下面的内容了
 
-从 Releases 中下载稳定版的方式进行安装（推荐）
+#### 从 Releases 中下载稳定版的方式进行安装（推荐）
 
 1. 从 Releases 中下载最新的 `LiteLoaderQQNT.zip`。
 2. 解压出 `LiteLoaderQQNT.zip` 内的  `LiteLoader` 文件夹到 [安装位置](#安装位置)。
 3. 上方[支持矩阵](#支持矩阵)中，若你的QQ是需要修改 `package.json` 的系统或版本，请按照 [安装位置](#安装位置) 中的说明对`package.json`进行修改。
 4. 至此，安装完成。
 
-使用 git clone 的方式安装（不推荐，适合高阶用户）
+#### 使用 git clone 的方式安装（不推荐，适合高阶用户）
 
 1. 确保你的系统装有 [Git](https://git-scm.com/downloads)。
 2. 在终端中打开上文提到的 LiteLoaderQQNT 需要安装到的位置。
@@ -137,7 +151,7 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 4. 上方[支持矩阵](#支持矩阵)中，若你的QQ是需要修改 `package.json` 的系统或版本，请按照 [安装位置](#安装位置) 中的说明对`package.json`进行修改。
 5. 至此，安装完成。
 
-通过 AUR 安装（仅限 Arch Linux 和 Arch-based Linux）
+#### 通过 AUR 安装（仅限 Arch Linux 和 Arch-based Linux）
 
 1. 确保你没有安装 Linux QQ 或已从 AUR 安装非 linuxqq-appimage 包的 Linux QQ。
 2. 使用你的 AUR Helper 安装 `liteloader-qqnt-bin` 包（对于想要使用最新代码的用户，请安装 `liteloader-qqnt-git` 包）。
