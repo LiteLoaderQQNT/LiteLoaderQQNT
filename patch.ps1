@@ -1,261 +1,219 @@
-﻿#加载WPF组件
-Add-Type -AssemblyName PresentationCore
-Add-Type -AssemblyName PresentationFramework
+﻿#!/usr/bin/env pwsh
+#Requires -Version 5.1
+#Requires -RunAsAdministrator
 
-#底部区域 - 进度条
-$progressbar = New-Object System.Windows.Controls.ProgressBar
-$progressbar.Margin = New-Object System.Windows.Thickness(10, 0, 10, 10)
-$progressbar.Maximum = 100
-$progressbar.Minimum = 0
-$progressbar.Value = 0
+# 获取 QQ 安装目录
+$Script:QQBase = Get-ChildItem `
+  'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\', `
+  'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\', `
+  'HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\' `
+| Where-Object Name -Like '*\QQ' `
+| Select-Object -Property @(
+  @{
+    label      = 'Path'
+    expression = { $_.GetValue('UninstallString') | Split-Path }
+  }
+) `
+| Select-Object -ExpandProperty Path
 
+if (!$QQBase) {
+  throw '未能发现已安装的 NTQQ'
+}
 
-#底部区域 - 按钮
-$button = New-Object System.Windows.Controls.Button
-$button.Margin = New-Object System.Windows.Thickness(10, 0, 10, 10)
-$button.Content = "开始执行补丁"
-$button.IsEnabled = $true
+function Update-PatchProgress {
+  [CmdletBinding()]
+  param (
+    # Parameter help description
+    [Parameter(Mandatory)]
+    [int]
+    $Progress
+  )
 
+  process {
+    Write-Progress -Activity '当前修补进度' -Status "$Progress% Complete:" -PercentComplete $Progress
+  }
+}
 
-#底部区域 - 标签
-$textblock = New-Object System.Windows.Controls.TextBlock
-$textblock.Margin = New-Object System.Windows.Thickness(10, 0, 10, 10)
-$textblock.TextAlignment = [Windows.TextAlignment]::Center
-$textblock.VerticalAlignment = [Windows.VerticalAlignment]::Center
-
-
-#设置窗口布局
-$grid = New-Object System.Windows.Controls.Grid
-
-$row_top = New-Object System.Windows.Controls.RowDefinition
-$row_bottom = New-Object System.Windows.Controls.RowDefinition
-
-$row_top.Height = New-Object System.Windows.GridLength(1, [System.Windows.GridUnitType]::Star)
-$row_bottom.Height = New-Object System.Windows.GridLength(40)
-
-$grid.RowDefinitions.Add($row_top)
-$grid.RowDefinitions.Add($row_bottom)
-
-$grid.Children.Add($progressbar)
-$grid.Children.Add($textblock)
-$grid.Children.Add($button)
-
-[System.Windows.Controls.Grid]::SetRow($progressbar, 1)
-[System.Windows.Controls.Grid]::SetRow($textblock, 1)
-[System.Windows.Controls.Grid]::SetRow($button, 1)
-
-
-#创建窗口
-$window = New-Object System.Windows.Window
-$window.Title = "Patch QQ"
-$window.Width = 480
-$window.Height = 320
-$window.MinWidth = 480
-$window.MinHeight = 320
-$window.Content = $grid
-$window.UseLayoutRounding = $true
-[System.Windows.Media.TextOptions]::SetTextFormattingMode($window, [System.Windows.Media.TextFormattingMode]::Ideal)
-[System.Windows.Media.TextOptions]::SetTextRenderingMode($window, [System.Windows.Media.TextRenderingMode]::ClearType)
-
-
-# Patch QQ
-$qq_pather = {
-    param(
-        $path,
-        $original_bytes1,
-        $replace_bytes1,
-        $original_bytes2,
-        $replace_bytes2,
-        $updateProgress,
-        $finish
-    )
-
+function Invoke-PatchQQ {
+  [CmdletBinding()]
+  param (
+    # Parameter help description
+    [Parameter(Mandatory)]
+    [byte[]]
+    $OriginalBytes1,
+    # Parameter help description
+    [Parameter(Mandatory)]
+    [byte[]]
+    $OriginalBytes2,
+    # Parameter help description
+    [Parameter(Mandatory)]
+    [byte[]]
+    $ReplaceBytes1,
+    # Parameter help description
+    [Parameter(Mandatory)]
+    [byte[]]
+    $ReplaceBytes2
+  )
+  begin {
+    Write-Host '开始修补...' -ForegroundColor Blue
+  }
+  process {
     # 要修补的.exe文件路径
-    $sourceFilePath = "$path\QQ.exe.bak"
-    $targetFilePath = "$path\QQ.exe"
+    $Private:SourceFilePath = "$QQBase\QQ.exe.bak"
+    $Private:TargetFilePath = "$QQBase\QQ.exe"
 
     # 重命名QQ为.bak
-    if (-not (Test-Path $sourceFilePath)) {
-        Rename-Item -Path $targetFilePath -NewName "QQ.exe.bak"
+    if (-not (Test-Path $SourceFilePath)) {
+      Rename-Item -Path $TargetFilePath -NewName 'QQ.exe.bak'
     }
 
     # 使用二进制文件流打开原始文件和目标文件
-    $sourceStream = [System.IO.FileStream]::new($sourceFilePath, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read)
-    $targetStream = [System.IO.FileStream]::new($targetFilePath, [System.IO.FileMode]::Create, [System.IO.FileAccess]::Write)
+    $Private:SourceStream = [System.IO.File]::OpenRead($SourceFilePath)
+    $Private:TargetStream = [System.IO.File]::Create($TargetFilePath)
+    try {
+      # 定义缓冲区大小 (4MB)
+      $Private:BufferSize = 1024 * 1024 * 4
+      $Private:Buffer = [byte[]]::new($BufferSize)
 
-    # 定义缓冲区大小 (4MB)
-    $bufferSize = 1024 * 1024 * 4
-    $buffer = New-Object byte[] $bufferSize
+      $Private:FileSize = $SourceStream.Length
+      $Private:BytesProcessed = 0
+      $Private:Matched = 0
 
-    $fileSize = $sourceStream.Length
-    $bytesProcessed = 0
-    $matched = 0
+      Update-PatchProgress -Progress 0
 
-    Invoke-Command -ScriptBlock $updateProgress -ArgumentList 0
-
-    # 循环处理文件
-    while ($true) {
+      # 循环处理文件
+      while ($true) {
         # 从原始文件读取缓冲区数据
-        $readBytes = $sourceStream.Read($buffer, 0, $bufferSize)
+        $Private:ReadBytes = $SourceStream.Read($Buffer, 0, $BufferSize)
 
         # 如果已经读取到文件末尾，则退出循环
-        if ($readBytes -eq 0) {
-            break
+        if ($ReadBytes -eq 0) {
+          break
         }
 
-        if ($matched -ne 2) {
-            # 查找并替换字节序列（写成这样子是为了提高性能）
-            for ($i = 0; $i -lt $readBytes; $i++) {
-                if (
-                    $buffer[$i + 0] -eq $original_bytes1[0] -and
-                    $buffer[$i + 1] -eq $original_bytes1[1] -and
-                    $buffer[$i + 2] -eq $original_bytes1[2] -and
-                    $buffer[$i + 3] -eq $original_bytes1[3] -and
-                    $buffer[$i + 4] -eq $original_bytes1[4] -and
-                    $buffer[$i + 5] -eq $original_bytes1[5] -and
-                    $buffer[$i + 6] -eq $original_bytes1[6] -and
-                    $buffer[$i + 7] -eq $original_bytes1[7] -and
-                    $buffer[$i + 8] -eq $original_bytes1[8] -and
-                    $buffer[$i + 9] -eq $original_bytes1[9] -and
-                    $buffer[$i + 10] -eq $original_bytes1[10] -and
-                    $buffer[$i + 11] -eq $original_bytes1[11] -and
-                    $buffer[$i + 12] -eq $original_bytes1[12]
-                ) {
-                    $matched = $matched + 1
-                    for ($j = 0; $j -lt 13; $j++) {
-                        $buffer[$i + $j] = $replace_bytes1[$j]
-                    }
-                } elseif  (
-                    $buffer[$i + 0] -eq $original_bytes2[0] -and
-                    $buffer[$i + 1] -eq $original_bytes2[1] -and
-                    $buffer[$i + 2] -eq $original_bytes2[2] -and
-                    $buffer[$i + 3] -eq $original_bytes2[3] -and
-                    $buffer[$i + 4] -eq $original_bytes2[4] -and
-                    $buffer[$i + 5] -eq $original_bytes2[5] -and
-                    $buffer[$i + 6] -eq $original_bytes2[6] -and
-                    $buffer[$i + 7] -eq $original_bytes2[7] -and
-                    $buffer[$i + 8] -eq $original_bytes2[8] -and
-                    $buffer[$i + 9] -eq $original_bytes2[9] -and
-                    $buffer[$i + 10] -eq $original_bytes2[10] -and
-                    $buffer[$i + 11] -eq $original_bytes2[11] -and
-                    $buffer[$i + 12] -eq $original_bytes2[12]
-                ) {
-                    $matched = $matched + 1
-                    for ($j = 0; $j -lt 13; $j++) {
-                        $buffer[$i + $j] = $replace_bytes2[$j]
-                    }
-                }
+        if ($Matched -ne 2) {
+          # 查找并替换字节序列（写成这样子是为了提高性能）
+          for ($i = 0; $i -lt $ReadBytes; $i++) {
+            if (
+              $Buffer[$i + 0] -eq $OriginalBytes1[0] -and
+              $Buffer[$i + 1] -eq $OriginalBytes1[1] -and
+              $Buffer[$i + 2] -eq $OriginalBytes1[2] -and
+              $Buffer[$i + 3] -eq $OriginalBytes1[3] -and
+              $Buffer[$i + 4] -eq $OriginalBytes1[4] -and
+              $Buffer[$i + 5] -eq $OriginalBytes1[5] -and
+              $Buffer[$i + 6] -eq $OriginalBytes1[6] -and
+              $Buffer[$i + 7] -eq $OriginalBytes1[7] -and
+              $Buffer[$i + 8] -eq $OriginalBytes1[8] -and
+              $Buffer[$i + 9] -eq $OriginalBytes1[9] -and
+              $Buffer[$i + 10] -eq $OriginalBytes1[10] -and
+              $Buffer[$i + 11] -eq $OriginalBytes1[11] -and
+              $Buffer[$i + 12] -eq $OriginalBytes1[12]
+            ) {
+              $Matched = $Matched + 1
+              for ($j = 0; $j -lt 13; $j++) {
+                $Buffer[$i + $j] = $ReplaceBytes1[$j]
+              }
             }
+            elseif (
+              $Buffer[$i + 0] -eq $OriginalBytes2[0] -and
+              $Buffer[$i + 1] -eq $OriginalBytes2[1] -and
+              $Buffer[$i + 2] -eq $OriginalBytes2[2] -and
+              $Buffer[$i + 3] -eq $OriginalBytes2[3] -and
+              $Buffer[$i + 4] -eq $OriginalBytes2[4] -and
+              $Buffer[$i + 5] -eq $OriginalBytes2[5] -and
+              $Buffer[$i + 6] -eq $OriginalBytes2[6] -and
+              $Buffer[$i + 7] -eq $OriginalBytes2[7] -and
+              $Buffer[$i + 8] -eq $OriginalBytes2[8] -and
+              $Buffer[$i + 9] -eq $OriginalBytes2[9] -and
+              $Buffer[$i + 10] -eq $OriginalBytes2[10] -and
+              $Buffer[$i + 11] -eq $OriginalBytes2[11] -and
+              $Buffer[$i + 12] -eq $OriginalBytes2[12]
+            ) {
+              $Matched = $Matched + 1
+              for ($j = 0; $j -lt 13; $j++) {
+                $Buffer[$i + $j] = $ReplaceBytes2[$j]
+              }
+            }
+          }
         }
 
         # 将缓冲区数据写入目标文件
-        $targetStream.Write($buffer, 0, $readBytes)
-        $bytesProcessed += $readBytes
-        $progress = [Math]::Truncate(($bytesProcessed / $fileSize) * 100)
-        Invoke-Command -ScriptBlock $updateProgress -ArgumentList $progress
+        $TargetStream.Write($Buffer, 0, $ReadBytes)
+        $BytesProcessed += $ReadBytes
+        $Private:Progress = [Math]::Truncate(($BytesProcessed / $FileSize) * 100)
+
+        Update-PatchProgress -Progress $Progress
+      }
+
+      Update-PatchProgress -Progress 100
+
     }
-
-    Invoke-Command -ScriptBlock $updateProgress -ArgumentList 100
-
-    # 关闭文件流
-    $sourceStream.Close()
-    $targetStream.Close()
-
-    Invoke-Command -ScriptBlock $finish
+    finally {
+      # 关闭文件流
+      $SourceStream.Dispose()
+      $TargetStream.Dispose()
+    }
+  }
+  end {
+    Write-Host 'Patch 完成！' -ForegroundColor Blue
+  }
 }
 
-Function replace_in_file($Filename, $Oldvalue, $Newvalue)
-{
+function Invoke-ReplaceInFile {
+  [CmdletBinding()]
+  param (
+    # Parameter help description
+    [Parameter(Mandatory)]
+    [string]
+    $Filename,
+    # Parameter help description
+    [Parameter(Mandatory)]
+    [string]
+    $OldValue,
+    # Parameter help description
+    [Parameter(Mandatory)]
+    [string]
+    $NewValue
+  )
+  process {
     if (Test-Path $Filename) {
-        $text = [IO.File]::ReadAllText($Filename) -replace $Oldvalue, $Newvalue
-        [IO.File]::WriteAllText($Filename, $text)
+      (Get-Content $Filename -Raw ) -replace $OldValue, $NewValue | Out-File $Filename
     }
+  }
 }
 
-
-# 获取QQ安装位置
-$qqDirPath = {
-    $filePath = $null
-    $reg1 = "HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\QQ"
-    $reg2 = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\QQ"
-    if (Test-Path $reg1) {
-        $filePath = Get-ItemPropertyValue $reg1 "UninstallString"
-    }
-    elseif (Test-Path $reg2) {
-        $filePath = Get-ItemPropertyValue $reg2 "UninstallString"
-    }
-    if ($filePath -eq $null){
-        $levelsToGoUp = 3
-        $filePath = Get-Location
-        for ($i = 1; $i -lt $levelsToGoUp; $i++) {
-            $filePath = [System.IO.Path]::GetDirectoryName($filePath)
-        }
-    }
-    return $filePath.Substring(0, $filePath.LastIndexOf("\"))
+$Private:State = Read-Host -Prompt '您要执行修补吗 [Y/n]'
+if (!'y'.Equals($State, [System.StringComparison]::OrdinalIgnoreCase) `
+    -and ![string]::IsNullOrWhiteSpace($State)) {
+  exit
 }
 
-# 判断列表中是否存在匹配项
-$path = & $qqDirPath
+Write-Host '正在初始化...' -ForegroundColor Blue
 
-#底部区域 - 按钮
-$button.Add_Click(
-    {
-        $button.Visibility = [Windows.Visibility]::Hidden
-        $textblock.Text = "正在初始化..."
+[byte[]] $Private:OriginalBytes1 = @(0xAD, 0xA0, 0xB4, 0xAF, 0xA2, 0xA9, 0xA4, 0xB3, 0xEF, 0xAB, 0xB2, 0xAE, 0xAF, 0x00)
+[byte[]] $Private:ReplaceBytes1 = @(0xA3, 0xA0, 0xB4, 0xAF, 0xA2, 0xA9, 0xA4, 0xB3, 0xEF, 0xAB, 0xB2, 0xAE, 0xAF, 0x00)
 
-        $original_bytes1 =  [byte[]] @(0xAD, 0xA0, 0xB4, 0xAF, 0xA2, 0xA9, 0xA4, 0xB3, 0xEF, 0xAB, 0xB2, 0xAE, 0xAF, 0x00)
-        $replace_bytes1 =  [byte[]] @(0xA3, 0xA0, 0xB4, 0xAF, 0xA2, 0xA9, 0xA4, 0xB3, 0xEF, 0xAB, 0xB2, 0xAE, 0xAF, 0x00)
-
-        $original_bytes2 =  [byte[]] @(0xB1, 0xA0, 0xA2, 0xAA, 0xA0, 0xA6, 0xA4, 0xEF, 0xAB, 0xB2, 0xAE, 0xAF, 0x00)
-        $replace_bytes2 =   [byte[]] @(0xA3, 0xA0, 0xA2, 0xAA, 0xA0, 0xA6, 0xA4, 0xEF, 0xAB, 0xB2, 0xAE, 0xAF, 0x00)
-
-        if(-not (Select-String -Path ($path + "\resources\app\package.json") -Pattern "LiteLoader" -Quiet)){
-            Copy-Item -Path ($path + "\resources\app\package.json") -Destination ($path + "\resources\app\backage.json") -Force
-        }
-        Copy-Item -Path ($path + "\resources\app\launcher.json") -Destination ($path + "\resources\app\bauncher.json") -Force
-
-        replace_in_file ($path + "\resources\app\bauncher.json") "package.json" "backage.json"
-        replace_in_file ($path + "\resources\app\package.json") "./app_launcher/index.js" "LiteLoader"
-
-        $updateProgress = {
-            param ($progress)
-            $window.Dispatcher.Invoke(
-                {
-                    $textblock.Text = "当前进度：$progress %"
-                    $progressbar.Value = $progress
-                }
-            )
-        }
-        $finish = {
-            $window.Dispatcher.Invoke(
-                {
-                    $textblock.Text = "Patch 完成！"
-                    $popup = new-object -comobject wscript.shell
-                    $popup.popup("Patch 完成！")
-                    $button.Visibility = [Windows.Visibility]::Visible
-                    $textblock.Text = ""
-                    $progressbar.Value = 0
-                }
-            )
-        }
-
-        $runspace = [runspacefactory]::CreateRunspace()
-        $runspace.Open()
-        $powershell = [powershell]::Create()
-        $powershell.Runspace = $runspace
-        $powershell.AddScript($qq_pather)
-        $powershell.AddArgument($path)
-        $powershell.AddArgument($original_bytes1)
-        $powershell.AddArgument($replace_bytes1)
-        $powershell.AddArgument($original_bytes2)
-        $powershell.AddArgument($replace_bytes2)
-        $powershell.AddArgument($updateProgress)
-        $powershell.AddArgument($finish)
-        $powershell.BeginInvoke()
-    }
-)
+[byte[]] $Private:OriginalBytes2 = @(0xB1, 0xA0, 0xA2, 0xAA, 0xA0, 0xA6, 0xA4, 0xEF, 0xAB, 0xB2, 0xAE, 0xAF, 0x00)
+[byte[]] $Private:ReplaceBytes2 = @(0xA3, 0xA0, 0xA2, 0xAA, 0xA0, 0xA6, 0xA4, 0xEF, 0xAB, 0xB2, 0xAE, 0xAF, 0x00)
 
 
-# 启动程序
-$app = New-Object System.Windows.Application
-$app.Run($window)
+if (-not (Select-String -Path ("$QQBase\resources\app\package.json") -Pattern 'LiteLoader' -Quiet)) {
+  Copy-Item -Path ("$QQBase\resources\app\package.json") -Destination ("$QQBase\resources\app\backage.json") -Force
+}
+Copy-Item -Path ("$QQBase\resources\app\launcher.json") -Destination ("$QQBase\resources\app\bauncher.json") -Force
+
+Invoke-ReplaceInFile `
+  -FileName "$QQBase\resources\app\bauncher.json" `
+  -OldValue 'package.json' `
+  -NewValue 'backage.json'
+
+Invoke-ReplaceInFile `
+  -FileName "$QQBase\resources\app\package.json" `
+  -OldValue './app_launcher/index.js' `
+  -NewValue 'LiteLoader'
+
+Invoke-PatchQQ `
+  -OriginalBytes1 $OriginalBytes1 `
+  -ReplaceBytes1 $ReplaceBytes1 `
+  -OriginalBytes2 $OriginalBytes2 `
+  -ReplaceBytes2 $ReplaceBytes2 `
