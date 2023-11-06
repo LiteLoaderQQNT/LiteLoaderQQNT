@@ -10,22 +10,41 @@ const index = async () => {
     plugin_loader.onLoad();
 
     // 监听页面变化
-    navigation.addEventListener("navigatesuccess", function func(event) {
-        const url = event.target.currentEntry.url;
-        // 检测是否为设置界面
-        if (url.includes("/index.html") && url.includes("#/setting")) {
-            // 移除监听
-            navigation.removeEventListener("navigatesuccess", func);
-            const interval = setInterval(() => {
+    const url = location.href;
+    if (url.includes("/index.html") && url.includes("#/setting")) {
+        // 判断页面是否加载完成
+        if (document.querySelector(".setting-tab .nav-bar")) {
+            plugin_loader.onConfigView();
+        } else {
+            // 监听页面变化
+            new MutationObserver((_, observe) => {
                 if (document.querySelector(".setting-tab .nav-bar")) {
-                    clearInterval(interval);
                     plugin_loader.onConfigView();
+                    observe.disconnect();
                 }
-            }, 100);
+            }).observe(document.querySelector("#app"), {
+                subtree: true,
+                attributes: false,
+                childList: true,
+            });
         }
-    });
-}
-
+    } else {
+        navigation.addEventListener("navigatesuccess", function func(event) {
+            const url = event.target.currentEntry.url;
+            // 检测是否为设置界面
+            if (url.includes("/index.html") && url.includes("#/setting")) {
+                // 移除监听
+                navigation.removeEventListener("navigatesuccess", func);
+                const interval = setInterval(() => {
+                    if (document.querySelector(".setting-tab .nav-bar")) {
+                        clearInterval(interval);
+                        plugin_loader.onConfigView();
+                    }
+                }, 100);
+            }
+        });
+    }
+};
 
 // 注入代码
 window.addEventListener("DOMContentLoaded", () => {

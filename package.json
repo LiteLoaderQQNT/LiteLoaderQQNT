@@ -1,6 +1,6 @@
 {
     "name": "liteloader-qqnt",
-    "version": "0.5.6",
+    "version": "0.5.8",
     "description": "QQNT的插件加载器：LiteLoaderQQNT —— 轻量 · 简洁 · 开源",
     "main": "./src/index.js",
     "private": true,
@@ -14,8 +14,5 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/LiteLoaderQQNT/LiteLoaderQQNT.git"
-    },
-    "dependencies": {
-        "https-proxy-agent": "^7.0.2"
     }
 }
