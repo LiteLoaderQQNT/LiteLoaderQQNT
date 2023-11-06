@@ -1,9 +1,9 @@
-const { Module } = require("module");
-const { app, net, protocol } = require("electron");
-const path = require("path");
-const fs = require("fs");
-const { output, qq_install_dir, relativeRootPath } = require("./base.js");
-const { PluginLoader } = require("./loader.js");
+import { Module } from "module";
+import { app, net, protocol } from "electron";
+import { normalize, join } from "path";
+import { existsSync } from "fs";
+import { output, qq_install_dir, relativeRootPath } from "./base.js";
+import { PluginLoader } from "./loader.js";
 
 
 // 计算 plugin-preloads.js 路径
@@ -44,7 +44,7 @@ function observeNewBrowserWindow(callback) {
                         additionalArguments: ["--fetch-schemes=app,llqqnt"]
                     }
                 };
-                if (fs.existsSync(path.normalize(preloadPath))) {
+                if (existsSync(normalize(preloadPath))) {
                     config.webPreferences.preload = preloadPath;
                 }
                 else {
@@ -89,29 +89,29 @@ const plugin_loader = new PluginLoader();
 
 const protocolHandler = (req) => {
     const { host, pathname } = new URL(req.url);
-    const filepath = path.normalize(decodeURI(pathname));
+    const filepath = normalize(decodeURI(pathname));
     switch (host) {
         case "local-file":
-            return net.fetch(`file://${path.join(filepath)}`);
+            return net.fetch(`file://${join(filepath)}`);
         case "plugins-dir":
             return net.fetch(
-                `file://${path.join(LiteLoader.path.plugins, filepath)}`
+                `file://${join(LiteLoader.path.plugins, filepath)}`
             );
         case "plugins-data":
             return net.fetch(
-                `file://${path.join(LiteLoader.path.plugins_data, filepath)}`
+                `file://${join(LiteLoader.path.plugins_data, filepath)}`
             );
         case "plugins-cache":
             return net.fetch(
-                `file://${path.join(LiteLoader.path.plugins_cache, filepath)}`
+                `file://${join(LiteLoader.path.plugins_cache, filepath)}`
             );
         case "liteloader-dir":
             return net.fetch(
-                `file://${path.join(LiteLoader.path.root, filepath)}`
+                `file://${join(LiteLoader.path.root, filepath)}`
             );
         case "builtins-dir":
             return net.fetch(
-                `file://${path.join(LiteLoader.path.builtins, filepath)}`
+                `file://${join(LiteLoader.path.builtins, filepath)}`
             );
         default:
             return net.fetch("");
@@ -120,29 +120,29 @@ const protocolHandler = (req) => {
 
 const oldProtocolHandler = (req, callback) => {
     const { host, pathname } = new URL(req.url);
-    const filepath = path.normalize(decodeURIComponent(pathname));
+    const filepath = normalize(decodeURIComponent(pathname));
     switch (host) {
         case "local-file":
-            return callback({ path: path.join(filepath) });
+            return callback({ path: join(filepath) });
         case "plugins-dir":
             return callback({
-                path: path.join(LiteLoader.path.plugins, filepath)
+                path: join(LiteLoader.path.plugins, filepath)
             });
         case "plugins-data":
             return callback({
-                path: path.join(LiteLoader.path.plugins_data, filepath)
+                path: join(LiteLoader.path.plugins_data, filepath)
             });
         case "plugins-cache":
             return callback({
-                path: path.join(LiteLoader.path.plugins_cache, filepath)
+                path: join(LiteLoader.path.plugins_cache, filepath)
             });
         case "liteloader-dir":
             return callback({
-                path: path.join(LiteLoader.path.root, filepath)
+                path: join(LiteLoader.path.root, filepath)
             });
         case "builtins-dir":
             return callback({
-                path: path.join(LiteLoader.path.builtins, filepath)
+                path: join(LiteLoader.path.builtins, filepath)
             });
         default:
             return callback({ path: "" });
@@ -151,15 +151,9 @@ const oldProtocolHandler = (req, callback) => {
 
 // 让插件加载只执行一次
 app.on("ready", () => {
-    //新版本Electron
-    if (protocol.handle) {
-        protocol.handle("llqqnt", protocolHandler);
-    }
-    //老版本Electron没有handle
-    else {
-        protocol.registerFileProtocol("llqqnt", oldProtocolHandler);
-    }
-
+    protocol.handle ? 
+        protocol.handle("llqqnt", protocolHandler) : // 新版本Electron
+        protocol.registerFileProtocol("llqqnt", oldProtocolHandler); // 老版本Electron没有handle
     // 加载插件
     plugin_loader.onLoad();
 });
@@ -171,14 +165,9 @@ observeNewBrowserWindow((window) => {
 
     //协议未注册，才需要注册
     if (!ses.protocol.isProtocolRegistered("llqqnt")) {
-        //新版本Electron
-        if (ses.protocol.handle) {
-            ses.protocol.handle("llqqnt", protocolHandler);
-        }
-        //老版本Electron没有handle
-        else {
-            ses.protocol.registerFileProtocol("llqqnt", oldProtocolHandler);
-        }
+        ses.protocol.handle ? 
+            ses.protocol.handle("llqqnt", protocolHandler) : // 新版本Electron
+            ses.protocol.registerFileProtocol("llqqnt", oldProtocolHandler); // 老版本Electron没有handle
     }
 
     // DevTools切换

@@ -1,5 +1,5 @@
-const { app } = require("electron");
-const { output, qq_install_dir } = require("./main/base.js");
+import { app } from "electron";
+import { output, qq_install_dir } from "./main/base.js";
 
 // 初始化
 output("Initializing...");
@@ -9,7 +9,7 @@ app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
 app.quit = () => { };
 
 // 加载
-require("./main/index.js");
+import "./main/index.js";
 
 
 // 继续执行QQNT启动

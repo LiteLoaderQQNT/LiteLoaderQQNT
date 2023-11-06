@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { output, qq_install_dir, relativeRootPath } = require("./base.js");
+const { output, qq_install_dir, relativeRootPath } = require("./base.js").default;
 
 class PluginLoader {
     // 插件列表
