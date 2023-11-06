@@ -87,6 +87,7 @@ function observeNewBrowserWindow(callback) {
 // 插件加载器
 const plugin_loader = new PluginLoader();
 
+// 文件协议
 const protocolHandler = (req) => {
     const { host, pathname } = new URL(req.url);
     const filepath = normalize(decodeURI(pathname));
@@ -118,6 +119,7 @@ const protocolHandler = (req) => {
     }
 };
 
+// 旧版本文件协议
 const oldProtocolHandler = (req, callback) => {
     const { host, pathname } = new URL(req.url);
     const filepath = normalize(decodeURIComponent(pathname));

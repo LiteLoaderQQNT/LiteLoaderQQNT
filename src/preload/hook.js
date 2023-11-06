@@ -1,3 +1,5 @@
+import { contextBridge } from "electron";
+
 // 兼容新旧版本与多平台，获取 major.node 引入
 const major = (() => {
     // 新版本需要使用 反射 获取 _linkedBinding 从而引入
@@ -21,8 +23,6 @@ const major = (() => {
         }
     }
 })();
-
-const { contextBridge } = require("electron");
 
 contextBridge.exposeInMainWorld("electron", {
     load: (file) => major.load(file, module)

@@ -5,6 +5,7 @@ import { output, qq_install_dir } from "./main/base.js";
 output("Initializing...");
 output(`Found QQNT installation at ${qq_install_dir}.`);
 
+// Electron 允许跨域
 app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
 app.quit = () => { };
 
@@ -15,6 +16,7 @@ import "./main/index.js";
 // 继续执行QQNT启动
 output("Starting QQNT...");
 
+// 判断平台
 if (process.platform == "win32") {
     return require(`${qq_install_dir}/resources/app/app_launcher/index.js`);
 }
