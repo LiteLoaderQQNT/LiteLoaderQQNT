@@ -118,7 +118,7 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 
 对于 `任何系统的 16183 `以上（不包含16183），目前暂无法使用框架，**但已经有解决方案**，仍需一段时间开发，请耐心等待
 
-#### 使用安装脚本安装
+#### 使用安装脚本安装（一键）
 
 *你可以使用安装脚本进行方便地安装。但请注意，目前所有脚本仅支持16183版本及以下。*
 
@@ -128,19 +128,26 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 4. 安装结束
 5. 你**不需要**看本文档其余部分，直接开启QQ即可
 
-#### 使用[`LLQQNTInstaller`](https://github.com/kaixinol/LLQQNTInstaller.py)安装
+#### 使用[`LLQQNTInstaller`](https://github.com/kaixinol/LLQQNTInstaller.py)安装（一键）
 
 1. 安装[Python3.11+](https://www.python.org/downloads/)
 2. 命令行执行`pip install llqqntinstaller-py`
 3. 命令行执行`python -m llqqntinstaller --use-git-proxy --proxy <你的代理>`
 4. 按照流程进行安装
-5. 按照程序提示说明安装完毕后可直接启动QQ，无需看下面的内容了
+5. 你**不需要**看本文档其余部分，直接开启QQ即可
 
-#### 从 Releases 中下载稳定版的方式进行安装（推荐）
+#### 通过 AUR 安装（仅限 Arch Linux 和 Arch-based Linux）（一键）
+
+1. 确保你没有安装 Linux QQ 或已从 AUR 安装非 linuxqq-appimage 包的 Linux QQ。
+2. 使用你的 AUR Helper 安装 `liteloader-qqnt-bin` 包（对于想要使用最新代码的用户，请安装 `liteloader-qqnt-git` 包）。
+3. 至此，安装完成。
+4. 你**不需要**看本文档其余部分，直接开启QQ即可。
+
+#### 从 Releases 中下载稳定版的方式进行安装
 
 1. 从 Releases 中下载最新的 `LiteLoaderQQNT.zip`。
 2. 解压出 `LiteLoaderQQNT.zip` 内的  `LiteLoader` 文件夹到 [安装位置](#安装位置)。
-3. 上方[支持矩阵](#支持矩阵)中，若你的QQ是需要修改 `package.json` 的系统或版本，请按照 [安装位置](#安装位置) 中的说明对`package.json`进行修改。
+3. 上方[支持矩阵](#支持矩阵)中，若你的QQ是需要修改 `package.json` 的系统或版本，请按照 [安装位置](#安装位置) 中的说明对`package.json`进行修改，并请参考下方[启动方法](#启动方法)中的说明。
 4. 至此，安装完成。
 
 #### 使用 git clone 的方式安装（不推荐，适合高阶用户）
@@ -148,14 +155,8 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 1. 确保你的系统装有 [Git](https://git-scm.com/downloads)。
 2. 在终端中打开上文提到的 LiteLoaderQQNT 需要安装到的位置。
 3. 输入 `git clone https://github.com/LiteLoaderQQNT/LiteLoaderQQNT.git --recursive LiteLoader --depth 1` 拉取项目与子模块。
-4. 上方[支持矩阵](#支持矩阵)中，若你的QQ是需要修改 `package.json` 的系统或版本，请按照 [安装位置](#安装位置) 中的说明对`package.json`进行修改。
+4. 上方[支持矩阵](#支持矩阵)中，若你的QQ是需要修改 `package.json` 的系统或版本，请按照 [安装位置](#安装位置) 中的说明对`package.json`进行修改，并请参考下方[启动方法](#启动方法)中的说明。
 5. 至此，安装完成。
-
-#### 通过 AUR 安装（仅限 Arch Linux 和 Arch-based Linux）
-
-1. 确保你没有安装 Linux QQ 或已从 AUR 安装非 linuxqq-appimage 包的 Linux QQ。
-2. 使用你的 AUR Helper 安装 `liteloader-qqnt-bin` 包（对于想要使用最新代码的用户，请安装 `liteloader-qqnt-git` 包）。
-3. 至此，安装完成。
 
 
 ### 启动方法
@@ -168,14 +169,7 @@ MacOS 目前只能通过安装 App Store 版 QQNT 来解决（仍然不含文件
 
 **以下三种方式任选其一即可**
 
-使用 Launcher （闭源软件）：
-
-1. 若你之前修改过`package.json`，请将被修改的 `package.json` 文件内容还原（必须跟QQ原始的文件一样），如果无法恢复建议重装一次QQ；若是你新安装的QQ，则无需操作。
-2. 从 releases 中下载额外的 Launcher（`LiteLoaderQQNT-Launcher_x64.exe` 或 `LiteLoaderQQNT-Launcher_x86.exe`），Launcher 可以只用x86版本。
-3. 将额外下载的 Launcher 移动到 QQNT 安装目录下 QQ.exe 同级目录。
-4. 至此，安装完成。为了加载 LiteLoaderQQNT，你需要每次运行都使用 Launcher 而不是 QQ（可以将QQ的快捷方式目标程序修改为 Launcher），且需要以管理员身份运行（可以在文件属性-兼容性中勾选以管理员身份运行）。
-
-使用全自动 Patch 程序（开源方法）：
+使用全自动 Patch 程序（开源方法）**（推荐）**：
 
 1. 去[LiteLoaderQQNT-PatcherNFixer](https://github.com/xh321/LiteLoaderQQNT-PatcherNFixer/releases)下载最新版本的修补程序。
 2. 下载后直接打开即可，它会自动搜索`QQ`的安装位置。
@@ -183,7 +177,14 @@ MacOS 目前只能通过安装 App Store 版 QQNT 来解决（仍然不含文件
 4. 至此，修补完成。经过 Patch 后去除了文件校验的 QQ.exe 将永久生效直到重新用安装包安装。
 5. 如果无法正常使用（提示QQ损坏），可再次打开修补程序，点击一键修复提示QQ损坏。（目前最高支持到`9.9.2-16183`，更高版本可能无效）
 
-使用 Patch Powershell 脚本（开源方法）：
+使用 Launcher （闭源软件）：
+
+1. 若你之前修改过`package.json`，请将被修改的 `package.json` 文件内容还原（必须跟QQ原始的文件一样），如果无法恢复建议重装一次QQ；若是你新安装的QQ，则无需操作。
+2. 从 releases 中下载额外的 Launcher（`LiteLoaderQQNT-Launcher_x64.exe` 或 `LiteLoaderQQNT-Launcher_x86.exe`），Launcher 可以只用x86版本。
+3. 将额外下载的 Launcher 移动到 QQNT 安装目录下 QQ.exe 同级目录。
+4. 至此，安装完成。为了加载 LiteLoaderQQNT，你需要每次运行都使用 Launcher 而不是 QQ（可以将QQ的快捷方式目标程序修改为 Launcher），且需要以管理员身份运行（可以在文件属性-兼容性中勾选以管理员身份运行）。
+
+使用 Patch Powershell 脚本（开源方法）（不再推荐）：
 
 1. 若你之前修改过`package.json`，请将被修改的 `package.json` 文件内容还原（必须跟QQ原始的文件一样，一个字一个换行都不能变（换行是`LF`））；若是你新安装的QQ，则无需操作。
 2. 确保你有权限能够执行本地PowerShell脚本文件（系统设置 > 开发者选项 > PowerShell中的设置）。
@@ -191,6 +192,7 @@ MacOS 目前只能通过安装 App Store 版 QQNT 来解决（仍然不含文件
 4. 在弹出的新窗口直接点击下方按钮开始Patch（新版本Patch脚本无需再选择QQ版本）。
 5. 至此，安装完成。经过 Patch 后去除了文件校验的 QQ.exe 将永久生效直到重新用安装包安装。
 6. 如果无法正常使用（例如Patch完毕后启动，提示QQ损坏），建议重装一次QQ并手动删除上次Patch遗留下来的`QQNT安装目录/resources/app/backage.json`文件。
+7. 如果多次尝试未果（一直报文件损坏），建议卸载重装QQ和框架，并只使用第一种方式（全自动 Patch 程序）。
 
 > 如果 Launcher 或 Patch 运行失败无反应请尝试使用管理员权限运行重试
 
