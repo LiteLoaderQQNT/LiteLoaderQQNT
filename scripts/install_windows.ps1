@@ -39,7 +39,7 @@ function Install-LiteLoaderQQNT {
       Write-Host "释放 $LiteLoaderQQNT_Name"
       Expand-Archive `
         -LiteralPath $TempFile `
-        -DestinationPath "$QQBase\resources\app\" `
+        -DestinationPath "$QQBase\resources\app\LiteLoader" `
         -Force
     }
     finally {
