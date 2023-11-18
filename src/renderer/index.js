@@ -7,7 +7,7 @@ const index = async () => {
     await plugin_loader.init();
 
     // 加载插件
-    plugin_loader.onLoad();
+    await plugin_loader.onLoad();
 
     // 监听页面变化
     const url = location.href;

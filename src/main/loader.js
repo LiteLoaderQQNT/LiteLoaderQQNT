@@ -145,7 +145,11 @@ class PluginLoader {
         }
         else {
             const file_path = path.join(plugin_path, main_path);
-            this.#plugins[slug].exports = require(file_path);
+            if (main_path.endsWith(".mjs")) {
+                this.#plugins[slug].exports = import(`file://${file_path}`);
+            } else {
+                this.#plugins[slug].exports = require(file_path);
+            }
         }
 
         // 禁用不兼容插件
@@ -163,17 +167,19 @@ class PluginLoader {
         delete LiteLoader.plugins[slug].exports;
     }
 
-    onLoad() {
+    async onLoad() {
         // 加载插件
         for (const [slug, plugin] of Object.entries(this.#plugins)) {
-            plugin.exports?.onLoad?.(plugin);
+            let e = await plugin.exports;
+            e?.onLoad?.(plugin);
         }
     }
 
-    onBrowserWindowCreated(window) {
+    async onBrowserWindowCreated(window) {
         // 加载插件
         for (const [slug, plugin] of Object.entries(this.#plugins)) {
-            plugin.exports?.onBrowserWindowCreated?.(window, plugin);
+            let e = await plugin.exports;
+            e?.onBrowserWindowCreated?.(window, plugin);
         }
         // 注入Preload
         const preloads = new Set([
