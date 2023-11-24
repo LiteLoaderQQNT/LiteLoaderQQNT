@@ -36,6 +36,8 @@ LiteLoaderQQNT 主页：https://llqqnt.mukapp.top
 更不建议去攻击他人，请从实际问题思考解决，而不是互相攻击。
 
 
+
+
 ## 💻 插件开发
 
 如需上架插件市场，请参考最新的插件模板（暂未完工），也建议参考其他插件。  
@@ -44,6 +46,7 @@ LiteLoaderQQNT 主页：https://llqqnt.mukapp.top
 插件仓库：[LiteLoaderQQNT-Plugin-List](https://github.com/LiteLoaderQQNT/LiteLoaderQQNT-Plugin-List)
 
 > 高版本 QQNT 无法打开自身的 DevTools，请安装第三方调试插件（推荐 Chii Devtools 插件）
+
 
 
 ## 📖 安装教程
@@ -62,7 +65,9 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 
 若你的系统需要修改，请**不要修改** LiteLoader 文件夹内的 `package.json`。**应该修改** `QQNT安装目录/resources/app/package.json`。
 
-### 安装位置
+
+
+### 📍安装位置
 
 正常情况下，需要将含有 LiteLoaderQQNT 本体的文件夹放到 `QQNT安装目录/resources/app` 下。
 
@@ -101,7 +106,9 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 
 注意，在`MacOS`下修改时请直接使用惯用的编辑器（ `VSCode` , `Sublime Text` 等均可， `Xcode` 除外）修改 `package.json` 文件，需要在 `系统设置->隐私与安全性->App管理` 中添加并允许编辑器修改和删除其他应用程序，修改时会弹出提示要求输入管理员密码确认。
 
-### 安装方法
+
+
+### 🧰安装方法
 
 #### 支持矩阵
 
@@ -152,14 +159,22 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 
 #### 使用 git clone 的方式安装（不推荐，适合高阶用户）
 
-1. 确保你的系统装有 [Git](https://git-scm.com/downloads)。
+1. 确保你的系统装有 [Git](https://git-scm.com/downloads) 和 [NodeJS](https://nodejs.org)（同时你要会npm的基本使用，例如更换镜像源等）。
+
 2. 在终端中打开上文提到的 LiteLoaderQQNT 需要安装到的位置。
+
 3. 输入 `git clone https://github.com/LiteLoaderQQNT/LiteLoaderQQNT.git --recursive LiteLoader --depth 1` 拉取项目与子模块。
-4. 上方[支持矩阵](#支持矩阵)中，若你的QQ是需要修改 `package.json` 的系统或版本，请按照 [安装位置](#安装位置) 中的说明对`package.json`进行修改，并请参考下方[启动方法](#启动方法)中的说明。
-5. 至此，安装完成。
+
+4. 在本体和每个子模块目录中执行一次 `npm i` 以安装npm包。
+
+5. 上方[支持矩阵](#支持矩阵)中，若你的QQ是需要修改 `package.json` 的系统或版本，请按照 [安装位置](#安装位置) 中的说明对`package.json`进行修改，并请参考下方[启动方法](#启动方法)中的说明。
+
+6. 至此，安装完成。
+
+   
 
 
-### 启动方法
+### 🏃启动方法
 
 由于 `Windows QQNT 9.9.1` 版本和 `MacOS QQNT 6.9.18` 版本开始被添加文件校验，  
 MacOS 目前只能通过安装 App Store 版 QQNT 来解决（仍然不含文件校验），或安装老版本。  
@@ -195,6 +210,31 @@ MacOS 目前只能通过安装 App Store 版 QQNT 来解决（仍然不含文件
 7. 如果多次尝试未果（一直报文件损坏），建议卸载重装QQ和框架，并只使用第一种方式（全自动 Patch 程序）。
 
 > 如果 Launcher 或 Patch 运行失败无反应请尝试使用管理员权限运行重试
+
+
+
+## 📤框架更新
+
+- 目前框架还没有提供自动更新功能（更新LiteLoader本体），你需要在本仓库的 [release 页面](https://github.com/LiteLoaderQQNT/LiteLoaderQQNT/releases)手动下载最新版的zip压缩包，覆盖解压到之前安装的 LiteLoaderQQNT上即可。
+- 如果你是通过一键脚本安装的，重新启动一次安装脚本一般情况下就能OK。
+- 如果你是 git clone 方式安装的，重新 pull 一次即可（稳妥起见，建议对本体和每个子模块执行一次 `npm i` 以防我们更新了 npm 包）
+
+
+
+## 📄插件安装
+
+一般情况下插件可以通过**QQ→设置→LiteLoader 插件市场**来安装，但由于插件均托管于 Github 上，中国大陆用户访问较为不便，虽然你可以在LiteLoader 配置界面手动配置代理，但为了照顾那些没有代理或者节点不顺畅的用户，在此提供手动安装插件的方法：
+
+（此方法缺点：手动更新+仓库过多）
+
+1.**前往各插件**作者的**仓库**，**下载**最新release，或者下载对应分支下的所有文件。
+
+2.[插件对应的**仓库地址**可在此查看](https://github.com/LiteLoaderQQNT/LiteLoaderQQNT-Plugin-List/blob/v3/plugins.json)，“repo”代表作者的插件仓库（都在github，直接搜索可找到），”branch“代表对应分支
+
+3.下载对应文件压缩包后，将其**解压在LiteLoaderQQNT数据目录**（LiteLoader配置页面有对应路径）下的**plugins文件夹**中，**每一个插件都要一个独立的文件夹**。
+
+4.重启QQ。
+
 
 
 ## 📂 数据目录
