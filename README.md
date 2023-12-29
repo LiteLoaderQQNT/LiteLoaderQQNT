@@ -134,7 +134,7 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 3. 根据提示进行安装与修补
 4. 安装结束
 5. 你**不需要**看本文档其余部分，直接开启QQ即可
-
+<!--
 #### 使用[`LLQQNTInstaller`](https://github.com/kaixinol/LLQQNTInstaller.py)安装（一键）
 
 1. 安装[Python3.11+](https://www.python.org/downloads/)
@@ -142,7 +142,7 @@ Linux & MacOS 版仍然需要修改 `QQNT安装目录/resources/app/package.json
 3. 命令行执行`python -m llqqntinstaller --use-git-proxy --proxy <你的代理>`
 4. 按照流程进行安装
 5. 你**不需要**看本文档其余部分，直接开启QQ即可
-
+-->
 #### 通过 AUR 安装（仅限 Arch Linux 和 Arch-based Linux）（一键）
 
 1. 确保你没有安装 Linux QQ 或已从 AUR 安装非 linuxqq-appimage 包的 Linux QQ。
