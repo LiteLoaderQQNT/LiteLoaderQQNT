@@ -87,50 +87,44 @@ function initPluginList(view) {
     };
 
     for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
-        const thumbnail = plugin.manifest?.thumbnail;
-        const plugin_icon = `local:///${plugin.path.plugin}/${thumbnail}`;
         const default_icon = `local:///${LiteLoader.path.root}/src/setting/default.png`;
-        const manifest = {
-            ...plugin.manifest,
-            thumbnail: thumbnail ? plugin_icon : default_icon,
-            author: {
-                name: plugin.manifest.authors[0].name,
-                link: plugin.manifest.authors[0].link
-            }
-        };
+        const plugin_icon = `local:///${plugin.path.plugin}/${plugin.manifest?.icon}`;
 
         const template = document.createElement("template");
         template.innerHTML = /*html*/ `
         <setting-item>
-            <img src="${manifest.thumbnail}" class="thumbnail">
+            <img src="${plugin.manifest?.icon ? plugin_icon : default_icon}" class="thumbnail">
             <div class="info">
-                <setting-text title="${manifest.name}">${manifest.name}</setting-text>
-                <setting-text data-type="secondary" title="${manifest.description}">${manifest.description}</setting-text>
+                <setting-text title="${plugin.manifest.name}">${plugin.manifest.name}</setting-text>
+                <setting-text data-type="secondary" title="${plugin.manifest.description}">${plugin.manifest.description}</setting-text>
                 <setting-text data-type="secondary" class="extra-information">
-                    <span>版本：${manifest.version}</span>
-                    <span>开发：<a onclick="LiteLoader.api.openExternal('${manifest.author.link}')">${manifest.author.name}</a></span>
+                    <span>版本：${plugin.manifest.version}</span>
+                    <span>开发：</span>
                 </setting-text>
             </div>
             <setting-switch></setting-switch>
         </setting-item>
         `;
 
+        for (const author of plugin.manifest.authors) {
+            const element = document.createElement("a");
+            element.textContent = author.name;
+            element.addEventListener("click", () => LiteLoader.api.openExternal(author.link));
+            template.content.querySelectorAll(".extra-information span")[1].append(element);
+        }
+
         const plugin_list = plugin_lists[plugin.manifest.type] || plugin_lists.extension;
         const plugin_item = template.content.cloneNode(true);
         const switch_btn = plugin_item.querySelector("setting-switch");
 
-        if (!LiteLoader.plugins[manifest.slug].disabled) {
+        if (!LiteLoader.plugins[slug].disabled) {
             switch_btn.setAttribute("is-active", "");
         }
 
         switch_btn.addEventListener("click", (event) => {
             const isActive = event.currentTarget.hasAttribute("is-active");
             LiteLoader.api.disablePlugin(slug, isActive);
-            if (isActive) {
-                event.currentTarget.removeAttribute("is-active")
-            } else {
-                event.currentTarget.setAttribute("is-active", "");
-            }
+            event.currentTarget.toggleAttribute("is-active");
         });
 
         plugin_list.append(plugin_item);
@@ -143,8 +137,8 @@ function initAbout(view) {
     const github_btn = view.querySelector(".about setting-button.github");
     const telegram_btn = view.querySelector(".about setting-button.telegram");
 
-    homepage_btn.addEventListener("click", () => LiteLoader.api.openExternal("https://llqqnt.mukapp.top"));
-    github_btn.addEventListener("click", () => LiteLoader.api.openExternal("https://github.com/LiteLoaderQQNT/LiteLoaderQQNT"));
+    homepage_btn.addEventListener("click", () => LiteLoader.api.openExternal("https://liteloaderqqnt.github.io"));
+    github_btn.addEventListener("click", () => LiteLoader.api.openExternal("https://github.com/LiteLoaderQQNT"));
     telegram_btn.addEventListener("click", () => LiteLoader.api.openExternal("https://t.me/LiteLoaderQQNT"));
 
     // Hitokoto - 一言
