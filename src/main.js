@@ -44,9 +44,9 @@ const loader = new class {
                     const plugin_path = path.join(LiteLoader.path.plugins, plugin_pathname);
                     const data_path = path.join(LiteLoader.path.data, manifest.slug);
 
-                    const main_file = path.join(plugin_path, manifest?.injects?.main);
-                    const preload_file = path.join(plugin_path, manifest?.injects?.preload);
-                    const renderer_file = path.join(plugin_path, manifest?.injects?.renderer);
+                    const main_file = path.join(plugin_path, manifest?.injects?.main ?? "");
+                    const preload_file = path.join(plugin_path, manifest?.injects?.preload ?? "");
+                    const renderer_file = path.join(plugin_path, manifest?.injects?.renderer ?? "");
 
                     LiteLoader.plugins[manifest.slug] = {
                         manifest: manifest,
