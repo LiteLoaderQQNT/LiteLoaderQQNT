@@ -30,9 +30,8 @@ const loader = new class {
     onSettingWindowCreated(settingInterface) {
         for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
             const view = settingInterface.getSettingView(slug);
-            const name = LiteLoader.plugins[slug].manifest.name;
-            settingInterface.addNavItme(name, this.#exports?.[slug]?.exports?.onSettingWindowCreated ? view : null);
-            this.#exports?.[slug]?.exports?.onSettingWindowCreated?.(view);
+            settingInterface.addNavItme(plugin.manifest.name, this.#exports?.[slug]?.onSettingWindowCreated ? view : null);
+            this.#exports?.[slug]?.onSettingWindowCreated?.(view);
         }
     }
 
