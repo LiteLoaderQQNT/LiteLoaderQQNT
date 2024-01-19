@@ -103,8 +103,8 @@ customElements.define("setting-list", class extends HTMLElement {
             slot_children.forEach((node, index) => {
                 const setting_divider = document.createElement("setting-divider");
                 if (this.dataset["direction"] == "column") {
-                    setting_divider.dataset["orientation"] = "horizontal";
-                    node.setAttribute("data-direction", "row");
+                    setting_divider.dataset["direction"] = "row";
+                    node.dataset["direction"] = "row";
                 }
                 if (index < slot_children.length) {
                     node.before(setting_divider);
@@ -118,12 +118,12 @@ customElements.define("setting-list", class extends HTMLElement {
             slot_children.forEach((node, index) => {
                 const setting_divider = document.createElement("setting-divider");
                 if (this.dataset["direction"] == "column") {
-                    setting_divider.dataset["orientation"] = "horizontal";
-                    node.setAttribute("data-direction", "row");
+                    setting_divider.dataset["direction"] = "row";
+                    node.dataset["direction"] = "row";
                 }
                 if (this.dataset["direction"] == "row") {
-                    setting_divider.dataset["orientation"] = "vertical";
-                    node.setAttribute("data-direction", "column");
+                    setting_divider.dataset["direction"] = "column";
+                    node.dataset["direction"] = "column";
                 }
                 if (index + 1 < slot_children.length) {
                     node.after(setting_divider);

@@ -9,11 +9,11 @@ template.innerHTML = /*html*/ `
         background-color: rgba(127, 127, 127, 0.15);
     }
 
-    :host([data-orientation="horizontal"]) {
+    :host([data-direction="row"]) {
         height: 1px;
     }
 
-    :host([data-orientation="vertical"]) {
+    :host([data-direction="column"]) {
         width: 1px;
     }
 </style>
@@ -29,5 +29,5 @@ customElements.define("setting-divider", class extends HTMLElement {
         this.shadowRoot.append(template.content.cloneNode(true));
     }
 
-    static observedAttributes = ["data-orientation"];
+    static observedAttributes = ["data-direction"];
 });
