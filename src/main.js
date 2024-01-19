@@ -112,7 +112,7 @@ const loader = new class {
 
 
     onBrowserWindowCreated(window) {
-        this.#exports.forEach((exports) => exports?.onBrowserWindowCreated(window))
+        this.#exports.forEach((exports) => 'onBrowserWindowCreated' in exports && exports.onBrowserWindowCreated(window))
     }
 
 
