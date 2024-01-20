@@ -1,16 +1,32 @@
 <style>
+    .config_view .plugins setting-item {
+        gap: 8px;
+    }
+
+    .config_view .plugins setting-item>div {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .config_view .plugins setting-item>div>div {
+        height: 48px;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .config_view .plugins setting-item>div>div>div {
+        flex: 1;
+    }
+
     /* 插件缩略图 */
-    .config_view .plugins .thumbnail {
+    .config_view .plugins img {
         width: 48px;
         height: 48px;
         border-radius: 8px;
-    }
-
-    /* 插件信息容器 */
-    .config_view .plugins .info {
-        flex: 1;
-        align-self: start;
-        margin: 0px 16px;
     }
 
     /* 插件附加信息 */

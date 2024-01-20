@@ -93,10 +93,14 @@ function initPluginList(view) {
         const template = document.createElement("template");
         template.innerHTML = /*html*/ `
         <setting-item>
-            <img src="${plugin.manifest?.icon ? plugin_icon : default_icon}" class="thumbnail">
-            <div class="info">
-                <setting-text title="${plugin.manifest.name}">${plugin.manifest.name}</setting-text>
-                <setting-text data-type="secondary" title="${plugin.manifest.description}">${plugin.manifest.description}</setting-text>
+            <div>
+                <div>
+                    <img src="${plugin.manifest?.icon ? plugin_icon : default_icon}" class="thumbnail">
+                    <div>
+                        <setting-text title="${plugin.manifest.name}">${plugin.manifest.name}</setting-text>
+                        <setting-text data-type="secondary" title="${plugin.manifest.description}">${plugin.manifest.description}</setting-text>
+                    </div>
+                </div>
                 <setting-text data-type="secondary" class="extra-information">
                     <span>版本：${plugin.manifest.version}</span>
                     <span>开发：</span>
@@ -106,12 +110,16 @@ function initPluginList(view) {
         </setting-item>
         `;
 
-        for (const author of plugin.manifest.authors) {
-            const element = document.createElement("a");
-            element.textContent = author.name;
-            element.addEventListener("click", () => LiteLoader.api.openExternal(author.link));
-            template.content.querySelectorAll(".extra-information span")[1].append(element);
-        }
+        const author_name = template.content.querySelectorAll(".extra-information span")[1]
+        plugin.manifest.authors.forEach((author, index, array) => {
+            const author_link = document.createElement("a");
+            author_link.textContent = author.name;
+            author_link.addEventListener("click", () => LiteLoader.api.openExternal(author.link));
+            author_name.append(author_link);
+            if (index < array.length - 1) {
+                author_name.append(" | ");
+            }
+        });
 
         const plugin_list = plugin_lists[plugin.manifest.type] || plugin_lists.extension;
         const plugin_item = template.content.cloneNode(true);
