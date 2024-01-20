@@ -8,6 +8,20 @@ const profile_root = process.env.LITELOADERQQNT_PROFILE ? process.env.LITELOADER
 const data_path = path.join(profile_root, "data");
 const plugins_path = path.join(profile_root, "plugins");
 
+// 如果数据目录不存在
+if (!fs.existsSync(profile_root)) {
+    fs.mkdirSync(profile_root, {recursive: true});
+}
+
+// 如果配置文件不存在
+if (!fs.existsSync(path.join(profile_root, "config.json"))) {
+    fs.copyFileSync(
+        path.join(root_path, "config.json"),
+        path.join(profile_root, "config.json"),
+        fs.constants.COPYFILE_EXCL
+    );
+}
+
 const config = require(path.join(profile_root, "config.json"));
 const liteloader_package = require(path.join(root_path, "package.json"));
 const qqnt_package = require(path.join(process.resourcesPath, "app/package.json"))
@@ -49,8 +63,7 @@ const LiteLoader = {
     path: {
         root: root_path,
         data: data_path,
-        plugins: plugins_path,
-        profile: profile_root
+        plugins: plugins_path
     },
     versions: {
         qqnt: qqnt_package.version,
