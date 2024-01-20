@@ -29,6 +29,19 @@ const loader = new class {
             return;
         }
 
+        // 如果配置文件不存在
+        if (!fs.existsSync(path.join(LiteLoader.path.profile, "config.json"))) {
+            output("No config file found.");
+            output("Copying default config file.")
+            fs.copyFile(
+                path.join(LiteLoader.path.root, "config.json"), path.join(LiteLoader.path.profile, "config.json"),
+                fs.constrants.COPYFILE_EXCL, (error) => {
+                    output("Copy default config failed!");
+                    output("Please check config.json");
+                }
+            );
+        }
+
         // 读取插件目录
         try {
             for (const plugin_pathname of fs.readdirSync(LiteLoader.path.plugins, "utf-8")) {

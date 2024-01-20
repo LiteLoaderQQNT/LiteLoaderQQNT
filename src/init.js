@@ -49,7 +49,8 @@ const LiteLoader = {
     path: {
         root: root_path,
         data: data_path,
-        plugins: plugins_path
+        plugins: plugins_path,
+        profile: profile_root
     },
     versions: {
         qqnt: qqnt_package.version,
