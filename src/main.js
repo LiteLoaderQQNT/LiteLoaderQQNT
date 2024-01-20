@@ -63,7 +63,7 @@ const loader = new class {
                     }
                 }
                 catch {
-                    return;
+                    continue;
                 }
             }
         }
