@@ -26,7 +26,7 @@ cd /Applications/QQ.app/Contents/Resources/app/app_launcher
 
 # 修改index.json
 echo "正在修补index.json..."
-if ! grep -q "require('Users" index.js; then
+if ! grep -q "require('/Users" index.js; then
     sudo sed -i '' "1i\\
 require('$HOME/Library/Containers/com.tencent.qq/Data/Documents/LiteLoader');\
 " index.js
