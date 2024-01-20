@@ -4,16 +4,17 @@ const fs = require("node:fs");
 
 
 const root_path = path.join(__dirname, "..");
-const data_path = path.join(root_path, "data");
-const plugins_path = path.join(root_path, "plugins");
+const profile_root = process.env.LITELOADERQQNT_PROFILE ? process.env.LITELOADERQQNT_PROFILE : root_path;
+const data_path = path.join(profile_root, "data");
+const plugins_path = path.join(profile_root, "plugins");
 
-const config = require(path.join(root_path, "config.json"));
+const config = require(path.join(profile_root, "config.json"));
 const liteloader_package = require(path.join(root_path, "package.json"));
 const qqnt_package = require(path.join(process.resourcesPath, "app/package.json"))
 
 
 function disablePlugin(slug, disabled) {
-    const config_path = path.join(root_path, "config.json");
+    const config_path = path.join(profile_root, "config.json");
     const config = JSON.parse(fs.readFileSync(config_path, "utf-8"));
     if (disabled) {
         config.LiteLoader.disabled_plugins = config.LiteLoader.disabled_plugins.concat(slug);
