@@ -19,17 +19,6 @@ Object.defineProperty(globalThis, "LiteLoader", {
 contextBridge.exposeInMainWorld("LiteLoader", LiteLoader);
 
 
-// 加载preload
-for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
-    if (!plugin.disabled && !plugin.incompatible && plugin.path.injects.preload) {
-        fetch(`local:///${plugin.path.injects.preload}`).then(async res => {
-            const preload = `(async function(require, process, Buffer, global, setImmediate, clearImmediate, exports, module) {${await res.text()}})`;
-            binding.createPreloadScript(preload)(...arguments);
-        });
-    }
-}
-
-
 // 加载渲染进程
 window.addEventListener("DOMContentLoaded", () => {
     const script = document.createElement("script");
@@ -37,4 +26,40 @@ window.addEventListener("DOMContentLoaded", () => {
     script.defer = true;
     script.src = `local:///${LiteLoader.path.root}/src/renderer.js`;
     document.head.appendChild(script);
+});
+
+
+const preload_codeblock = (code) => `(
+    async function(
+        require,
+        process,
+        Buffer,
+        global,
+        setImmediate,
+        clearImmediate,
+        exports,
+        module
+    ) {
+        ${code}
+    }
+)`;
+
+
+// 加载插件 Preload
+for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
+    if (!plugin.disabled && !plugin.incompatible && plugin.path.injects.preload) {
+        fetch(`local:///${plugin.path.injects.preload}`).then(async res => {
+            binding.createPreloadScript(preload_codeblock(await res.text()))(...arguments);
+        });
+    }
+}
+
+
+// 加载 QQNT Preload
+let flag = false;
+ipcRenderer.invoke("LiteLoader.LiteLoader.preload").then(preload => {
+    if (!flag) {
+        binding.createPreloadScript(preload_codeblock(preload))(...arguments);
+        flag = true;
+    }
 });

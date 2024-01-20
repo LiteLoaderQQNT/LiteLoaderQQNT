@@ -1,8 +1,7 @@
 const { Module } = require("module");
-const { net } = require("electron");
+const { net, ipcMain } = require("electron");
 const path = require("path");
 const fs = require("fs");
-const original_fs = require("original-fs");
 
 
 function output(...args) {
@@ -135,14 +134,14 @@ function protocolRegister(protocol) {
 function proxyBrowserWindowConstruct(target, [config], newTarget) {
     const liteloader_preload_path = path.join(LiteLoader.path.root, "src/preload.js");
     const qqnt_preload_path = config.webPreferences.preload;
-    const preload_path = `${path.dirname(qqnt_preload_path)}/../application/${path.basename(qqnt_preload_path)}`;
+    const preload_path = `${path.dirname(qqnt_preload_path)}/../application/preload.js`;
 
     if (!fs.existsSync(path.dirname(qqnt_preload_path))) {
         fs.mkdirSync(path.dirname(qqnt_preload_path));
+        fs.copyFileSync(liteloader_preload_path, preload_path, fs.constants.COPYFILE_EXCL);
     }
 
-    fs.copyFileSync(liteloader_preload_path, qqnt_preload_path);
-    original_fs.appendFileSync(qqnt_preload_path, `{${fs.readFileSync(qqnt_preload_path, "utf-8")}}`, "utf-8");
+    ipcMain.handleOnce("LiteLoader.LiteLoader.preload", () => fs.readFileSync(qqnt_preload_path, "utf-8"));
 
     const new_config = {
         ...config,
