@@ -8,6 +8,7 @@ template.innerHTML = /*html*/ `
         font-size: min(var(--font_size_3), 18px);
         line-height: min(var(--line_height_3), 24px);
         padding: 0px 16px;
+        margin-top: 0;
         margin-bottom: 8px;
     }
 </style>
