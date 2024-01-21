@@ -84,7 +84,8 @@ const LiteLoader = {
             set: setConfig,
             get: getConfig
         },
-        openExternal: shell.openExternal
+        openExternal: shell.openExternal,
+        openPath: shell.openPath
     }
 };
 
@@ -129,6 +130,11 @@ ipcMain.handle("LiteLoader.LiteLoader.api", (event, name, method, ...args) => {
     if (name == "openExternal") {
         if (method == "openExternal") {
             return LiteLoader.api.openExternal(...args);
+        }
+    }
+    if (name == "openPath") {
+        if (method == "openPath") {
+            return LiteLoader.api.openPath(...args);
         }
     }
 });

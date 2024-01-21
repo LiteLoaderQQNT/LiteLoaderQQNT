@@ -140,6 +140,19 @@ function initPluginList(view) {
 }
 
 
+function initPath(view) {
+    const root_path_content = view.querySelectorAll(".path .root setting-text")[2];
+    const root_path_button = view.querySelector(".path .root setting-button");
+    const profile_path_content = view.querySelectorAll(".path .profile setting-text")[2];
+    const profile_path_button = view.querySelector(".path .profile setting-button");
+
+    root_path_content.textContent = LiteLoader.path.root;
+    root_path_button.addEventListener("click", () => LiteLoader.api.openPath(LiteLoader.path.root));
+    profile_path_content.textContent = LiteLoader.path.profile;
+    profile_path_button.addEventListener("click", () => LiteLoader.api.openPath(LiteLoader.path.profile));
+}
+
+
 function initAbout(view) {
     const homepage_btn = view.querySelector(".about setting-button.liteloaderqqnt");
     const github_btn = view.querySelector(".about setting-button.github");
@@ -167,5 +180,6 @@ export async function onSettingWindowCreated(view) {
     // 初始化
     initVersions(view);
     initPluginList(view);
+    initPath(view);
     initAbout(view);
 }

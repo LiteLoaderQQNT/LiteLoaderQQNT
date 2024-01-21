@@ -11,7 +11,8 @@ Object.defineProperty(globalThis, "LiteLoader", {
                 get: (...args) => ipcRenderer.invoke("LiteLoader.LiteLoader.api", "config", "get", ...args),
                 set: (...args) => ipcRenderer.invoke("LiteLoader.LiteLoader.api", "config", "set", ...args)
             },
-            openExternal: (...args) => ipcRenderer.invoke("LiteLoader.LiteLoader.api", "openExternal", "openExternal", ...args)
+            openExternal: (...args) => ipcRenderer.invoke("LiteLoader.LiteLoader.api", "openExternal", "openExternal", ...args),
+            openPath: (...args) => ipcRenderer.invoke("LiteLoader.LiteLoader.api", "openPath", "openPath", ...args)
         }
     }
 });
