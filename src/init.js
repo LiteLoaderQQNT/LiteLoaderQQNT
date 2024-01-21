@@ -4,22 +4,18 @@ const fs = require("node:fs");
 
 
 const root_path = path.join(__dirname, "..");
-const profile_root = process.env.LITELOADERQQNT_PROFILE ? process.env.LITELOADERQQNT_PROFILE : root_path;
+const profile_root = process.env.LITELOADERQQNT_PROFILE ?? root_path;
 const data_path = path.join(profile_root, "data");
 const plugins_path = path.join(profile_root, "plugins");
 
 // 如果数据目录不存在
 if (!fs.existsSync(profile_root)) {
-    fs.mkdirSync(profile_root, {recursive: true});
+    fs.mkdirSync(profile_root, { recursive: true });
 }
 
 // 如果配置文件不存在
 if (!fs.existsSync(path.join(profile_root, "config.json"))) {
-    fs.copyFileSync(
-        path.join(root_path, "config.json"),
-        path.join(profile_root, "config.json"),
-        fs.constants.COPYFILE_EXCL
-    );
+    fs.copyFileSync(path.join(root_path, "config.json"), path.join(profile_root, "config.json"));
 }
 
 const config = require(path.join(profile_root, "config.json"));
@@ -62,6 +58,7 @@ function setConfig(slug, new_config) {
 const LiteLoader = {
     path: {
         root: root_path,
+        profile: profile_root,
         data: data_path,
         plugins: plugins_path
     },
@@ -98,6 +95,9 @@ Object.defineProperty(globalThis, "LiteLoader", {
     get() {
         const stack = new Error().stack.split("\n");
         if (stack[2].includes(LiteLoader.path.root)) {
+            return LiteLoader;
+        }
+        if (stack[2].includes(LiteLoader.path.profile)) {
             return LiteLoader;
         }
     }
