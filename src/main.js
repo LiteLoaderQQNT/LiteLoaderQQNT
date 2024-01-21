@@ -143,11 +143,15 @@ function protocolRegister(protocol) {
 function proxyBrowserWindowConstruct(target, [config], newTarget) {
     const liteloader_preload_path = path.join(LiteLoader.path.root, "src/preload.js");
     const qqnt_preload_path = config.webPreferences.preload;
-    const preload_path = `${path.dirname(qqnt_preload_path)}/../application/preload.js`;
+    const preload_path = `${path.dirname(qqnt_preload_path).replaceAll("\\", "/")}/../application/preload.js`;
 
-    if (!fs.existsSync(path.dirname(qqnt_preload_path))) {
-        fs.mkdirSync(path.dirname(qqnt_preload_path));
-        fs.copyFileSync(liteloader_preload_path, preload_path, fs.constants.COPYFILE_EXCL);
+    if (!fs.existsSync(preload_path)) {
+        fs.mkdirSync(path.dirname(preload_path), { recursive: true });
+        fs.copyFileSync(liteloader_preload_path, preload_path);
+    }
+
+    if (fs.readFileSync(preload_path, "utf-8") != fs.readFileSync(liteloader_preload_path, "utf-8")) {
+        fs.copyFileSync(liteloader_preload_path, preload_path);
     }
 
     ipcMain.handleOnce("LiteLoader.LiteLoader.preload", () => fs.readFileSync(qqnt_preload_path, "utf-8"));
@@ -158,7 +162,7 @@ function proxyBrowserWindowConstruct(target, [config], newTarget) {
             ...config.webPreferences,
             webSecurity: false,
             devTools: true,
-            preload: preload_path.replaceAll("\\", "/"),
+            preload: preload_path,
             additionalArguments: ["--fetch-schemes=local"]
         }
     }
