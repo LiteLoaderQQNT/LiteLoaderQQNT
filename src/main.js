@@ -15,16 +15,25 @@ const loader = new class {
 
     #exports = [];
 
+
     constructor() {
         output("Start finding all plugins.");
+
+        if (process.env?.LITELOADERQQNT_PROFILE) {
+            output("Use LITELOADERQQNT_PROFILE environment variables:", LiteLoader.path.profile);
+        }
 
         // 如果插件目录不存在
         if (!fs.existsSync(LiteLoader.path.plugins)) {
             output("The plugins directory does not exist.");
             output("A new plugin directory will be created.");
-            fs.mkdir(LiteLoader.path.plugins, () => {
-                output("The plugins directory creation failed!");
-                output("Please check the plugins directory.");
+            fs.mkdir(LiteLoader.path.plugins, { recursive: true }, error => {
+                if (error) {
+                    output("Plugins directory creation failed!");
+                    output("Please check the plugins directory.");
+                    return;
+                }
+                output("Plugins directory created successfully!");
             });
             return;
         }
@@ -63,7 +72,7 @@ const loader = new class {
                     }
                 }
                 catch {
-                    return;
+                    continue;
                 }
             }
         }
