@@ -112,7 +112,10 @@ const loader = new class {
 
         // 加载插件
         for (const plugin of Object.values(LiteLoader.plugins)) {
-            if (!plugin.disabled && !plugin.incompatible && plugin.path.injects.main) {
+            if (plugin.disabled || plugin.incompatible) {
+                continue;
+            }
+            if (plugin.path.injects.main) {
                 this.#exports.push(require(plugin.path.injects.main));
             }
         }

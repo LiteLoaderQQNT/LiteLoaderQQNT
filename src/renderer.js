@@ -20,7 +20,10 @@ const loader = new class {
 
     async init() {
         for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
-            if (!plugin.disabled && !plugin.incompatible && plugin.path.injects.renderer) {
+            if (plugin.disabled || plugin.incompatible) {
+                continue;
+            }
+            if (plugin.path.injects.renderer) {
                 this.#exports[slug] = await import(`local:///${plugin.path.injects.renderer}`);
             }
         }
@@ -29,6 +32,9 @@ const loader = new class {
 
     onSettingWindowCreated(settingInterface) {
         for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
+            if (plugin.disabled || plugin.incompatible) {
+                continue;
+            }
             const view = settingInterface.getSettingView(slug);
             settingInterface.addNavItme(plugin.manifest.name, this.#exports?.[slug]?.onSettingWindowCreated ? view : null);
             this.#exports?.[slug]?.onSettingWindowCreated?.(view);

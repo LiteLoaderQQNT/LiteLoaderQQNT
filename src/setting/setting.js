@@ -87,6 +87,11 @@ function initPluginList(view) {
     };
 
     for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
+        // 跳过不兼容插件
+        if (plugin.disabled || plugin.incompatible) {
+            continue;
+        }
+
         const default_icon = `local:///${LiteLoader.path.root}/src/setting/default.png`;
         const plugin_icon = `local:///${plugin.path.plugin}/${plugin.manifest?.icon}`;
 

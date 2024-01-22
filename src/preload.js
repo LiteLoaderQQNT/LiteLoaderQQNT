@@ -48,7 +48,10 @@ const preload_codeblock = (code) => `(
 
 // 加载插件 Preload
 for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
-    if (!plugin.disabled && !plugin.incompatible && plugin.path.injects.preload) {
+    if (plugin.disabled || plugin.incompatible) {
+        continue;
+    }
+    if (plugin.path.injects.preload) {
         fetch(`local:///${plugin.path.injects.preload}`).then(async res => {
             binding.createPreloadScript(preload_codeblock(await res.text()))(...arguments);
         });
