@@ -100,13 +100,13 @@ function initPluginList(view) {
         <setting-item>
             <div>
                 <div>
-                    <img src="${plugin.manifest?.icon ? plugin_icon : default_icon}" class="thumbnail">
+                    <img src="${plugin.manifest?.icon ? plugin_icon : default_icon}">
                     <div>
                         <setting-text title="${plugin.manifest.name}">${plugin.manifest.name}</setting-text>
                         <setting-text data-type="secondary" title="${plugin.manifest.description}">${plugin.manifest.description}</setting-text>
                     </div>
                 </div>
-                <setting-text data-type="secondary" class="extra-information">
+                <setting-text data-type="secondary">
                     <span>版本：${plugin.manifest.version}</span>
                     <span>开发：</span>
                 </setting-text>
@@ -115,7 +115,7 @@ function initPluginList(view) {
         </setting-item>
         `;
 
-        const author_name = template.content.querySelectorAll(".extra-information span")[1]
+        const author_name = template.content.querySelectorAll("span")[1]
         plugin.manifest.authors.forEach((author, index, array) => {
             const author_link = document.createElement("a");
             author_link.textContent = author.name;
