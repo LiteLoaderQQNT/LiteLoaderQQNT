@@ -2,42 +2,35 @@ import { onSettingWindowCreated } from "./setting.js";
 
 
 export class SettingInterface {
-    #nav_bar = document.querySelector(".setting-tab .nav-bar");
     #setting_title = document.querySelector(".setting-main .setting-title");
-    #qqnt_setting_view = document.querySelector(".setting-main .q-scroll-view");
+    #liteloader_nav_bar = document.createElement("div");
     #liteloader_setting_view = document.createElement("div");
 
 
     constructor() {
-        this.#liteloader_setting_view.classList.add("q-scroll-view", "scroll-view--show-scrollbar");
-        document.querySelector(".setting-main .setting-main__content").append(this.#liteloader_setting_view);
-
-        this.#nav_bar.addEventListener("click", event => {
-            const target = event.target.closest(".nav-item");
-            if (target) {
-                // 重新设定激活状态
-                this.#nav_bar.childNodes.forEach(node => {
-                    node.classList?.remove("nav-item-active");
-                });
-                target.classList.add("nav-item-active");
-                // 内容显示
-                if (target.classList.contains("liteloader")) {
-                    this.#qqnt_setting_view.style.display = "none";
-                    this.#liteloader_setting_view.style.display = "block";
-                } else {
-                    this.#qqnt_setting_view.style.display = "block";
-                    this.#liteloader_setting_view.style.display = "none";
-                }
-            }
-        });
-
         const style = document.createElement("style");
         style.textContent = `
-        .liteloader.dividing_line {
-            margin: 5% 30%;
-            border: initial;
-            border-radius: 4px;
-            height: 3px;
+        .setting-tab {
+            display: flex;
+            flex-direction: column;
+        }
+        .setting-tab .nav-bar {
+            flex-shrink: 0;
+        }
+        .liteloader.nav-bar {
+            flex: 1;
+            margin-top: 25px;
+            overflow-x: hidden;
+            overflow-y: scroll;
+        }
+        .liteloader.nav-bar::before {
+            content: "";
+            display: block;
+            position: absolute;
+            transform: translate(50px, -15px);
+            width: 100px;
+            height: 5px;
+            border-radius: 5px;
             background: rgba(127, 127, 127, 0.5);
         }
         .liteloader.tab-view {
@@ -51,20 +44,40 @@ export class SettingInterface {
         `;
         document.head.append(style);
 
-        this.addDividingLine();
+        this.#liteloader_nav_bar.classList.add("nav-bar", "liteloader");
+        document.querySelector(".setting-tab").append(this.#liteloader_nav_bar);
+
+        this.#liteloader_setting_view.classList.add("q-scroll-view", "scroll-view--show-scrollbar");
+        document.querySelector(".setting-main .setting-main__content").append(this.#liteloader_setting_view);
+
+        const qqnt_setting_view = document.querySelector(".setting-main .q-scroll-view");
+        document.querySelector(".setting-tab").addEventListener("click", event => {
+            const nav_item = event.target.closest(".nav-item");
+            if (nav_item) {
+                // 重新设定激活状态
+                document.querySelectorAll(".setting-tab .nav-item").forEach(element => {
+                    element.classList.remove("nav-item-active");
+                });
+                nav_item.classList.add("nav-item-active");
+                // 内容显示
+                if (nav_item.classList.contains("liteloader")) {
+                    qqnt_setting_view.style.display = "none";
+                    this.#liteloader_setting_view.style.display = "block";
+                }
+                else {
+                    qqnt_setting_view.style.display = "block";
+                    this.#liteloader_setting_view.style.display = "none";
+                }
+            }
+        });
 
         const view = this.getSettingView("config_view");
         this.addNavItme("LiteLoaderQQNT", view);
         onSettingWindowCreated(view);
-    }
 
-
-    // 分割线
-    addDividingLine() {
-        const dividing_line = document.createElement("hr");
-        dividing_line.classList.add("liteloader");
-        dividing_line.classList.add("dividing_line");
-        this.#nav_bar.append(dividing_line);
+        for (let index = 0; index < 20; index++) {
+            this.addNavItme(`第 ${index} 个测试按钮`, null);
+        }
     }
 
 
@@ -78,7 +91,7 @@ export class SettingInterface {
 
     // 导航栏条目
     addNavItme(name, view) {
-        const nav_item = this.#nav_bar.querySelector(".nav-item").cloneNode(true);
+        const nav_item = document.querySelector(".setting-tab .nav-item").cloneNode(true);
         nav_item.classList.remove("nav-item-active");
         nav_item.classList.add("liteloader");
         if (!view) {
@@ -93,6 +106,6 @@ export class SettingInterface {
                 this.#liteloader_setting_view.append(view);
             }
         });
-        this.#nav_bar.append(nav_item);
+        this.#liteloader_nav_bar.append(nav_item);
     }
 }
