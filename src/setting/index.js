@@ -74,10 +74,6 @@ export class SettingInterface {
         const view = this.getSettingView("config_view");
         this.addNavItme("LiteLoaderQQNT", view);
         onSettingWindowCreated(view);
-
-        for (let index = 0; index < 20; index++) {
-            this.addNavItme(`第 ${index} 个测试按钮`, null);
-        }
     }
 
 
@@ -94,9 +90,6 @@ export class SettingInterface {
         const nav_item = document.querySelector(".setting-tab .nav-item").cloneNode(true);
         nav_item.classList.remove("nav-item-active");
         nav_item.classList.add("liteloader");
-        if (!view) {
-            nav_item.classList.add("disabled");
-        }
         nav_item.querySelector(".q-icon").textContent = null;
         nav_item.querySelector(".name").textContent = name;
         nav_item.addEventListener("click", event => {

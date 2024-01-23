@@ -35,9 +35,11 @@ const loader = new class {
             if (plugin.disabled || plugin.incompatible) {
                 continue;
             }
-            const view = settingInterface.getSettingView(slug);
-            settingInterface.addNavItme(plugin.manifest.name, this.#exports?.[slug]?.onSettingWindowCreated ? view : null);
-            this.#exports?.[slug]?.onSettingWindowCreated?.(view);
+            if (this.#exports?.[slug]?.onSettingWindowCreated) {
+                const view = settingInterface.getSettingView(slug);
+                settingInterface.addNavItme(plugin.manifest.name, view);
+                this.#exports?.[slug]?.onSettingWindowCreated?.(view);
+            }
         }
     }
 
