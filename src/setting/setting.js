@@ -88,7 +88,7 @@ function initPluginList(view) {
 
     for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
         // 跳过不兼容插件
-        if (plugin.disabled || plugin.incompatible) {
+        if (plugin.incompatible) {
             continue;
         }
 
