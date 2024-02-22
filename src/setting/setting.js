@@ -78,8 +78,13 @@ function initVersions(view) {
     try_again();
 }
 
+async function getIconHtmlString(pluginSvgIconUrlUsingLocalPotocol) {
+    const response = await fetch(pluginSvgIconUrlUsingLocalPotocol)
+    return await response.text()
+}
 
-function initPluginList(view) {
+
+async function initPluginList(view) {
     const plugin_lists = {
         extension: view.querySelector(".plugins setting-list.extension"),
         theme: view.querySelector(".plugins setting-list.theme"),
@@ -100,7 +105,7 @@ function initPluginList(view) {
         <setting-item>
             <div>
                 <div>
-                    <img src="${plugin.manifest?.icon ? plugin_icon : default_icon}">
+                    ${plugin_icon.endsWith('.svg') ? await getIconHtmlString(plugin_icon) : `<img src="${plugin.manifest?.icon ? plugin_icon : default_icon}"/>`}
                     <div>
                         <setting-text title="${plugin.manifest.name}">${plugin.manifest.name}</setting-text>
                         <setting-text data-type="secondary" title="${plugin.manifest.description}">${plugin.manifest.description}</setting-text>
@@ -184,7 +189,7 @@ export async function onSettingWindowCreated(view) {
 
     // 初始化
     initVersions(view);
-    initPluginList(view);
+    await initPluginList(view);
     initPath(view);
     initAbout(view);
 }
