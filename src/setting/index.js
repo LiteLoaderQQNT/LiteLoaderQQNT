@@ -80,7 +80,7 @@ export class SettingInterface {
     // Setting View
     getSettingView(slug) {
         const view = document.createElement("div");
-        view.classList.add("liteloader", "tab-view", slug);
+        view.classList.add("liteloader", "tab-view", slug.replace(" ", '-'));
         return view;
     }
 
