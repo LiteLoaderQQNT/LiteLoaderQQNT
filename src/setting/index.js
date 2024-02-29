@@ -72,7 +72,7 @@ export class SettingInterface {
         });
 
         const view = this.getSettingView("config_view");
-        this.addNavItme("LiteLoaderQQNT", view);
+        this.addNavItem("LiteLoaderQQNT", view);
         onSettingWindowCreated(view);
     }
 
@@ -86,7 +86,7 @@ export class SettingInterface {
 
 
     // 导航栏条目
-    addNavItme(name, view) {
+    addNavItem(name, view) {
         const nav_item = document.querySelector(".setting-tab .nav-item").cloneNode(true);
         nav_item.classList.remove("nav-item-active");
         nav_item.classList.add("liteloader");
