@@ -97,7 +97,7 @@ async function initPluginList(view) {
             continue;
         }
 
-        const default_icon = `local:///${LiteLoader.path.root}/src/setting/default.png`;
+        const default_icon = `local:///${LiteLoader.path.root}/src/setting/static/default.png`;
         const plugin_icon = `local:///${plugin.path.plugin}/${plugin.manifest?.icon}`;
 
         const template = document.createElement("template");
@@ -185,7 +185,7 @@ function initAbout(view) {
 
 export async function onSettingWindowCreated(view) {
     // HTMl
-    view.innerHTML = await (await fetch(`local:///${LiteLoader.path.root}/src/setting/view.html`)).text();
+    view.innerHTML = await (await fetch(`local:///${LiteLoader.path.root}/src/setting/static/view.html`)).text();
 
     // 初始化
     initVersions(view);

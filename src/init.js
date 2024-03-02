@@ -1,32 +1,7 @@
-const { ipcMain, shell } = require("electron");
+const { ipcMain, shell, protocol } = require("electron");
 const path = require("node:path");
 const fs = require("node:fs");
 
-const { protocol } = require("electron");
-protocol.registerSchemesAsPrivileged([
-    {
-        scheme: "local",
-        privileges: {
-            standard: false,
-            allowServiceWorkers: true,
-            corsEnabled: false,
-            supportFetchAPI: true,
-            stream: true,
-            bypassCSP: true
-        }
-    },
-    {
-        scheme: "appimg",
-        privileges: {
-            standard: false,
-            allowServiceWorkers: true,
-            corsEnabled: true,
-            supportFetchAPI: true,
-            stream: true,
-            bypassCSP: true
-        }
-    }
-]);
 
 const root_path = path.join(__dirname, "..");
 const profile_root = process.env.LITELOADERQQNT_PROFILE ?? root_path;
@@ -163,6 +138,32 @@ ipcMain.handle("LiteLoader.LiteLoader.api", (event, name, method, ...args) => {
         }
     }
 });
+
+
+protocol.registerSchemesAsPrivileged([
+    {
+        scheme: "local",
+        privileges: {
+            standard: false,
+            allowServiceWorkers: true,
+            corsEnabled: false,
+            supportFetchAPI: true,
+            stream: true,
+            bypassCSP: true
+        }
+    },
+    {
+        scheme: "appimg",
+        privileges: {
+            standard: false,
+            allowServiceWorkers: true,
+            corsEnabled: true,
+            supportFetchAPI: true,
+            stream: true,
+            bypassCSP: true
+        }
+    }
+]);
 
 
 require("./main.js");

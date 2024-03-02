@@ -83,7 +83,7 @@ const loader = new class {
 
         // 输出插件状态
         for (const plugin of Object.values(LiteLoader.plugins)) {
-            const dependencies = plugin.manifest?.dependencies?.filter((slug) => !LiteLoader.plugins[slug]);
+            const dependencies = plugin.manifest?.dependencies?.filter(slug => !LiteLoader.plugins[slug]);
 
             // 输出不兼容
             if (plugin.incompatible) {
@@ -98,7 +98,7 @@ const loader = new class {
             }
 
             // 缺少依赖
-            if (dependencies) {
+            if (dependencies?.length) {
                 output("Found plugin:", plugin.manifest.name, "Missing dependencies:", dependencies.toString());
                 continue;
             }
