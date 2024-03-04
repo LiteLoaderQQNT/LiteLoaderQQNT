@@ -1,5 +1,6 @@
-import { SettingInterface } from "./setting/renderer.js";
+import "./components/index.js";
 import "./easter_eggs/index.js";
+import { SettingInterface } from "./setting/renderer.js";
 
 
 const loader = await (new class {

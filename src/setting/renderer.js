@@ -1,15 +1,3 @@
-import "./components/section.js";
-import "./components/panel.js";
-import "./components/list.js";
-import "./components/item.js";
-import "./components/select.js";
-import "./components/option.js";
-import "./components/switch.js";
-import "./components/button.js";
-import "./components/text.js";
-import "./components/divider.js";
-
-
 export class SettingInterface {
     #setting_title = document.querySelector(".setting-main .setting-title");
     #liteloader_nav_bar = document.createElement("div");
