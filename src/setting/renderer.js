@@ -256,7 +256,7 @@ async function initPluginList(view) {
 
         switch_btn.addEventListener("click", (event) => {
             const isActive = event.currentTarget.hasAttribute("is-active");
-            LiteLoader.api.disablePlugin(slug, isActive);
+            LiteLoader_Setting.disablePlugin(slug, isActive);
             event.currentTarget.toggleAttribute("is-active");
         });
 

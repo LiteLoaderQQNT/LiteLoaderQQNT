@@ -23,18 +23,6 @@ const liteloader_package = require(path.join(root_path, "package.json"));
 const qqnt_package = require(path.join(process.resourcesPath, "app/package.json"))
 
 
-function disablePlugin(slug, disabled) {
-    const config_path = path.join(profile_root, "config.json");
-    const config = JSON.parse(fs.readFileSync(config_path, "utf-8"));
-    if (disabled) {
-        config.LiteLoader.disabled_plugins = config.LiteLoader.disabled_plugins.concat(slug);
-    } else {
-        config.LiteLoader.disabled_plugins = config.LiteLoader.disabled_plugins.filter(item => item != slug);
-    }
-    fs.writeFileSync(config_path, JSON.stringify(config, null, 4), "utf-8");
-}
-
-
 function getConfig(slug, default_config) {
     let config = {};
     const config_path = path.join(data_path, slug, "config.json");
@@ -79,7 +67,6 @@ const LiteLoader = {
     config: config,
     plugins: {},
     api: {
-        disablePlugin: disablePlugin,
         config: {
             set: setConfig,
             get: getConfig
@@ -114,11 +101,6 @@ ipcMain.on("LiteLoader.LiteLoader.LiteLoader", (event) => {
 });
 
 ipcMain.handle("LiteLoader.LiteLoader.api", (event, name, method, ...args) => {
-    if (name == "disablePlugin") {
-        if (method == "disablePlugin") {
-            return LiteLoader.api.disablePlugin(...args);
-        }
-    }
     if (name == "config") {
         if (method == "get") {
             return LiteLoader.api.config.get(...args);
@@ -250,3 +232,4 @@ protocol.registerSchemesAsPrivileged([
 
 
 require("./main.js");
+require("./setting/main.js");
