@@ -1,4 +1,5 @@
 import { SettingInterface } from "./setting/renderer.js";
+import "./easter_eggs/index.js";
 
 
 const loader = await (new class {
@@ -32,18 +33,18 @@ const loader = await (new class {
 
 
 // 注入设置界面
-function settingInterfaceInit() {
+async function findSettingTabNavBar() {
     const settingInterface = new SettingInterface();
-    if (document.querySelector(".setting-tab .nav-bar")) {
-        loader.onSettingWindowCreated(settingInterface);
+    const observer = async (_, observer) => {
+        if (document.querySelector(".setting-tab .nav-bar")) {
+            loader.onSettingWindowCreated(settingInterface);
+            observer?.disconnect?.();
+            return true;
+        }
+        return false;
     }
-    else {
-        new MutationObserver((_, observe) => {
-            if (document.querySelector(".setting-tab .nav-bar")) {
-                loader.onSettingWindowCreated(settingInterface);
-                observe.disconnect();
-            }
-        }).observe(document.querySelector("#app"), {
+    if (!await observer()) {
+        new MutationObserver(observer).observe(document, {
             subtree: true,
             attributes: false,
             childList: true
@@ -53,15 +54,15 @@ function settingInterfaceInit() {
 
 
 // 监听页面变化
-if (location.href.includes("/index.html") && location.href.includes("#/setting")) {
-    settingInterfaceInit();
-}
-else {
-    navigation.addEventListener("navigatesuccess", function func(event) {
-        const url = event.target.currentEntry.url;
-        if (url.includes("/index.html") && url.includes("#/setting")) {
-            navigation.removeEventListener("navigatesuccess", func);
-            settingInterfaceInit();
+if (location.hash.includes("#/blank")) {
+    const navigatesuccess = async event => {
+        if (event.target.currentEntry.url.includes("#/setting")) {
+            findSettingTabNavBar();
         }
-    });
+        navigation.removeEventListener("navigatesuccess", navigatesuccess);
+    }
+    navigation.addEventListener("navigatesuccess", navigatesuccess);
+}
+else if (location.hash.includes("#/setting")) {
+    findSettingTabNavBar();
 }
