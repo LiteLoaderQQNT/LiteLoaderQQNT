@@ -11,6 +11,16 @@ template.innerHTML = /*html*/ `
         margin-top: 0;
         margin-bottom: 8px;
     }
+
+    :host([is-panel]) slot {
+        display: block;
+        background-color: var(--fill_light_primary, var(--fg_white));
+        border-radius: 8px;
+        font-size: min(var(--font_size_3), 18px);
+        line-height: min(var(--line_height_3), 24px);
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
 </style>
 
 <section>
@@ -22,6 +32,9 @@ template.innerHTML = /*html*/ `
 
 // 自定义标签
 customElements.define("setting-section", class extends HTMLElement {
+
+    static observedAttributes = ["data-title", "is-panel"];
+
     constructor() {
         super();
 
@@ -29,11 +42,10 @@ customElements.define("setting-section", class extends HTMLElement {
         this.shadowRoot.append(template.content.cloneNode(true));
 
         this._title = this.shadowRoot.querySelector("h1");
+        this._slot = this.shadowRoot.querySelector("slot");
 
         this.update();
     }
-
-    static observedAttributes = ["data-title"];
 
     attributeChangedCallback() {
         this.update();
@@ -41,5 +53,9 @@ customElements.define("setting-section", class extends HTMLElement {
 
     update() {
         this._title.textContent = this.dataset["title"];
+        const slot_children = this._slot.assignedElements();
+        const panel = slot_children.filter(node => node.nodeName == "SETTING-PANEL");
+        this.toggleAttribute("is-panel", !panel.length);
     }
+
 });

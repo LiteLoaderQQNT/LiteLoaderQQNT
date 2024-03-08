@@ -7,6 +7,12 @@ template.innerHTML = /*html*/ `
         width: 100px;
     }
 
+    :host([is-disabled]) {
+        opacity: 0.3;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
     .select {
         width: 100%;
         color: var(--text_primary);
@@ -101,6 +107,9 @@ template.innerHTML = /*html*/ `
 
 // 自定义标签
 customElements.define("setting-select", class extends HTMLElement {
+
+    static observedAttributes = ["is-disabled"];
+
     constructor() {
         super();
 
@@ -150,4 +159,5 @@ customElements.define("setting-select", class extends HTMLElement {
 
         this._title.value = this.querySelector("setting-option[is-selected]").textContent;
     }
+
 });

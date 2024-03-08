@@ -7,6 +7,12 @@ template.innerHTML = /*html*/ `
         vertical-align: text-bottom;
     }
 
+    :host([is-disabled]) {
+        opacity: 0.3;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
     :host button {
         display: inline-flex;
         align-items: center;
@@ -50,11 +56,6 @@ template.innerHTML = /*html*/ `
     :host([data-type="secondary"]) button:active {
         background-color: var(--overlay_pressed);
     }
-
-    :host([is-disabled]) button {
-        opacity: 0.3;
-        cursor: not-allowed;
-    }
 </style>
 
 <button>
@@ -67,6 +68,9 @@ template.innerHTML = /*html*/ `
 
 // 自定义标签
 customElements.define("setting-button", class extends HTMLElement {
+
+    static observedAttributes = ["data-type", "is-disabled"];
+
     constructor() {
         super();
 
@@ -74,5 +78,4 @@ customElements.define("setting-button", class extends HTMLElement {
         this.shadowRoot.append(template.content.cloneNode(true));
     }
 
-    static observedAttributes = ["data-type", "is-disabled"];
 });

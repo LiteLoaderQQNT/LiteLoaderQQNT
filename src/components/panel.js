@@ -19,10 +19,12 @@ template.innerHTML = /*html*/ `
 
 // 自定义标签
 customElements.define("setting-panel", class extends HTMLElement {
+
     constructor() {
         super();
 
         this.attachShadow({ mode: "open" });
         this.shadowRoot.append(template.content.cloneNode(true));
     }
+
 });

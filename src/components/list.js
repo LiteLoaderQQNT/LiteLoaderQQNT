@@ -13,6 +13,34 @@ template.innerHTML = /*html*/ `
         padding: 16px 0px;
     }
 
+    :host([is-disabled]) {
+        opacity: 0.3;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    .title-icon {
+        width: 1rem;
+        height: 1rem;
+        transform: rotate(0deg);
+        transition-duration: 0.2s;
+        transition-timing-function: ease;
+        transition-delay: 0s;
+        transition-property: transform;
+    }
+
+    :host([is-active]) .title-icon {
+        transform: rotate(-180deg);
+    }
+
+    :host([is-collapsible]) slot {
+        display: none !important;
+    }
+
+    :host([is-active]) slot {
+        display: block !important;
+    }
+
     setting-item {
         cursor: pointer;
         font-size: min(var(--font_size_3), 18px);
@@ -29,20 +57,6 @@ template.innerHTML = /*html*/ `
         padding: 0px;
     }
 
-    svg {
-        width: 1rem;
-        height: 1rem;
-        transform: rotate(-180deg);
-        transition-duration: 0.2s;
-        transition-timing-function: ease;
-        transition-delay: 0s;
-        transition-property: transform;
-    }
-
-    svg.is-fold {
-        transform: rotate(0deg);
-    }
-
     .hidden {
         display: none !important;
     }
@@ -50,7 +64,7 @@ template.innerHTML = /*html*/ `
 
 <setting-item data-direction="row" class="hidden">
     <h2></h2>
-    <svg class="is-fold" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg class="title-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M21 8L12 17L3 8" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path>
     </svg>
 </setting-item>
@@ -61,6 +75,9 @@ template.innerHTML = /*html*/ `
 
 // 自定义标签
 customElements.define("setting-list", class extends HTMLElement {
+
+    static observedAttributes = ["data-title", "data-direction", "is-collapsible", "is-active", "is-disabled"];
+
     constructor() {
         super();
 
@@ -69,12 +86,10 @@ customElements.define("setting-list", class extends HTMLElement {
 
         this._head = this.shadowRoot.querySelector("setting-item");
         this._title = this.shadowRoot.querySelector("h2");
-        this._icon = this.shadowRoot.querySelector("svg");
         this._slot = this.shadowRoot.querySelector("slot");
 
         this._head.addEventListener("click", () => {
-            this._icon.classList.toggle("is-fold");
-            this._slot.classList.toggle("hidden");
+            this.toggleAttribute("is-active");
         });
 
         this.update();
@@ -85,8 +100,6 @@ customElements.define("setting-list", class extends HTMLElement {
             observer.observe(this, { childList: true });
         }).observe(this, { childList: true });
     }
-
-    static observedAttributes = ["data-title", "data-direction", "is-collapsible"];
 
     attributeChangedCallback() {
         this.update();
@@ -99,7 +112,6 @@ customElements.define("setting-list", class extends HTMLElement {
         // 折叠列表
         if (this.hasAttribute("is-collapsible")) {
             this._head.classList.toggle("hidden", false);
-            this._slot.classList.toggle("hidden", this._icon.classList.contains("is-fold"));
             slot_children.forEach((node, index) => {
                 const setting_divider = document.createElement("setting-divider");
                 if (this.dataset["direction"] == "column") {
@@ -114,7 +126,6 @@ customElements.define("setting-list", class extends HTMLElement {
         // 普通列表
         else {
             this._head.classList.toggle("hidden", true);
-            this._slot.classList.toggle("hidden", false);
             slot_children.forEach((node, index) => {
                 const setting_divider = document.createElement("setting-divider");
                 if (this.dataset["direction"] == "column") {
