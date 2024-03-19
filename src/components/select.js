@@ -63,7 +63,8 @@ template.innerHTML = /*html*/ `
     }
 
     ul {
-        position: fixed;
+        position: absolute;
+        top: 100%;
         backdrop-filter: blur(8px);
         display: flex;
         flex-direction: column;
@@ -81,7 +82,6 @@ template.innerHTML = /*html*/ `
         max-height: var(--q-contextmenu-max-height);
         overflow-x: hidden;
         overflow-y: auto;
-        backdrop-filter: blur(8px);
         margin: 5px 0px;
         z-index: 999;
     }
