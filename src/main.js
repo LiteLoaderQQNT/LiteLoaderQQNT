@@ -34,12 +34,15 @@ const loader = (new class {
 
 // 注册协议
 function protocolRegister(protocol) {
-    //协议未注册，才需要注册
     if (!protocol.isProtocolRegistered("local")) {
         protocol.handle("local", (req) => {
             const { host, pathname } = new URL(decodeURI(req.url));
             const filepath = path.normalize(pathname.slice(1));
-            return net.fetch(`file://${host}/${filepath}`);
+            switch (host) {
+                case "root": return net.fetch(`file:///${LiteLoader.path.root}/${filepath}`);
+                case "profile": return net.fetch(`file:///${LiteLoader.path.profile}/${filepath}`);
+                default: return net.fetch(`file://${host}/${filepath}`);
+            }
         });
     }
 }
