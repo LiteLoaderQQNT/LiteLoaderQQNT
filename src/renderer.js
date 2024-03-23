@@ -1,24 +1,14 @@
-import "./components/section.js";
-import "./components/panel.js";
-import "./components/list.js";
-import "./components/item.js";
-import "./components/select.js";
-import "./components/option.js";
-import "./components/switch.js";
-import "./components/button.js";
-import "./components/text.js";
-import "./components/divider.js";
-
-import { SettingInterface } from "./setting/index.js";
+import "./components/index.js";
+import "./easter_eggs/index.js";
+import { SettingInterface } from "./setting/renderer.js";
 
 
-const loader = new class {
-
+const loader = await (new class {
 
     #exports = {};
 
-
     async init() {
+        // 加载插件
         for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
             if (plugin.disabled || plugin.incompatible) {
                 continue;
@@ -27,60 +17,53 @@ const loader = new class {
                 this.#exports[slug] = await import(`local:///${plugin.path.injects.renderer}`);
             }
         }
+        return this;
     }
 
-
     onSettingWindowCreated(settingInterface) {
-        for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
-            if (plugin.disabled || plugin.incompatible) {
-                continue;
-            }
-            if (this.#exports?.[slug]?.onSettingWindowCreated) {
+        for (const [slug, plugin] of Object.entries(this.#exports)) {
+            if (plugin?.onSettingWindowCreated) {
                 const view = settingInterface.getSettingView(slug);
-                settingInterface.addNavItem(plugin.manifest.name, view);
-                this.#exports?.[slug]?.onSettingWindowCreated?.(view);
+                settingInterface.addNavItem(LiteLoader.plugins[slug].manifest.name, view);
+                plugin.onSettingWindowCreated(view);
             }
         }
     }
 
-
-};
-
-
-await loader.init();
+}).init();
 
 
-// 监听页面变化
-if (location.href.includes("/index.html") && location.href.includes("#/setting")) {
+// 注入设置界面
+async function findSettingTabNavBar() {
     const settingInterface = new SettingInterface();
-    if (document.querySelector(".setting-tab .nav-bar")) {
-        loader.onSettingWindowCreated(settingInterface);
+    const observer = async (_, observer) => {
+        if (document.querySelector(".setting-tab .nav-bar")) {
+            loader.onSettingWindowCreated(settingInterface);
+            observer?.disconnect?.();
+            return true;
+        }
+        return false;
     }
-    else {
-        new MutationObserver((_, observe) => {
-            if (document.querySelector(".setting-tab .nav-bar")) {
-                loader.onSettingWindowCreated(settingInterface);
-                observe.disconnect();
-            }
-        }).observe(document.querySelector("#app"), {
+    if (!await observer()) {
+        new MutationObserver(observer).observe(document, {
             subtree: true,
             attributes: false,
             childList: true
         });
     }
 }
-else {
-    navigation.addEventListener("navigatesuccess", function func(event) {
-        const url = event.target.currentEntry.url;
-        if (url.includes("/index.html") && url.includes("#/setting")) {
-            navigation.removeEventListener("navigatesuccess", func);
-            const settingInterface = new SettingInterface();
-            const interval = setInterval(() => {
-                if (document.querySelector(".setting-tab .nav-bar")) {
-                    clearInterval(interval);
-                    loader.onSettingWindowCreated(settingInterface);
-                }
-            }, 100);
+
+
+// 监听页面变化
+if (location.hash.includes("#/blank")) {
+    const navigatesuccess = async event => {
+        if (event.target.currentEntry.url.includes("#/setting")) {
+            findSettingTabNavBar();
         }
-    });
+        navigation.removeEventListener("navigatesuccess", navigatesuccess);
+    }
+    navigation.addEventListener("navigatesuccess", navigatesuccess);
+}
+else if (location.hash.includes("#/setting")) {
+    findSettingTabNavBar();
 }

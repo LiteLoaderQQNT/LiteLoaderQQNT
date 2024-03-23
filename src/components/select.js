@@ -7,6 +7,12 @@ template.innerHTML = /*html*/ `
         width: 100px;
     }
 
+    :host([is-disabled]) {
+        opacity: 0.3;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
     .select {
         width: 100%;
         color: var(--text_primary);
@@ -57,7 +63,8 @@ template.innerHTML = /*html*/ `
     }
 
     ul {
-        position: fixed;
+        position: absolute;
+        top: 100%;
         backdrop-filter: blur(8px);
         display: flex;
         flex-direction: column;
@@ -75,7 +82,6 @@ template.innerHTML = /*html*/ `
         max-height: var(--q-contextmenu-max-height);
         overflow-x: hidden;
         overflow-y: auto;
-        backdrop-filter: blur(8px);
         margin: 5px 0px;
         z-index: 999;
     }
@@ -101,6 +107,9 @@ template.innerHTML = /*html*/ `
 
 // 自定义标签
 customElements.define("setting-select", class extends HTMLElement {
+
+    static observedAttributes = ["is-disabled"];
+
     constructor() {
         super();
 
@@ -150,4 +159,5 @@ customElements.define("setting-select", class extends HTMLElement {
 
         this._title.value = this.querySelector("setting-option[is-selected]").textContent;
     }
+
 });

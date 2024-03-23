@@ -2,6 +2,12 @@
 const template = document.createElement("template");
 template.innerHTML = /*html*/ `
 <style>
+    :host([is-disabled]) {
+        opacity: 0.3;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
     div {
         background-color: var(--fill_standard_primary);
         border-radius: 14px;
@@ -49,6 +55,9 @@ template.innerHTML = /*html*/ `
 
 // 自定义标签
 customElements.define("setting-switch", class extends HTMLElement {
+
+    static observedAttributes = ["is-active", "is-disabled"];
+
     constructor() {
         super();
 
@@ -56,5 +65,4 @@ customElements.define("setting-switch", class extends HTMLElement {
         this.shadowRoot.append(template.content.cloneNode(true));
     }
 
-    static observedAttributes = ["is-active"];
 });

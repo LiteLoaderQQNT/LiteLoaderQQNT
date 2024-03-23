@@ -15,12 +15,16 @@ template.innerHTML = /*html*/ `
         align-items: center;
     }
 </style>
+
 <slot></slot>
 `;
 
 
 // 自定义标签
 customElements.define("setting-item", class extends HTMLElement {
+
+    static observedAttributes = ["data-direction"];
+
     constructor() {
         super();
 
@@ -28,5 +32,4 @@ customElements.define("setting-item", class extends HTMLElement {
         this.shadowRoot.append(template.content.cloneNode(true));
     }
 
-    static observedAttributes = ["data-direction"];
 });

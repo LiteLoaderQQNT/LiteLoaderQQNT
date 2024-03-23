@@ -25,6 +25,9 @@ template.innerHTML = /*html*/ `
 
 // 自定义标签
 customElements.define("setting-text", class extends HTMLElement {
+
+    static observedAttributes = ["data-type"];
+
     constructor() {
         super();
 
@@ -32,5 +35,4 @@ customElements.define("setting-text", class extends HTMLElement {
         this.shadowRoot.append(template.content.cloneNode(true));
     }
 
-    static observedAttributes = ["data-type"];
 });

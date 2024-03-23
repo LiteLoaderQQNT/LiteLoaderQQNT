@@ -6,6 +6,12 @@ template.innerHTML = /*html*/ `
         display: block;
     }
 
+    :host([is-disabled]) {
+        opacity: 0.3;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
     li {
         display: flex;
         justify-content: space-between;
@@ -65,6 +71,9 @@ template.innerHTML = /*html*/ `
 
 // 自定义标签
 customElements.define("setting-option", class extends HTMLElement {
+
+    static observedAttributes = ["data-value", "is-selected", "is-disabled"];
+
     constructor() {
         super();
 
@@ -72,5 +81,4 @@ customElements.define("setting-option", class extends HTMLElement {
         this.shadowRoot.append(template.content.cloneNode(true));
     }
 
-    static observedAttributes = ["data-value", "is-selected"];
 });
