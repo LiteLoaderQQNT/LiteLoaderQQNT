@@ -1,5 +1,5 @@
 const { Module } = require("module");
-const { BrowserWindow, net, ipcMain } = require("electron");
+const { net, ipcMain } = require("electron");
 const path = require("path");
 const fs = require("fs");
 
@@ -49,8 +49,7 @@ function protocolRegister(protocol) {
 
 const liteloader_preload_path = path.join(LiteLoader.path.root, "src/preload.js");
 ipcMain.handle("LiteLoader.LiteLoader.preload", (event) => {
-    const browserWindow = BrowserWindow.fromWebContents(event.sender);
-    const qqnt_preload_path = browserWindow.preload;
+    const qqnt_preload_path = event.sender.preload;
     return fs.readFileSync(qqnt_preload_path, "utf-8");
 })
 
@@ -79,7 +78,7 @@ function proxyBrowserWindowConstruct(target, [config], newTarget) {
     }
 
     const window = Reflect.construct(target, [new_config], newTarget);
-    window.preload = qqnt_preload_path;
+    window.webContents.preload = qqnt_preload_path;
 
     //加载自定义协议
     protocolRegister(window.webContents.session.protocol);
