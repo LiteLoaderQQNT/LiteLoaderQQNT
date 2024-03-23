@@ -47,9 +47,13 @@ function protocolRegister(protocol) {
     }
 }
 
+const liteloader_preload_path = path.join(LiteLoader.path.root, "src/preload.js");
+ipcMain.handle("LiteLoader.LiteLoader.preload", (event) => {
+    const qqnt_preload_path = event.sender.preload;
+    return fs.readFileSync(qqnt_preload_path, "utf-8");
+})
 
 function proxyBrowserWindowConstruct(target, [config], newTarget) {
-    const liteloader_preload_path = path.join(LiteLoader.path.root, "src/preload.js");
     const qqnt_preload_path = config.webPreferences.preload;
     const preload_path = `${path.dirname(qqnt_preload_path).replaceAll("\\", "/")}/../application/preload.js`;
 
@@ -61,8 +65,6 @@ function proxyBrowserWindowConstruct(target, [config], newTarget) {
     if (fs.readFileSync(preload_path, "utf-8") != fs.readFileSync(liteloader_preload_path, "utf-8")) {
         fs.copyFileSync(liteloader_preload_path, preload_path);
     }
-
-    ipcMain.handleOnce("LiteLoader.LiteLoader.preload", () => fs.readFileSync(qqnt_preload_path, "utf-8"));
 
     const new_config = {
         ...config,
@@ -76,6 +78,7 @@ function proxyBrowserWindowConstruct(target, [config], newTarget) {
     }
 
     const window = Reflect.construct(target, [new_config], newTarget);
+    window.webContents.preload = qqnt_preload_path;
 
     //加载自定义协议
     protocolRegister(window.webContents.session.protocol);
