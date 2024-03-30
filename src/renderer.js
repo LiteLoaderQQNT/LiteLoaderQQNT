@@ -24,7 +24,7 @@ const loader = await (new class {
         for (const [slug, plugin] of Object.entries(this.#exports)) {
             if (plugin?.onSettingWindowCreated) {
                 const view = settingInterface.getSettingView(slug);
-                settingInterface.addNavItem(LiteLoader.plugins[slug].manifest.name, view);
+                settingInterface.addNavItem(LiteLoader.plugins[slug], view);
                 plugin.onSettingWindowCreated(view);
             }
         }

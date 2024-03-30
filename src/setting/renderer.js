@@ -69,7 +69,7 @@ export class SettingInterface {
         });
 
         const view = this.getSettingView("config_view");
-        this.addNavItem("LiteLoaderQQNT", view);
+        this.addNavItem({ manifest: { slug: "liteloader", name: "LiteLoaderQQNT" } }, view);
         onSettingWindowCreated(view);
     }
 
@@ -83,18 +83,22 @@ export class SettingInterface {
 
 
     // 导航栏条目
-    addNavItem(name, view) {
+    addNavItem(plugin, view) {
         const nav_item = document.querySelector(".setting-tab .nav-item").cloneNode(true);
         nav_item.classList.remove("nav-item-active");
         nav_item.classList.add("liteloader");
-        nav_item.querySelector(".q-icon").textContent = null;
-        nav_item.querySelector(".name").textContent = name;
+        nav_item.setAttribute("data-slug", plugin.manifest.slug);
+        nav_item.querySelector(".name").textContent = plugin.manifest.name;
         nav_item.addEventListener("click", event => {
             if (!event.currentTarget.classList.contains("nav-item-active")) {
-                this.#setting_title.childNodes[1].textContent = name;
+                this.#setting_title.childNodes[1].textContent = plugin.manifest.name;
                 this.#liteloader_setting_view.textContent = null;
                 this.#liteloader_setting_view.append(view);
             }
+        });
+        const thumb = plugin.manifest.thumb ? `local:///${plugin.path.plugin}/${plugin.manifest?.thumb}` : `local:///${LiteLoader.path.root}/src/setting/static/default.svg`;
+        appropriateIcon(thumb).then((html) => {
+            nav_item.querySelector(".q-icon").innerHTML = html;
         });
         this.#liteloader_nav_bar.append(nav_item);
     }
@@ -186,6 +190,14 @@ async function getIconHtmlString(pluginSvgIconUrlUsingLocalPotocol) {
     return await response.text()
 }
 
+async function appropriateIcon(pluginIconUrlUsingLocalPotocol) {
+    if (pluginIconUrlUsingLocalPotocol.endsWith('.svg')) {
+        return await getIconHtmlString(pluginIconUrlUsingLocalPotocol);
+    } else {
+        return `<img src="${pluginIconUrlUsingLocalPotocol}"/>`
+    }
+}
+
 
 async function initPluginList(view) {
     const plugin_lists = {
@@ -208,7 +220,7 @@ async function initPluginList(view) {
         <setting-item>
             <div>
                 <div>
-                    ${plugin_icon.endsWith('.svg') ? await getIconHtmlString(plugin_icon) : `<img src="${plugin.manifest?.icon ? plugin_icon : default_icon}"/>`}
+                    ${plugin.manifest?.icon ? await appropriateIcon(plugin_icon) : `<img src="${default_icon}"/>`}
                     <div>
                         <setting-text title="${plugin.manifest.name}">${plugin.manifest.name}</setting-text>
                         <setting-text data-type="secondary" title="${plugin.manifest.description}">${plugin.manifest.description}</setting-text>
