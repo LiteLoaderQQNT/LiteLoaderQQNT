@@ -55,15 +55,20 @@ async function findSettingTabNavBar() {
 
 
 // 监听页面变化
-if (location.hash.includes("#/blank")) {
-    const navigatesuccess = async event => {
-        if (event.target.currentEntry.url.includes("#/setting")) {
-            findSettingTabNavBar();
-        }
-        navigation.removeEventListener("navigatesuccess", navigatesuccess);
+function currentPage() {
+    return window.location.hash.slice(2).split("/")[0];
+}
+const pagePromise = new Promise((resolve, reject) => {
+    if (currentPage() !== "blank") {
+        resolve(currentPage());
+    } else {
+        navigation.addEventListener("navigatesuccess", () => {
+            resolve(currentPage());
+        }, { once: true });
     }
-    navigation.addEventListener("navigatesuccess", navigatesuccess);
-}
-else if (location.hash.includes("#/setting")) {
-    findSettingTabNavBar();
-}
+});
+pagePromise.then(page => {
+    if (page === "setting") {
+        findSettingTabNavBar();
+    }
+});
