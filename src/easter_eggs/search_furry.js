@@ -33,7 +33,8 @@ class EasterEgg {
     }
 
     #execute() {
-        open(this.#images_apis[Math.floor(Math.random() * this.#images_apis.length)]);
+        const random_image = this.#images_apis[Math.floor(Math.random() * this.#images_apis.length)];
+        LiteLoader.api.openExternal(random_image);
     }
 
 }
