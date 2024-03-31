@@ -96,7 +96,7 @@ export class SettingInterface {
                 this.#liteloader_setting_view.append(view);
             }
         });
-        const thumb = plugin.manifest.thumb ? `local:///${plugin.path.plugin}/${plugin.manifest?.thumb}` : `local:///${LiteLoader.path.root}/src/setting/static/default.svg`;
+        const thumb = plugin.manifest.thumb ? `local:///${plugin.path.plugin}/${plugin.manifest?.thumb}` : `local://root/src/setting/static/default.svg`;
         appropriateIcon(thumb).then((html) => {
             nav_item.querySelector(".q-icon").innerHTML = html;
         });
@@ -212,7 +212,7 @@ async function initPluginList(view) {
             continue;
         }
 
-        const default_icon = `local:///${LiteLoader.path.root}/src/setting/static/default.png`;
+        const default_icon = `local://root/src/setting/static/default.png`;
         const plugin_icon = `local:///${plugin.path.plugin}/${plugin.manifest?.icon}`;
 
         const template = document.createElement("template");
@@ -300,7 +300,7 @@ function initAbout(view) {
 
 async function onSettingWindowCreated(view) {
     // HTMl
-    view.innerHTML = await (await fetch(`local:///${LiteLoader.path.root}/src/setting/static/view.html`)).text();
+    view.innerHTML = await (await fetch(`local://root/src/setting/static/view.html`)).text();
 
     // 初始化
     initVersions(view);
