@@ -215,8 +215,10 @@ async function initPluginList(view) {
         const default_icon = `local://root/src/setting/static/default.png`;
         const plugin_icon = `local:///${plugin.path.plugin}/${plugin.manifest?.icon}`;
 
-        const template = document.createElement("template");
-        template.innerHTML = /*html*/ `
+        const plugin_list = plugin_lists[plugin.manifest.type] || plugin_lists.extension;
+        const plugin_item = document.createElement("template");
+
+        plugin_item.innerHTML = /*html*/ `
         <setting-item>
             <div>
                 <div>
@@ -235,7 +237,9 @@ async function initPluginList(view) {
         </setting-item>
         `;
 
-        const author_name = template.content.querySelectorAll("span")[1]
+        const author_name = plugin_item.content.querySelectorAll("span")[1]
+        const switch_btn = plugin_item.content.querySelector("setting-switch");
+
         plugin.manifest.authors.forEach((author, index, array) => {
             const author_link = document.createElement("a");
             author_link.textContent = author.name;
@@ -245,10 +249,6 @@ async function initPluginList(view) {
                 author_name.append(" | ");
             }
         });
-
-        const plugin_list = plugin_lists[plugin.manifest.type] || plugin_lists.extension;
-        const plugin_item = template.content.cloneNode(true);
-        const switch_btn = plugin_item.querySelector("setting-switch");
 
         if (!LiteLoader.plugins[slug].disabled) {
             switch_btn.setAttribute("is-active", "");
@@ -260,7 +260,7 @@ async function initPluginList(view) {
             event.currentTarget.toggleAttribute("is-active");
         });
 
-        plugin_list.append(plugin_item);
+        plugin_list.append(plugin_item.content);
     }
 }
 
