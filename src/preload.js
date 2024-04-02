@@ -18,10 +18,9 @@ const runPreloadScript = code => binding.createPreloadScript(`
 `)(...arguments);
 
 
+// 加载插件 Preload
 (async () => {
     runPreloadScript(await (await fetch(`local://root/src/liteloader_api/preload.js`)).text());
-    runPreloadScript(await (await fetch(`local://root/src/setting/preload.js`)).text());
-    // 加载插件 Preload
     for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
         if (plugin.disabled || plugin.incompatible) {
             continue;

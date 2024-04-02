@@ -128,6 +128,28 @@ function compareVersion(local_version, remote_version) {
 }
 
 
+// 禁用插件
+async function disablePlugin(slug, disabled) {
+    const config = await LiteLoader.api.config.get("LiteLoader", { disabled_plugins: [] });
+    if (disabled) {
+        config.disabled_plugins = config.disabled_plugins.concat(slug);
+    }
+    else {
+        config.disabled_plugins = config.disabled_plugins.filter(item => item != slug);
+    }
+    await LiteLoader.api.config.set("LiteLoader", config);
+}
+
+
+async function appropriateIcon(pluginIconUrlUsingLocalPotocol) {
+    if (pluginIconUrlUsingLocalPotocol.endsWith('.svg')) {
+        return await (await fetch(pluginIconUrlUsingLocalPotocol)).text();
+    } else {
+        return `<img src="${pluginIconUrlUsingLocalPotocol}"/>`;
+    }
+}
+
+
 function initVersions(view) {
     const qqnt = view.querySelectorAll(".versions .current .qqnt setting-text");
     const liteloader = view.querySelectorAll(".versions .current .liteloader setting-text");
@@ -183,19 +205,6 @@ function initVersions(view) {
     };
 
     try_again();
-}
-
-async function getIconHtmlString(pluginSvgIconUrlUsingLocalPotocol) {
-    const response = await fetch(pluginSvgIconUrlUsingLocalPotocol)
-    return await response.text()
-}
-
-async function appropriateIcon(pluginIconUrlUsingLocalPotocol) {
-    if (pluginIconUrlUsingLocalPotocol.endsWith('.svg')) {
-        return await getIconHtmlString(pluginIconUrlUsingLocalPotocol);
-    } else {
-        return `<img src="${pluginIconUrlUsingLocalPotocol}"/>`
-    }
 }
 
 
@@ -254,10 +263,10 @@ async function initPluginList(view) {
             switch_btn.setAttribute("is-active", "");
         }
 
-        switch_btn.addEventListener("click", (event) => {
+        switch_btn.addEventListener("click", async (event) => {
             const isActive = event.currentTarget.hasAttribute("is-active");
-            LiteLoader_Setting.disablePlugin(slug, isActive);
             event.currentTarget.toggleAttribute("is-active");
+            await disablePlugin(slug, isActive);
         });
 
         plugin_list.append(plugin_item.content);

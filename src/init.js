@@ -46,6 +46,7 @@ protocol.registerSchemesAsPrivileged([
 
     // 读取插件目录
     try {
+        const config = LiteLoader.api.config.get("LiteLoader", { disabled_plugins: [] });
         for (const plugin_pathname of fs.readdirSync(LiteLoader.path.plugins, "utf-8")) {
             try {
                 const manifest_file = path.join(LiteLoader.path.plugins, plugin_pathname, "manifest.json");
@@ -53,7 +54,7 @@ protocol.registerSchemesAsPrivileged([
 
                 const incompatible_version = Number(manifest.manifest_version) != 4;
                 const incompatible_platform = !manifest.platform.includes(LiteLoader.os.platform);
-                const disabled_plugin = LiteLoader.config.LiteLoader.disabled_plugins.includes(manifest.slug);
+                const disabled_plugin = config.disabled_plugins.includes(manifest.slug);
 
                 const plugin_path = path.join(LiteLoader.path.plugins, plugin_pathname);
                 const data_path = path.join(LiteLoader.path.data, manifest.slug);
@@ -115,4 +116,3 @@ protocol.registerSchemesAsPrivileged([
 
 
 require("./main.js");
-require("./setting/main.js");

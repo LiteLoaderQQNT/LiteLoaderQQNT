@@ -4,36 +4,11 @@ const fs = require("node:fs");
 
 
 const root_path = path.join(__dirname, "..", "..");
-const profile_root = process.env.LITELOADERQQNT_PROFILE ?? root_path;
-const data_path = path.join(profile_root, "data");
-const plugins_path = path.join(profile_root, "plugins");
-
-// 如果数据目录不存在
-if (!fs.existsSync(profile_root)) {
-    fs.mkdirSync(profile_root, { recursive: true });
-}
-
-// 如果配置文件不存在
-if (!fs.existsSync(path.join(profile_root, "config.json"))) {
-    fs.copyFileSync(path.join(root_path, "config.json"), path.join(profile_root, "config.json"));
-}
-
-const config = require(path.join(profile_root, "config.json"));
+const profile_path = process.env.LITELOADERQQNT_PROFILE ?? root_path;
+const data_path = path.join(profile_path, "data");
+const plugins_path = path.join(profile_path, "plugins");
 const liteloader_package = require(path.join(root_path, "package.json"));
 const qqnt_package = require(path.join(process.resourcesPath, "app/package.json"))
-
-
-function getConfig(slug, default_config) {
-    let config = {};
-    const config_path = path.join(data_path, slug, "config.json");
-    fs.mkdirSync(path.dirname(config_path), { recursive: true });
-    if (fs.existsSync(config_path)) {
-        config = JSON.parse(fs.readFileSync(config_path, "utf-8"));
-    } else {
-        fs.writeFileSync(config_path, JSON.stringify(default_config, null, 4), "utf-8");
-    }
-    return Object.assign({}, default_config, config);
-}
 
 
 function setConfig(slug, new_config) {
@@ -43,10 +18,23 @@ function setConfig(slug, new_config) {
 }
 
 
+function getConfig(slug, default_config) {
+    const config_path = path.join(data_path, slug, "config.json");
+    if (fs.existsSync(config_path)) {
+        const config = JSON.parse(fs.readFileSync(config_path, "utf-8"));
+        return Object.assign({}, default_config, config);
+    }
+    else {
+        setConfig(slug, default_config);
+        return Object.assign({}, default_config, {});
+    }
+}
+
+
 const LiteLoader = {
     path: {
         root: root_path,
-        profile: profile_root,
+        profile: profile_path,
         data: data_path,
         plugins: plugins_path
     },
@@ -64,7 +52,6 @@ const LiteLoader = {
         liteloader: liteloader_package,
         qqnt: qqnt_package
     },
-    config: config,
     plugins: {},
     api: {
         config: {
@@ -81,11 +68,11 @@ const LiteLoader = {
 Object.defineProperty(globalThis, "LiteLoader", {
     configurable: false,
     get() {
-        const stack = new Error().stack.split("\n");
-        if (stack[2].includes(LiteLoader.path.root)) {
+        const stack = new Error().stack.split("\n")[2];
+        if (stack.includes(LiteLoader.path.root)) {
             return LiteLoader;
         }
-        if (stack[2].includes(LiteLoader.path.profile)) {
+        if (stack.includes(LiteLoader.path.profile)) {
             return LiteLoader;
         }
     }
@@ -99,6 +86,7 @@ ipcMain.on("LiteLoader.LiteLoader.LiteLoader", (event) => {
         api: void null
     }
 });
+
 
 ipcMain.handle("LiteLoader.LiteLoader.api", (event, name, method, ...args) => {
     if (name == "config") {
