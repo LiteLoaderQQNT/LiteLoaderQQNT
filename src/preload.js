@@ -2,12 +2,13 @@ const { ipcRenderer } = require("electron");
 
 
 // 加载渲染进程
-window.addEventListener("DOMContentLoaded", () => {
-    const script = document.createElement("script");
-    script.type = "module";
-    script.defer = true;
-    script.src = `local://root/src/renderer.js`;
-    document.head.append(script);
+document.addEventListener("readystatechange", () => {
+    if (document.readyState == "interactive") {
+        const script = document.createElement("script");
+        script.type = "module";
+        script.src = `local://root/src/renderer.js`;
+        document.head.append(script);
+    }
 });
 
 
