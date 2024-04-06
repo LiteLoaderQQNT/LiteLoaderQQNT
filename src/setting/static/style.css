@@ -1,0 +1,98 @@
+/* 侧边栏 */
+.setting-tab {
+    & {
+        display: flex;
+        flex-direction: column;
+    }
+
+    & .nav-bar {
+        & {
+            flex-shrink: 0;
+        }
+
+        &.liteloader {
+            & {
+                flex: 1;
+                margin-top: 25px;
+                overflow-x: hidden;
+                overflow-y: scroll;
+            }
+
+            &::before {
+                content: "";
+                display: block;
+                position: absolute;
+                transform: translate(50px, -15px);
+                width: 100px;
+                height: 5px;
+                border-radius: 5px;
+                background: rgba(127, 127, 127, 0.5);
+            }
+        }
+    }
+}
+
+
+/* 主内容 */
+.setting-main {
+    & .q-scroll-view {
+        &.liteloader {
+            & .tab-view {
+                font-size: 14px;
+                padding: 20px 20px 0px;
+            }
+        }
+    }
+}
+
+
+/* 设置页面样式 */
+.config_view {
+    & .plugins {
+        & setting-item {
+            & {
+                gap: 8px;
+            }
+
+            & > div {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            & > div > div {
+                height: 48px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            /* 插件缩略图 */
+            & .icon :is(img, svg) {
+                width: 48px;
+                height: 48px;
+                border-radius: 8px;
+            }
+
+            /* 插件附加信息 */
+            & span {
+                margin-right: 12px;
+            }
+
+            /* 插件附加信息 */
+            & a {
+                & {
+                    color: var(--text-link);
+                }
+
+                &:hover {
+                    color: var(--hover-link);
+                }
+
+                &:active {
+                    color: var(--press-link);
+                }
+            }
+        }
+    }
+}

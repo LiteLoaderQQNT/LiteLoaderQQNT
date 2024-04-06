@@ -23,9 +23,9 @@ const loader = await (new class {
     onSettingWindowCreated(settingInterface) {
         for (const [slug, plugin] of Object.entries(this.#exports)) {
             if (plugin?.onSettingWindowCreated) {
-                const view = settingInterface.getSettingView(slug);
-                settingInterface.addNavItem(LiteLoader.plugins[slug], view);
-                plugin.onSettingWindowCreated(view);
+                settingInterface.add(LiteLoader.plugins[slug]).then(view => {
+                    plugin.onSettingWindowCreated(view);
+                });
             }
         }
     }
@@ -34,9 +34,9 @@ const loader = await (new class {
 
 
 // 注入设置界面
-async function findSettingTabNavBar() {
+function findSettingTabNavBar() {
     const settingInterface = new SettingInterface();
-    const observer = async (_, observer) => {
+    const observer = (_, observer) => {
         if (document.querySelector(".setting-tab .nav-bar")) {
             loader.onSettingWindowCreated(settingInterface);
             observer?.disconnect?.();
@@ -44,8 +44,8 @@ async function findSettingTabNavBar() {
         }
         return false;
     }
-    if (!await observer()) {
-        new MutationObserver(observer).observe(document, {
+    if (!observer()) {
+        new MutationObserver(observer).observe(document.body, {
             subtree: true,
             attributes: false,
             childList: true

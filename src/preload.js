@@ -7,7 +7,7 @@ document.addEventListener("readystatechange", () => {
         const script = document.createElement("script");
         script.type = "module";
         script.src = `local://root/src/renderer.js`;
-        document.head.append(script);
+        document.head.prepend(script);
     }
 });
 

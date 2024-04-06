@@ -1,53 +1,14 @@
 export class SettingInterface {
-    #setting_title = document.querySelector(".setting-main .setting-title");
     #liteloader_nav_bar = document.createElement("div");
     #liteloader_setting_view = document.createElement("div");
-
+    #setting_view = document.querySelector(".setting-main .q-scroll-view");
+    #setting_title = document.querySelector(".setting-main .setting-title");
 
     constructor() {
-        const style = document.createElement("style");
-        style.textContent = `
-        .setting-tab {
-            display: flex;
-            flex-direction: column;
-        }
-        .setting-tab .nav-bar {
-            flex-shrink: 0;
-        }
-        .liteloader.nav-bar {
-            flex: 1;
-            margin-top: 25px;
-            overflow-x: hidden;
-            overflow-y: scroll;
-        }
-        .liteloader.nav-bar::before {
-            content: "";
-            display: block;
-            position: absolute;
-            transform: translate(50px, -15px);
-            width: 100px;
-            height: 5px;
-            border-radius: 5px;
-            background: rgba(127, 127, 127, 0.5);
-        }
-        .liteloader.tab-view {
-            font-size: 14px;
-            padding: 20px 20px 0px;
-        }
-        .liteloader.disabled {
-            pointer-events: none;
-            opacity: 0.5;
-        }
-        `;
-        document.head.append(style);
-
         this.#liteloader_nav_bar.classList.add("nav-bar", "liteloader");
+        this.#liteloader_setting_view.classList.add("q-scroll-view", "scroll-view--show-scrollbar", "liteloader");
         document.querySelector(".setting-tab").append(this.#liteloader_nav_bar);
-
-        this.#liteloader_setting_view.classList.add("q-scroll-view", "scroll-view--show-scrollbar");
         document.querySelector(".setting-main .setting-main__content").append(this.#liteloader_setting_view);
-
-        const qqnt_setting_view = document.querySelector(".setting-main .q-scroll-view");
         document.querySelector(".setting-tab").addEventListener("click", event => {
             const nav_item = event.target.closest(".nav-item");
             if (nav_item) {
@@ -57,37 +18,28 @@ export class SettingInterface {
                 });
                 nav_item.classList.add("nav-item-active");
                 // 内容显示
-                if (nav_item.classList.contains("liteloader")) {
-                    qqnt_setting_view.style.display = "none";
+                if (nav_item.parentElement.classList.contains("liteloader")) {
+                    this.#setting_view.style.display = "none";
                     this.#liteloader_setting_view.style.display = "block";
                 }
                 else {
-                    qqnt_setting_view.style.display = "block";
+                    this.#setting_view.style.display = "block";
                     this.#liteloader_setting_view.style.display = "none";
                 }
             }
         });
-
-        const view = this.getSettingView("config_view");
-        this.addNavItem({ manifest: { slug: "liteloader", name: "LiteLoaderQQNT" } }, view);
-        onSettingWindowCreated(view);
+        this.#SettingInit();
     }
 
-
-    // Setting View
-    getSettingView(slug) {
-        const view = document.createElement("div");
-        view.classList.add("liteloader", "tab-view", slug);
-        return view;
-    }
-
-
-    // 导航栏条目
-    addNavItem(plugin, view) {
+    async add(plugin) {
+        const default_thumb = `local://root/src/setting/static/default.svg`;
+        const plugin_thumb = `local:///${plugin.path.plugin}/${plugin.manifest?.thumb}`;
+        const thumb = plugin.manifest.thumb ? plugin_thumb : default_thumb;
         const nav_item = document.querySelector(".setting-tab .nav-item").cloneNode(true);
+        const view = document.createElement("div");
         nav_item.classList.remove("nav-item-active");
-        nav_item.classList.add("liteloader");
         nav_item.setAttribute("data-slug", plugin.manifest.slug);
+        nav_item.querySelector(".q-icon").innerHTML = await appropriateIcon(thumb);
         nav_item.querySelector(".name").textContent = plugin.manifest.name;
         nav_item.addEventListener("click", event => {
             if (!event.currentTarget.classList.contains("nav-item-active")) {
@@ -96,35 +48,33 @@ export class SettingInterface {
                 this.#liteloader_setting_view.append(view);
             }
         });
-        const thumb = plugin.manifest.thumb ? `local:///${plugin.path.plugin}/${plugin.manifest?.thumb}` : `local://root/src/setting/static/default.svg`;
-        appropriateIcon(thumb).then((html) => {
-            nav_item.querySelector(".q-icon").innerHTML = html;
-        });
         this.#liteloader_nav_bar.append(nav_item);
+        view.classList.add("tab-view", plugin.manifest.slug);
+        return view;
     }
-}
 
-
-// 对比本地与远端的版本号，有新版就返回true
-function compareVersion(local_version, remote_version) {
-    // 将字符串改为数组
-    const local_version_arr = local_version.trim().split(".");
-    const remote_version_arr = remote_version.trim().split(".");
-    // 返回数组长度最大的
-    const max_length = Math.max(local_version_arr.length, remote_version_arr.length);
-    // 从头对比每一个
-    for (let i = 0; i < max_length; i++) {
-        // 将字符串改为数字
-        const local_version_num = parseInt(local_version_arr?.[i] ?? "0");
-        const remote_version_num = parseInt(remote_version_arr?.[i] ?? "0");
-        // 版本号不相等
-        if (local_version_num != remote_version_num) {
-            // 有更新返回true，没更新返回false
-            return local_version_num < remote_version_num;
-        }
+    async #SettingInit() {
+        const style = document.createElement("link");
+        style.rel = "stylesheet";
+        style.type = "text/css";
+        style.href = "local://root/src/setting/static/style.css";
+        document.head.append(style);
+        const view = await this.add({
+            manifest: {
+                slug: "config_view",
+                name: "LiteLoaderQQNT",
+                thumb: "./src/setting/static/default.svg"
+            },
+            path: {
+                plugin: LiteLoader.path.root
+            }
+        });
+        view.innerHTML = await (await fetch("local://root/src/setting/static/view.html")).text();
+        initVersions(view);
+        initPluginList(view);
+        initPath(view);
+        initAbout(view);
     }
-    // 版本号相等，返回false
-    return false;
 }
 
 
@@ -150,17 +100,17 @@ async function appropriateIcon(pluginIconUrlUsingLocalPotocol) {
 }
 
 
-function initVersions(view) {
-    const qqnt = view.querySelectorAll(".versions .current .qqnt setting-text");
+async function initVersions(view) {
     const liteloader = view.querySelectorAll(".versions .current .liteloader setting-text");
-    const chromium = view.querySelectorAll(".versions .current .chromium setting-text");
+    const qqnt = view.querySelectorAll(".versions .current .qqnt setting-text");
     const electron = view.querySelectorAll(".versions .current .electron setting-text");
+    const chromium = view.querySelectorAll(".versions .current .chromium setting-text");
     const nodejs = view.querySelectorAll(".versions .current .nodejs setting-text");
 
-    qqnt[1].textContent = LiteLoader.versions.qqnt;
     liteloader[1].textContent = LiteLoader.versions.liteloader;
-    chromium[1].textContent = LiteLoader.versions.chrome;
+    qqnt[1].textContent = LiteLoader.versions.qqnt;
     electron[1].textContent = LiteLoader.versions.electron;
+    chromium[1].textContent = LiteLoader.versions.chrome;
     nodejs[1].textContent = LiteLoader.versions.node;
 
     const title = view.querySelector(".versions .new setting-text");
@@ -180,7 +130,7 @@ function initVersions(view) {
         fetch(release_latest_url).then((res) => {
             const new_version = res.url.slice(res.url.lastIndexOf("/") + 1);
             // 有新版
-            if (compareVersion(LiteLoader.versions.liteloader, new_version)) {
+            if (LiteLoader.versions.liteloader != new_version) {
                 title.textContent = `发现 LiteLoaderQQNT 新版本 ${new_version}`;
                 update_btn.textContent = "去瞅一眼";
                 update_btn.value = res.url;
@@ -209,6 +159,7 @@ function initVersions(view) {
 
 
 async function initPluginList(view) {
+    const plugin_item_template = view.querySelector("#plugin-item");
     const plugin_lists = {
         extension: view.querySelector(".plugins setting-list.extension"),
         theme: view.querySelector(".plugins setting-list.theme"),
@@ -223,58 +174,50 @@ async function initPluginList(view) {
 
         const default_icon = `local://root/src/setting/static/default.png`;
         const plugin_icon = `local:///${plugin.path.plugin}/${plugin.manifest?.icon}`;
+        const icon = plugin.manifest?.icon ? plugin_icon : default_icon;
 
         const plugin_list = plugin_lists[plugin.manifest.type] || plugin_lists.extension;
-        const plugin_item = document.createElement("template");
+        const plugin_item = plugin_item_template.content.cloneNode(true);
 
-        plugin_item.innerHTML = /*html*/ `
-        <setting-item>
-            <div>
-                <div>
-                    ${plugin.manifest?.icon ? await appropriateIcon(plugin_icon) : `<img src="${default_icon}"/>`}
-                    <div>
-                        <setting-text title="${plugin.manifest.name}">${plugin.manifest.name}</setting-text>
-                        <setting-text data-type="secondary" title="${plugin.manifest.description}">${plugin.manifest.description}</setting-text>
-                    </div>
-                </div>
-                <setting-text data-type="secondary">
-                    <span>版本：${plugin.manifest.version}</span>
-                    <span>开发：</span>
-                </setting-text>
-            </div>
-            <setting-switch></setting-switch>
-        </setting-item>
-        `;
+        const plugin_item_icon = plugin_item.querySelector(".icon");
+        const plugin_item_name = plugin_item.querySelector(".name");
+        const plugin_item_description = plugin_item.querySelector(".description");
+        const plugin_item_version = plugin_item.querySelector(".version");
+        const plugin_item_authors = plugin_item.querySelector(".authors");
+        const plugin_item_switch = plugin_item.querySelector(".switch");
 
-        const author_name = plugin_item.content.querySelectorAll("span")[1]
-        const switch_btn = plugin_item.content.querySelector("setting-switch");
+        plugin_item_icon.innerHTML = await appropriateIcon(icon);
+        plugin_item_name.textContent = plugin.manifest.name;
+        plugin_item_name.title = plugin.manifest.name;
+        plugin_item_description.textContent = plugin.manifest.description;
+        plugin_item_description.title = plugin.manifest.description;
+        plugin_item_version.textContent = plugin.manifest.version;
 
         plugin.manifest.authors.forEach((author, index, array) => {
             const author_link = document.createElement("a");
             author_link.textContent = author.name;
             author_link.addEventListener("click", () => LiteLoader.api.openExternal(author.link));
-            author_name.append(author_link);
+            plugin_item_authors.append(author_link);
             if (index < array.length - 1) {
-                author_name.append(" | ");
+                plugin_item_authors.append(" | ");
             }
         });
 
         if (!LiteLoader.plugins[slug].disabled) {
-            switch_btn.setAttribute("is-active", "");
+            plugin_item_switch.setAttribute("is-active", "");
         }
 
-        switch_btn.addEventListener("click", async (event) => {
-            const isActive = event.currentTarget.hasAttribute("is-active");
+        plugin_item_switch.addEventListener("click", (event) => {
+            disablePlugin(slug, event.currentTarget.hasAttribute("is-active"));
             event.currentTarget.toggleAttribute("is-active");
-            await disablePlugin(slug, isActive);
         });
 
-        plugin_list.append(plugin_item.content);
+        plugin_list.append(plugin_item);
     }
 }
 
 
-function initPath(view) {
+async function initPath(view) {
     const root_path_content = view.querySelectorAll(".path .root setting-text")[2];
     const root_path_button = view.querySelector(".path .root setting-button");
     const profile_path_content = view.querySelectorAll(".path .profile setting-text")[2];
@@ -287,7 +230,7 @@ function initPath(view) {
 }
 
 
-function initAbout(view) {
+async function initAbout(view) {
     const homepage_btn = view.querySelector(".about setting-button.liteloaderqqnt");
     const github_btn = view.querySelector(".about setting-button.github");
     const telegram_btn = view.querySelector(".about setting-button.telegram");
@@ -304,16 +247,4 @@ function initAbout(view) {
     };
     fetchHitokoto();
     setInterval(fetchHitokoto, 1000 * 10);
-}
-
-
-async function onSettingWindowCreated(view) {
-    // HTMl
-    view.innerHTML = await (await fetch(`local://root/src/setting/static/view.html`)).text();
-
-    // 初始化
-    initVersions(view);
-    await initPluginList(view);
-    initPath(view);
-    initAbout(view);
 }
