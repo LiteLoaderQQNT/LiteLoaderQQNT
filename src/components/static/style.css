@@ -1,0 +1,383 @@
+@scope (:host) {
+    :scope[is-disabled] {
+        opacity: 0.3;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    :scope .hidden {
+        display: none !important;
+    }
+}
+
+
+@scope (:host(setting-section)) {
+    :scope h1 {
+        color: var(--text_primary);
+        font-weight: var(--font-bold);
+        font-size: min(var(--font_size_3), 18px);
+        line-height: min(var(--line_height_3), 24px);
+        padding: 0px 16px;
+        margin-top: 0;
+        margin-bottom: 8px;
+    }
+}
+
+
+@scope (:host(setting-panel)) {
+    :scope {
+        display: block;
+        background-color: var(--fill_light_primary, var(--fg_white));
+        border-radius: 8px;
+        font-size: min(var(--font_size_3), 18px);
+        line-height: min(var(--line_height_3), 24px);
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+}
+
+
+/* what the fuck */
+@scope (:host(setting-list)) {
+    :scope[data-direction="column"] {
+        display: block;
+        padding: 0px 16px;
+    }
+
+    :scope[data-direction="row"] {
+        display: flex;
+        justify-content: space-between;
+        padding: 16px 0px;
+    }
+
+    :scope svg {
+        width: 1rem;
+        height: 1rem;
+        transform: rotate(0deg);
+        transition-duration: 0.2s;
+        transition-timing-function: ease;
+        transition-delay: 0s;
+        transition-property: transform;
+    }
+
+    :scope[is-collapsible] slot {
+        display: none !important;
+    }
+
+    /* 不理解下面两段是怎么回事，这两段都是有用的 */
+    :scope[is-active] slot {
+        display: block !important;
+    }
+
+    /* 但是需要在下面写其中一段，才能让这两段有用 */
+    :scope[is-active] svg {
+        transform: rotate(-180deg);
+    }
+
+    :scope setting-item {
+        cursor: pointer;
+        font-size: min(var(--font_size_3), 18px);
+        line-height: min(var(--line_height_3), 24px);
+    }
+
+    :scope h2 {
+        box-sizing: border-box;
+        font-size: 100%;
+        font-style: inherit;
+        font-weight: inherit;
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+    }
+}
+
+/* 这段虽然看似没用，但是不可以删掉，可以替换成另一个，让上面两个有用 */
+:host(setting-list[is-active]) svg {
+    transform: rotate(-180deg);
+}
+
+
+@scope (:host(setting-item)) {
+    :scope[data-direction="column"] {
+        flex: 1;
+        margin: 0px 10px;
+        text-align: center;
+    }
+
+    :scope[data-direction="row"] {
+        margin: 12px 0px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+
+@scope (:host(setting-select)) {
+    :scope {
+        display: block;
+        width: 100px;
+    }
+
+    :scope .select {
+        width: 100%;
+        color: var(--text_primary);
+        font-size: 12px;
+        position: relative;
+        z-index: inherit;
+    }
+
+    :scope .menu-button {
+        width: 100%;
+        height: 24px;
+        line-height: 24px;
+        padding: 0px 8px;
+        background-color: transparent;
+        border-radius: 4px;
+        cursor: default;
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        z-index: 5;
+        box-sizing: border-box;
+        border: 1px solid var(--border_dark);
+    }
+
+    :scope input {
+        appearance: none;
+        border-radius: 0px;
+        box-sizing: border-box;
+        background: none;
+        border: none;
+        padding: 0px;
+        cursor: default;
+        background-color: transparent;
+        color: var(--text_primary);
+        flex: 1;
+        margin-right: 8px;
+        outline: none;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    :scope svg {
+        width: 16px;
+        height: 16px;
+        color: var(--icon_primary);
+        position: relative;
+        top: 3px;
+    }
+
+    :scope ul {
+        position: absolute;
+        top: 100%;
+        backdrop-filter: blur(8px);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        list-style: none;
+        font-size: 12px;
+        background-color: var(--blur_middle_standard);
+        background-clip: padding-box;
+        border-radius: 4px;
+        box-shadow: var(--shadow_bg_middle_secondary);
+        border: var(--border_secondary);
+        padding: 4px;
+        app-region: no-drag;
+        box-sizing: border-box;
+        max-height: var(--q-contextmenu-max-height);
+        overflow-x: hidden;
+        overflow-y: auto;
+        margin: 5px 0px;
+        z-index: 999;
+    }
+}
+
+
+@scope (:host(setting-option)) {
+    :scope {
+        display: block;
+    }
+
+    :scope li {
+        & {
+            display: flex;
+            justify-content: space-between;
+            border-radius: 4px;
+            box-sizing: border-box;
+            line-height: 24px;
+            color: var(--text_primary);
+            font-size: 12px;
+            padding: 0px 8px;
+        }
+
+        &:hover {
+            background-color: var(--overlay_hover);
+        }
+
+        &:active {
+            background-color: var(--overlay_pressed);
+        }
+    }
+
+
+    :scope[is-selected] li {
+        background-color: var(--overlay_active);
+    }
+
+    :scope span {
+        margin-right: 8px;
+        overflow: hidden;
+        text-wrap: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    :scope svg {
+        flex-shrink: 0;
+        display: none;
+        width: 1em;
+        height: 1em;
+        color: var(--icon_primary);
+        position: relative;
+        right: -4px;
+        top: 7px;
+    }
+
+    :scope[is-selected] svg {
+        display: block;
+    }
+}
+
+
+@scope (:host(setting-switch)) {
+    :scope {
+        background-color: var(--fill_standard_primary);
+        border-radius: 14px;
+        box-sizing: border-box;
+        display: inline-flex;
+        position: relative;
+        transition-duration: 0.2s;
+        transition-timing-function: cubic-bezier(0.38, 0, 0.24, 1);
+        transition-delay: 0s;
+        transition-property: all;
+        width: 28px;
+        padding: 3px;
+    }
+
+    :scope[is-active] {
+        background-color: var(--brand_standard);
+    }
+
+    :scope span {
+        border-radius: 5px;
+        box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 4px;
+        box-sizing: border-box;
+        display: inline-block;
+        height: 10px;
+        position: relative;
+        transition-duration: 0.2s;
+        transition-timing-function: cubic-bezier(0.38, 0, 0.24, 1);
+        transition-delay: 0s;
+        transition-property: all;
+        width: 10px;
+        z-index: 2;
+        background: var(--icon_white);
+    }
+
+    :scope[is-active] span {
+        transform: translate(12px);
+    }
+}
+
+
+@scope (:host(setting-button)) {
+    :scope {
+        position: relative;
+        vertical-align: text-bottom;
+    }
+
+    :scope button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        overflow: visible;
+        background-color: var(--brand_standard);
+        border: 1px solid;
+        border-radius: 4px;
+        outline-style: none;
+        font-size: 12px;
+        line-height: 14px;
+        min-width: 62px;
+        margin: 0px;
+        padding: 4px 7px;
+    }
+
+    :scope[data-type="primary"] button {
+        & {
+            background-color: var(--brand_standard);
+            color: var(--on_brand_primary);
+            border-color: var(--brand_standard);
+        }
+
+        &:hover {
+            background: var(--nt_brand_standard_2_overlay_hover_brand_2_mix);
+        }
+
+        &:active {
+            background-color: var(--nt_brand_standard_2_overlay_pressed_brand_2_mix);
+        }
+    }
+
+    :scope[data-type="secondary"] button {
+        & {
+            background-color: transparent;
+            color: var(--text_primary);
+            border-color: var(--fill_standard_primary);
+        }
+
+        &:hover {
+            background-color: var(--overlay_hover);
+        }
+
+        &:active {
+            background-color: var(--overlay_pressed);
+        }
+    }
+}
+
+
+@scope (:host(setting-text)) {
+    :scope {
+        display: -webkit-box;
+        word-break: break-all;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+    }
+
+    :scope[data-type="secondary"] slot {
+        color: var(--text_secondary);
+        font-size: min(var(--font_size_2), 16px);
+        line-height: min(var(--line_height_2), 22px);
+        margin-top: 4px;
+    }
+}
+
+
+@scope (:host(setting-divider)) {
+    :scope {
+        display: block;
+        border: unset;
+        margin: unset;
+        background-color: rgba(127, 127, 127, 0.15);
+    }
+
+    :scope[data-direction="row"] {
+        height: 1px;
+    }
+
+    :scope[data-direction="column"] {
+        width: 1px;
+    }
+}

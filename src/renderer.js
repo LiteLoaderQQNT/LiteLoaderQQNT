@@ -1,4 +1,4 @@
-import "./components/index.js";
+import "./components/renderer.js";
 import "./easter_eggs/index.js";
 import { SettingInterface } from "./setting/renderer.js";
 
