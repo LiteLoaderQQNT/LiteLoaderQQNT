@@ -31,7 +31,6 @@ export class SettingInterface {
                 }
             }
         });
-        this.#SettingInit();
     }
 
     async add(plugin) {
@@ -56,7 +55,7 @@ export class SettingInterface {
         return view;
     }
 
-    async #SettingInit() {
+    async SettingInit() {
         const style = document.createElement("link");
         style.rel = "stylesheet";
         style.type = "text/css";

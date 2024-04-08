@@ -20,12 +20,11 @@ const loader = await (new class {
         return this;
     }
 
-    onSettingWindowCreated(settingInterface) {
+    async onSettingWindowCreated(settingInterface) {
         for (const [slug, plugin] of Object.entries(this.#exports)) {
             if (plugin?.onSettingWindowCreated) {
-                settingInterface.add(LiteLoader.plugins[slug]).then(view => {
-                    plugin.onSettingWindowCreated(view);
-                });
+                const view = await settingInterface.add(LiteLoader.plugins[slug]);
+                plugin.onSettingWindowCreated(view);
             }
         }
     }
@@ -33,19 +32,19 @@ const loader = await (new class {
 }).init();
 
 
-// 注入设置界面
-function findSettingTabNavBar() {
-    const settingInterface = new SettingInterface();
+// 寻找指定元素
+async function findElement(selector, callback) {
     const observer = (_, observer) => {
-        if (document.querySelector(".setting-tab .nav-bar")) {
-            loader.onSettingWindowCreated(settingInterface);
+        const element = document.querySelector(selector);
+        if (element) {
+            callback(element);
             observer?.disconnect?.();
             return true;
         }
         return false;
     }
     if (!observer()) {
-        new MutationObserver(observer).observe(document.body, {
+        new MutationObserver(observer).observe(document, {
             subtree: true,
             attributes: false,
             childList: true
@@ -67,9 +66,17 @@ async function watchURLHash(callback) {
 }
 
 
-// 指定页面触发彩蛋
-watchURLHash((currentHash) => {
+// 加载彩蛋
+async function loadSettingInterface(currentHash) {
     if (currentHash.includes("#/setting")) {
-        findSettingTabNavBar();
+        const settingInterface = new SettingInterface();
+        findElement(".setting-tab .nav-bar", async () => {
+            await settingInterface.SettingInit();
+            await loader.onSettingWindowCreated(settingInterface);
+        });
     }
-});
+}
+
+
+// 指定页面触发
+watchURLHash(loadSettingInterface);

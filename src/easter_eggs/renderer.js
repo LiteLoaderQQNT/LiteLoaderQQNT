@@ -1,4 +1,4 @@
-// 寻找检查更新按钮
+// 寻找指定元素
 async function findElement(selector, callback) {
     const observer = (_, observer) => {
         const element = document.querySelector(selector);
@@ -19,6 +19,19 @@ async function findElement(selector, callback) {
 }
 
 
+// 监听页面变化
+async function watchURLHash(callback) {
+    if (!location.hash.includes("#/blank")) {
+        callback(location.hash);
+    }
+    else {
+        navigation.addEventListener("navigatesuccess", () => {
+            callback(location.hash)
+        }, { once: true });
+    }
+}
+
+
 // 加载彩蛋
 async function loadEasterEggs(currentHash) {
     const easter_eggs = [
@@ -35,18 +48,5 @@ async function loadEasterEggs(currentHash) {
 }
 
 
-// 监听页面变化
-async function watchURLHash(callback) {
-    if (!location.hash.includes("#/blank")) {
-        callback(location.hash);
-    }
-    else {
-        navigation.addEventListener("navigatesuccess", () => {
-            callback(location.hash)
-        }, { once: true });
-    }
-}
-
-
-// 指定页面触发彩蛋
+// 指定页面触发
 watchURLHash(loadEasterEggs);
