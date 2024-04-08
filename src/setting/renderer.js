@@ -242,13 +242,15 @@ async function initPath(view) {
 
 
 async function initAbout(view) {
-    const homepage_btn = view.querySelector(".about setting-button.liteloaderqqnt");
-    const github_btn = view.querySelector(".about setting-button.github");
-    const telegram_btn = view.querySelector(".about setting-button.telegram");
+    const liteloaderqqnt = view.querySelector(".about .liteloaderqqnt");
+    const github = view.querySelector(".about .github");
+    const group = view.querySelector(".about .group");
+    const channel = view.querySelector(".about .channel");
 
-    homepage_btn.addEventListener("click", () => LiteLoader.api.openExternal("https://liteloaderqqnt.github.io"));
-    github_btn.addEventListener("click", () => LiteLoader.api.openExternal("https://github.com/LiteLoaderQQNT"));
-    telegram_btn.addEventListener("click", () => LiteLoader.api.openExternal("https://t.me/LiteLoaderQQNT"));
+    liteloaderqqnt.addEventListener("click", () => LiteLoader.api.openExternal("https://liteloaderqqnt.github.io"));
+    github.addEventListener("click", () => LiteLoader.api.openExternal("https://github.com/LiteLoaderQQNT"));
+    group.addEventListener("click", () => LiteLoader.api.openExternal("https://t.me/LiteLoaderQQNT"));
+    channel.addEventListener("click", () => LiteLoader.api.openExternal("https://t.me/LiteLoaderQQNT_Channel"));
 
     // Hitokoto - 一言
     const fetchHitokoto = async () => {
