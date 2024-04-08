@@ -1,5 +1,5 @@
 import "./components/renderer.js";
-import "./easter_eggs/index.js";
+import "./easter_eggs/renderer.js";
 import { SettingInterface } from "./setting/renderer.js";
 
 
@@ -55,20 +55,21 @@ function findSettingTabNavBar() {
 
 
 // 监听页面变化
-function currentPage() {
-    return window.location.hash.slice(2).split("/")[0];
-}
-const pagePromise = new Promise((resolve, reject) => {
-    if (currentPage() !== "blank") {
-        resolve(currentPage());
-    } else {
+async function watchURLHash(callback) {
+    if (!location.hash.includes("#/blank")) {
+        callback(location.hash);
+    }
+    else {
         navigation.addEventListener("navigatesuccess", () => {
-            resolve(currentPage());
+            callback(location.hash)
         }, { once: true });
     }
-});
-pagePromise.then(page => {
-    if (page === "setting") {
+}
+
+
+// 指定页面触发彩蛋
+watchURLHash((currentHash) => {
+    if (currentHash.includes("#/setting")) {
         findSettingTabNavBar();
     }
 });

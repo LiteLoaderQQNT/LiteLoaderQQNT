@@ -1,7 +1,15 @@
-class EasterEgg {
+export const hash = "#/main";
+export const selector = ".contact-top-bar";
+export function trigger(contact_topbar) {
+    const search_word = "furry";
+    const images_apis = [
+        "https://uapis.cn/api/imgapi/furry/img4k.php",
+        "https://uapis.cn/api/imgapi/furry/imgz4k.php",
+        "https://uapis.cn/api/imgapi/furry/imgs4k.php"
+    ];
 
-    #search_word = "furry";
-    #menu_item_html = /*html*/ `
+    const menu_item_template = document.createElement("template");
+    menu_item_template.innerHTML = `
     <a class="furry q-context-menu-item q-context-menu-item--normal">
         <div class="q-context-menu-item__icon q-context-menu-item__head">
             <svg class="q-icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
@@ -11,66 +19,20 @@ class EasterEgg {
         <span class="q-context-menu-item__text">随机 Furry 图片</span>
     </a>
     `;
-    #images_apis = [
-        "https://uapis.cn/api/imgapi/furry/img4k.php",
-        "https://uapis.cn/api/imgapi/furry/imgz4k.php",
-        "https://uapis.cn/api/imgapi/furry/imgs4k.php"
-    ];
 
-    constructor(contact_topbar) {
-        const search_input = contact_topbar.querySelector("input");
-        const adder_button = contact_topbar.querySelector(".contact-adder-btn");
-        adder_button.addEventListener("click", () => {
-            if (search_input.value.toLowerCase() == this.#search_word) {
-                const context_menu = document.querySelector(".q-context-menu");
-                const template = document.createElement("template");
-                template.innerHTML = this.#menu_item_html;
-                const menu_item = template.content.firstElementChild;
-                menu_item.addEventListener("click", this.#execute.bind(this));
-                context_menu.append(menu_item);
-            }
-        });
-    }
+    const menu_item = menu_item_template.content.firstElementChild;
+    const adder_button = contact_topbar.querySelector(".contact-adder-btn");
+    const search_input = contact_topbar.querySelector("input");
 
-    #execute() {
-        const random_image = this.#images_apis[Math.floor(Math.random() * this.#images_apis.length)];
+    menu_item.addEventListener("click", () => {
+        const random_image = images_apis[Math.floor(Math.random() * images_apis.length)];
         LiteLoader.api.openExternal(random_image);
-    }
+    });
 
-}
-
-
-// 寻找主窗口搜索区域
-async function findContactTopBar() {
-    const observer = async (_, observer) => {
-        const contact_topbar = document.querySelector(".contact-top-bar");
-        if (contact_topbar) {
-            new EasterEgg(contact_topbar);
-            observer?.disconnect?.();
-            return true;
+    adder_button.addEventListener("click", () => {
+        if (search_input.value.toLowerCase() == search_word) {
+            const context_menu = document.querySelector(".q-context-menu");
+            context_menu.append(menu_item);
         }
-        return false;
-    }
-    if (!await observer()) {
-        new MutationObserver(observer).observe(document, {
-            subtree: true,
-            attributes: false,
-            childList: true
-        });
-    }
-}
-
-
-// 监听页面变化
-if (location.hash.includes("#/blank")) {
-    const navigatesuccess = async event => {
-        if (event.target.currentEntry.url.includes("#/main")) {
-            findContactTopBar();
-        }
-        navigation.removeEventListener("navigatesuccess", navigatesuccess);
-    }
-    navigation.addEventListener("navigatesuccess", navigatesuccess);
-}
-else if (location.hash.includes("#/main")) {
-    findContactTopBar();
+    });
 }
