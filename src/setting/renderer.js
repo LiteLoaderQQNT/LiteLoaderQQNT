@@ -1,3 +1,6 @@
+import default_config from "./static/config.json" assert {type: "json"};
+
+
 export class SettingInterface {
     #liteloader_nav_bar = document.createElement("div");
     #liteloader_setting_view = document.createElement("div");
@@ -80,7 +83,7 @@ export class SettingInterface {
 
 // 禁用插件
 async function disablePlugin(slug, disabled) {
-    const config = await LiteLoader.api.config.get("LiteLoader", { disabled_plugins: [] });
+    const config = await LiteLoader.api.config.get("LiteLoader", default_config);
     if (disabled) {
         config.disabled_plugins = config.disabled_plugins.concat(slug);
     }
@@ -160,11 +163,21 @@ async function initVersions(view) {
 
 async function initPluginList(view) {
     const plugin_item_template = view.querySelector("#plugin-item");
+    const plugin_loader_switch = view.querySelector(".plugins .loader setting-switch");
     const plugin_lists = {
-        extension: view.querySelector(".plugins setting-list.extension"),
-        theme: view.querySelector(".plugins setting-list.theme"),
-        framework: view.querySelector(".plugins setting-list.framework"),
+        extension: view.querySelector(".plugins .extension"),
+        theme: view.querySelector(".plugins .theme"),
+        framework: view.querySelector(".plugins .framework"),
     };
+
+    const config = await LiteLoader.api.config.get("LiteLoader", default_config);
+    plugin_loader_switch.toggleAttribute("is-active", config.enable_plugins);
+    plugin_loader_switch.addEventListener("click", () => {
+        const isActive = plugin_loader_switch.hasAttribute("is-active");
+        plugin_loader_switch.toggleAttribute("is-active", !isActive);
+        config.enable_plugins = !isActive;
+        LiteLoader.api.config.set("LiteLoader", config);
+    });
 
     for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
         // 跳过不兼容插件
@@ -203,13 +216,11 @@ async function initPluginList(view) {
             }
         });
 
-        if (!LiteLoader.plugins[slug].disabled) {
-            plugin_item_switch.setAttribute("is-active", "");
-        }
-
-        plugin_item_switch.addEventListener("click", (event) => {
-            disablePlugin(slug, event.currentTarget.hasAttribute("is-active"));
-            event.currentTarget.toggleAttribute("is-active");
+        plugin_item_switch.toggleAttribute("is-active", !LiteLoader.plugins[slug].disabled);
+        plugin_item_switch.addEventListener("click", () => {
+            const isActive = plugin_item_switch.hasAttribute("is-active");
+            plugin_item_switch.toggleAttribute("is-active", !isActive);
+            disablePlugin(slug, isActive);
         });
 
         plugin_list.append(plugin_item);

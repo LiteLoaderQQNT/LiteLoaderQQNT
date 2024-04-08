@@ -1,5 +1,7 @@
 require("./liteloader_api/main.js");
 
+const default_config = require("./setting/static/config.json");
+
 const { protocol } = require("electron");
 const path = require("node:path");
 const fs = require("node:fs");
@@ -23,11 +25,20 @@ protocol.registerSchemesAsPrivileged([
 // 找到所有插件并挂载到 LiteLoader.plugins 对象
 (() => {
     const output = (...args) => console.log("\x1b[32m%s\x1b[0m", "[LiteLoader]", ...args);
+    const config = LiteLoader.api.config.get("LiteLoader", default_config);
 
-    output("Start finding all plugins.");
+    // 如果设定环境变量
     if (process.env?.LITELOADERQQNT_PROFILE) {
         output("Use LITELOADERQQNT_PROFILE environment variables:", LiteLoader.path.profile);
     }
+
+    // 如果插件全局开关为关闭状态
+    if (!config.enable_plugins) {
+        output("Plugin loader is disabled, no plugins will be loaded.");
+        return;
+    }
+
+    output("Start finding all plugins.");
 
     // 如果插件目录不存在
     if (!fs.existsSync(LiteLoader.path.plugins)) {
@@ -46,7 +57,6 @@ protocol.registerSchemesAsPrivileged([
 
     // 读取插件目录
     try {
-        const config = LiteLoader.api.config.get("LiteLoader", { disabled_plugins: [] });
         for (const plugin_pathname of fs.readdirSync(LiteLoader.path.plugins, "utf-8")) {
             try {
                 const manifest_file = path.join(LiteLoader.path.plugins, plugin_pathname, "manifest.json");
