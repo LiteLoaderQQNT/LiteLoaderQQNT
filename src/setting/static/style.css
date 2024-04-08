@@ -34,65 +34,65 @@
 
 
 /* 主内容 */
-.setting-main {
-    & .q-scroll-view {
-        &.liteloader {
-            & .tab-view {
-                font-size: 14px;
-                padding: 20px 20px 0px;
-            }
-        }
-    }
+.setting-main .q-scroll-view.liteloader .tab-view {
+    font-size: 14px;
+    padding: 20px 20px 0px;
 }
 
 
+
 /* 设置页面样式 */
-.config_view {
-    & .plugins {
-        & setting-item {
+.config_view .plugins setting-item {
+    & {
+        gap: 8px;
+    }
+
+    & > div {
+        & {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        & > div {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        & > setting-text {
             & {
+                display: flex;
                 gap: 8px;
             }
 
-            & > div {
-                display: flex;
-                flex-direction: column;
-                gap: 6px;
+            & :nth-child(1) {
+                width: 120px;
             }
+        }
+    }
 
-            & > div > div {
-                height: 48px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
+    /* 插件缩略图 */
+    & .icon :is(img, svg) {
+        width: 48px;
+        height: 48px;
+        border-radius: 8px;
+    }
 
-            /* 插件缩略图 */
-            & .icon :is(img, svg) {
-                width: 48px;
-                height: 48px;
-                border-radius: 8px;
-            }
+    /* 插件附加信息 */
+    & a {
+        & {
+            color: var(--text-link);
+        }
 
-            /* 插件附加信息 */
-            & span {
-                margin-right: 12px;
-            }
+        &:hover {
+            color: var(--hover-link);
+        }
 
-            /* 插件附加信息 */
-            & a {
-                & {
-                    color: var(--text-link);
-                }
-
-                &:hover {
-                    color: var(--hover-link);
-                }
-
-                &:active {
-                    color: var(--press-link);
-                }
-            }
+        &:active {
+            color: var(--press-link);
         }
     }
 }
