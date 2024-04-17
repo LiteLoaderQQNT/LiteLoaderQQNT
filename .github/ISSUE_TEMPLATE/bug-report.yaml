@@ -1,0 +1,112 @@
+name: 回报错误
+description: 在使用过程中遇到了错误
+title: "[Bug]: "
+labels: ["bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 感谢您愿意填写错误回报！
+        ## 以下是一些注意事项，请务必阅读让我们能够更容易处理
+
+        ### ❗ | 确定没有相同问题的ISSUE已被提出。
+        ### 🌎 | 请准确填写环境信息。
+        ### ❔ | 使用命令行模式启动进行复现，并提供完整日志内容。请自行删除日志内存在的个人信息及敏感内容。
+        ### 如果您不知道如何有效、精准地表述，我们建议您先阅读《提问的智慧》
+
+        #### 在 Windows 下显示终端日志
+
+        1. 桌面右键 QQ 图标，点击 "打开文件所在位置"。
+        2. 在出现的文件夹窗口内按住 `Shift` 右键，点击 "在此处打开命令窗口" 或 "在此处打开 PowerShell 窗口"。
+        3. 在弹出的控制台窗口内输入 ".\QQ.exe" 并按下 `Enter`。
+
+        #### 在 Linux 下显示终端日志
+
+        1. 既然已经用上 Linux 了，那应该知道如何操作
+
+        ### 在 MacOS 下显示终端日志
+
+        1. 点按程序坞中的“启动台”图标，在搜索栏中键入 "终端"，然后点按 "终端"。
+        2. 在弹出的终端内输入 "open -a QQ" 并按下 `Enter`。
+
+        ---
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 请确保您已阅读以上注意事项，并勾选下方的确认框。
+      options:
+        - label: 我已经使用一个干净且无其它非必要的插件的环境测试过，问题依旧存在。
+          required: true
+        - label: 我已经在 [Issue Tracker](https://github.com/LiteLoaderQQNT/LiteLoaderQQNT/issues) 中找过我要提出的问题，没有找到相同问题的ISSUE。
+          required: true
+        - label: 我已知晓并同意，此处仅用于汇报主程序中存在的问题。若这个 Issue 是关于其他非程序本身问题，则我的 Issue 可能会被无条件自动关闭或/并锁定。
+          required: true
+        - label: 我已知晓并同意，如果我不按照模板提供的指示进行填写，则我的 Issue 可能会被无条件删除。
+          required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## 环境信息
+
+  - type: input
+    id: env-qqnt-ver
+    attributes:
+      label: QQNT 版本
+    validations:
+      required: true
+
+  - type: input
+    id: env-LiteLoaderQQNT-ver
+    attributes:
+      label: LiteLoaderQQNT 版本 （或 Commit Id）
+    validations:
+      required: true
+
+  - type: dropdown
+    id: env-vm-ver
+    attributes:
+      label: 运行环境
+      description: 选择系统版本
+      options:
+        - Windows
+        - Linux
+        - MacOS
+        - 其它（请在下方说明）
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce-steps
+    attributes:
+      label: 重现步骤
+      description: |
+        我们需要执行哪些操作才能让 Bug 出现？
+        简洁清晰的重现步骤能够帮助我们更迅速地定位问题所在。
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望的结果是什么？
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际的结果是什么？
+    validations:
+      required: true
+
+  - type: textarea
+    id: logging
+    attributes:
+      label: 日志记录
+
+  - type: textarea
+    id: extra-desc
+    attributes:
+      label: 补充说明（可选）
