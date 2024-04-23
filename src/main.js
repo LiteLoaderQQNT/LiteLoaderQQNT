@@ -1,4 +1,3 @@
-const { Module } = require("module");
 const { net, ipcMain } = require("electron");
 const path = require("path");
 const fs = require("fs");
@@ -111,21 +110,22 @@ function proxyBrowserWindowConstruct(target, [config], newTarget) {
 
 
 // 监听窗口创建
-Module._load = new Proxy(Module._load, {
-    apply(target, thisArg, argArray) {
-        const module = Reflect.apply(target, thisArg, argArray);
-        if (argArray[0] == "electron") {
-            return new Proxy(module, {
+require.cache["electron"] = new Proxy(require.cache["electron"], {
+    get(target, property, receiver) {
+        const electron = Reflect.get(target, property, receiver);
+        if (property == "exports") {
+            return new Proxy(electron, {
                 get(target, property, receiver) {
+                    const BrowserWindow = Reflect.get(target, property, receiver);
                     if (property == "BrowserWindow") {
-                        return new Proxy(module.BrowserWindow, {
+                        return new Proxy(BrowserWindow, {
                             construct: proxyBrowserWindowConstruct
                         });
                     }
-                    return Reflect.get(target, property, receiver);
+                    return BrowserWindow;
                 }
             });
         }
-        return module;
+        return electron;
     }
 });
