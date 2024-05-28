@@ -26,13 +26,14 @@
 
 @scope (:host(setting-panel)) {
     :scope {
-        display: block;
+        display: inline-block;
         background-color: var(--fill_light_primary, var(--fg_white));
         border-radius: 8px;
         font-size: min(var(--font_size_3), 18px);
         line-height: min(var(--line_height_3), 24px);
         margin-bottom: 20px;
-        overflow: hidden;
+        overflow: visible;
+        width: 100%;
     }
 }
 
