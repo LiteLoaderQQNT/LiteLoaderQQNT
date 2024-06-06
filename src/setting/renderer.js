@@ -10,6 +10,7 @@ export class SettingInterface {
     constructor() {
         this.#liteloader_nav_bar.classList.add("nav-bar", "liteloader");
         this.#liteloader_setting_view.classList.add("q-scroll-view", "scroll-view--show-scrollbar", "liteloader");
+        this.#liteloader_setting_view.style.display = "none";
         document.querySelector(".setting-tab").append(this.#liteloader_nav_bar);
         document.querySelector(".setting-main .setting-main__content").append(this.#liteloader_setting_view);
         document.querySelector(".setting-tab").addEventListener("click", event => {
