@@ -9,7 +9,10 @@ const data_path = path.join(profile_path, "data");
 const plugins_path = path.join(profile_path, "plugins");
 const liteloader_package = require(path.join(root_path, "package.json"));
 const qqnt_package = require(path.join(process.resourcesPath, "app/package.json"))
-const qqnt_version = require(path.join(process.resourcesPath, "app/versions/config.json"))
+const qqnt_version = (() => {   // 兼容无快更
+    const config_filepath = path.join(process.resourcesPath, "app/versions/config.json");
+    return fs.existsSync(config_filepath) ? require(config_filepath) : qqnt_package;
+})();
 
 
 function setConfig(slug, new_config) {
@@ -40,7 +43,7 @@ const LiteLoader = {
         plugins: plugins_path
     },
     versions: {
-        qqnt: qqnt_version.curVersion,
+        qqnt: qqnt_version.curVersion ?? qqnt_version.version,
         liteloader: liteloader_package.version,
         node: process.versions.node,
         chrome: process.versions.chrome,
