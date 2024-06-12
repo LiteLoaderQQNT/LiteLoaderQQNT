@@ -1,10 +1,12 @@
 @scope (:host) {
-    :scope[is-disabled] {
+    :scope[is-disabled],
+    :scope [is-disabled] {
         opacity: 0.3;
         cursor: not-allowed;
         pointer-events: none;
     }
 
+    :scope.hidden,
     :scope .hidden {
         display: none !important;
     }
