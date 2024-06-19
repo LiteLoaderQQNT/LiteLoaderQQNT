@@ -16,11 +16,6 @@ export class SettingInterface {
         document.querySelector(".setting-tab").addEventListener("click", event => {
             const nav_item = event.target.closest(".nav-item");
             if (nav_item) {
-                // 重新设定激活状态
-                document.querySelectorAll(".setting-tab .nav-item").forEach(element => {
-                    element.classList.remove("nav-item-active");
-                });
-                nav_item.classList.add("nav-item-active");
                 // 内容显示
                 if (nav_item.parentElement.classList.contains("liteloader")) {
                     this.#setting_view.style.display = "none";
@@ -30,6 +25,12 @@ export class SettingInterface {
                     this.#setting_view.style.display = "block";
                     this.#liteloader_setting_view.style.display = "none";
                 }
+                // 重新设定激活状态
+                this.#setting_title.childNodes[1].textContent = nav_item.querySelector(".name").textContent;
+                document.querySelectorAll(".setting-tab .nav-item").forEach(element => {
+                    element.classList.remove("nav-item-active");
+                });
+                nav_item.classList.add("nav-item-active");
             }
         });
     }
@@ -46,7 +47,6 @@ export class SettingInterface {
         nav_item.querySelector(".name").textContent = plugin.manifest.name;
         nav_item.addEventListener("click", event => {
             if (!event.currentTarget.classList.contains("nav-item-active")) {
-                this.#setting_title.childNodes[1].textContent = plugin.manifest.name;
                 this.#liteloader_setting_view.textContent = null;
                 this.#liteloader_setting_view.append(view);
             }
