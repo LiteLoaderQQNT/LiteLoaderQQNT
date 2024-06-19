@@ -222,7 +222,7 @@ async function initPluginList(view) {
             }
         });
 
-        plugin_item_switch.toggleAttribute("is-active", !LiteLoader.plugins[slug].disabled);
+        plugin_item_switch.toggleAttribute("is-active", !config.disabled_plugins.includes(slug));
         plugin_item_switch.addEventListener("click", () => {
             const isActive = plugin_item_switch.hasAttribute("is-active");
             plugin_item_switch.toggleAttribute("is-active", !isActive);
