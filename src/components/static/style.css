@@ -28,14 +28,12 @@
 
 @scope (:host(setting-panel)) {
     :scope {
-        display: inline-block;
+        display: block;
         background-color: var(--fill_light_primary, var(--fg_white));
         border-radius: 8px;
         font-size: min(var(--font_size_3), 18px);
         line-height: min(var(--line_height_3), 24px);
         margin-bottom: 20px;
-        overflow: visible;
-        width: 100%;
     }
 }
 
@@ -103,12 +101,12 @@
 @scope (:host(setting-item)) {
     :scope[data-direction="column"] {
         flex: 1;
-        margin: 0px 10px;
+        padding: 0px 10px;
         text-align: center;
     }
 
     :scope[data-direction="row"] {
-        margin: 12px 0px;
+        padding: 12px 0px;
         display: flex;
         justify-content: space-between;
         align-items: center;
