@@ -179,6 +179,12 @@ async function initPluginList(view) {
         LiteLoader.api.config.set("LiteLoader", config);
     });
 
+    const plugin_counts = {
+        extension: 0,
+        theme: 0,
+        framework: 0
+    }
+
     for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
         // 跳过不兼容插件
         if (plugin.incompatible) {
@@ -224,7 +230,14 @@ async function initPluginList(view) {
         });
 
         plugin_list.append(plugin_item);
+
+        plugin_counts.total++;
+        plugin_counts[plugin.manifest.type]++;
     }
+
+    plugin_lists.extension.dataset["title"] = `扩展 （ ${plugin_counts.extension} 个插件 ）`;
+    plugin_lists.theme.dataset["title"] = `主题 （ ${plugin_counts.theme} 个插件 ）`;
+    plugin_lists.framework.dataset["title"] = `依赖 （ ${plugin_counts.framework} 个插件 ）`;
 }
 
 
