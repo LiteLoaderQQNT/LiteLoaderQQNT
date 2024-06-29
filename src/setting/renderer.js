@@ -212,7 +212,7 @@ async function initPluginList(view) {
         plugin_item_description.title = plugin.manifest.description;
         plugin_item_version.textContent = plugin.manifest.version;
 
-        plugin.manifest.authors.forEach((author, index, array) => {
+        plugin.manifest.authors?.forEach((author, index, array) => {
             const author_link = document.createElement("a");
             author_link.textContent = author.name;
             author_link.addEventListener("click", () => LiteLoader.api.openExternal(author.link));
