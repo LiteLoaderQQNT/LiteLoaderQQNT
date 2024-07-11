@@ -14,7 +14,12 @@ const loader = (new class {
                 continue;
             }
             if (plugin.path.injects.main) {
-                this.#exports[slug] = require(plugin.path.injects.main);
+                try {
+                    this.#exports[slug] = require(plugin.path.injects.main);
+                }
+                catch (e) {
+                    plugin.error = { message: `[Main] ${e.message}`, stack: e.stack };
+                }
             }
         }
         return this;

@@ -12,6 +12,8 @@
 
         &.liteloader {
             & {
+                display: flex;
+                flex-flow: column;
                 flex: 1;
                 margin-top: 25px;
                 overflow-x: hidden;
@@ -28,6 +30,12 @@
                 border-radius: 5px;
                 background: rgba(127, 127, 127, 0.5);
             }
+
+            .nav-item.error {
+                text-decoration: line-through;
+                color: var(--text-error);
+                order: 1;
+            }
         }
     }
 }
@@ -37,6 +45,58 @@
 .setting-main .q-scroll-view.liteloader .tab-view {
     font-size: 14px;
     padding: 20px 20px 0px;
+
+    &.error {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-height: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+        font-family: sans-serif;
+        background: var(--bg_bottom_standard);
+
+        &::before {
+            content: "😿";
+            position: absolute;
+            bottom: -64px;
+            right: -64px;
+            font-size: 256px;
+            opacity: 0.2;
+        }
+
+        & > * {
+            position: relative;
+        }
+
+        h2 {
+            font-size: x-large;
+            font-weight: bold;
+        }
+        
+        p {
+            color: var(--text-error);
+        }
+
+        small {
+            color: var(--text_secondary);
+        }
+
+        textarea {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            color: inherit;
+            font-family: inherit;
+            line-height: 1.25;
+            white-space: pre-wrap;
+            /* border: 1px solid var(--border_dark); */
+            border-radius: 8px;
+            backdrop-filter: blur(4px);
+            background: var(--fill_standard_secondary);
+        }
+    }
 }
 
 
