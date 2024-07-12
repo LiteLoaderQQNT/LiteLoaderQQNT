@@ -22,14 +22,25 @@ const runPreloadScript = code => binding.createPreloadScript(`
 // 加载插件 Preload
 (async () => {
     runPreloadScript(await (await fetch(`local://root/src/liteloader_api/preload.js`)).text());
+    const preloadErrors = {}
     for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
-        if (plugin.disabled || plugin.incompatible) {
+        if (plugin.disabled || plugin.incompatible || plugin.error) {
             continue;
         }
         if (plugin.path.injects.preload) {
-            runPreloadScript(await (await fetch(`local:///${plugin.path.injects.preload}`)).text());
+            try {
+                runPreloadScript(await (await fetch(`local:///${plugin.path.injects.preload}`)).text());
+            }
+            catch (e) {
+                preloadErrors[slug] = { message: `[Preload] ${e.message}`, stack: e.stack };
+            }
         }
     }
+
+    const errorData = document.createElement("script");
+    errorData.textContent = JSON.stringify(preloadErrors);
+    errorData.id = "LL_PRELOAD_ERRORS";
+    document.head.append(errorData);
 })();
 
 
