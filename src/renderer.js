@@ -8,14 +8,23 @@ const loader = await (new class {
     #exports = {};
 
     async init() {
+        // 确保preload加载完毕
+        if (!window.LiteLoaderPreloadErrors) {
+            await new Promise(resolve => {
+                const check = () => (window.LiteLoaderPreloadErrors ? resolve() : setTimeout(check));
+                check();
+            });
+        }
+
         // 加载插件
         for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
             if (plugin.disabled || plugin.incompatible) {
                 continue;
             }
 
-            if (plugin.error) {
-                this.#exports[slug] = { error: plugin.error };
+            const error = plugin.error || LiteLoaderPreloadErrors[slug];
+            if (error) {
+                this.#exports[slug] = { error };
                 continue
             }
 
@@ -32,14 +41,11 @@ const loader = await (new class {
     }
 
     async onSettingWindowCreated(settingInterface) {
-        const preloadError = JSON.parse(document.getElementById("LL_PRELOAD_ERRORS")?.textContent || "{}");
-
         for (const [slug, plugin] of Object.entries(this.#exports)) {
             if (plugin?.onSettingWindowCreated || plugin?.error) {
                 const view = await settingInterface.add(LiteLoader.plugins[slug]);
                 (async () => {
                     try {
-                        if (preloadError[slug]) throw preloadError[slug];
                         if (plugin.error) throw plugin.error;
                         await plugin.onSettingWindowCreated(view);
                     }

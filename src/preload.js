@@ -1,4 +1,4 @@
-const { ipcRenderer } = require("electron");
+const { ipcRenderer, contextBridge } = require("electron");
 
 
 // 加载渲染进程
@@ -37,10 +37,7 @@ const runPreloadScript = code => binding.createPreloadScript(`
         }
     }
 
-    const errorData = document.createElement("script");
-    errorData.textContent = JSON.stringify(preloadErrors);
-    errorData.id = "LL_PRELOAD_ERRORS";
-    document.head.append(errorData);
+    contextBridge.exposeInMainWorld("LiteLoaderPreloadErrors", preloadErrors);
 })();
 
 
