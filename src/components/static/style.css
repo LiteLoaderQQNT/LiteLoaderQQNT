@@ -200,25 +200,23 @@
         display: block;
     }
 
-    :scope li {
-        & {
-            display: flex;
-            justify-content: space-between;
-            border-radius: 4px;
-            box-sizing: border-box;
-            line-height: 24px;
-            color: var(--text_primary);
-            font-size: 12px;
-            padding: 0px 8px;
-        }
+    li {
+        display: flex;
+        justify-content: space-between;
+        border-radius: 4px;
+        box-sizing: border-box;
+        line-height: 24px;
+        color: var(--text_primary);
+        font-size: 12px;
+        padding: 0px 8px;
+    }
+    
+    li:hover {
+        background-color: var(--overlay_hover);
+    }
 
-        &:hover {
-            background-color: var(--overlay_hover);
-        }
-
-        &:active {
-            background-color: var(--overlay_pressed);
-        }
+    li:active {
+        background-color: var(--overlay_pressed);
     }
 
 
@@ -297,7 +295,7 @@
         vertical-align: text-bottom;
     }
 
-    :scope button {
+    button {
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -313,34 +311,32 @@
         padding: 4px 7px;
     }
 
-    :scope[data-type="primary"] button {
-        & {
+    :scope[data-type="primary"] {
+        button {
             background-color: var(--brand_standard);
             color: var(--on_brand_primary);
             border-color: var(--brand_standard);
         }
-
-        &:hover {
-            background: var(--nt_brand_standard_2_overlay_hover_brand_2_mix);
+        button:hover {
+            background-color: var(--nt_brand_standard_2_overlay_hover_brand_2_mix);
         }
 
-        &:active {
+        button:active {
             background-color: var(--nt_brand_standard_2_overlay_pressed_brand_2_mix);
         }
     }
 
-    :scope[data-type="secondary"] button {
-        & {
+    :scope[data-type="secondary"] {
+        button {
             background-color: transparent;
             color: var(--text_primary);
             border-color: var(--fill_standard_primary);
         }
-
-        &:hover {
+        button:hover {
             background-color: var(--overlay_hover);
         }
 
-        &:active {
+        button:active {
             background-color: var(--overlay_pressed);
         }
     }
