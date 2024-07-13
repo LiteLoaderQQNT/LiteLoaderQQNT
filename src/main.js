@@ -33,6 +33,14 @@ const loader = (new class {
         }
     }
 
+    onLogin(uid) {
+        for (const [slug, plugin] of Object.entries(this.#exports)) {
+            if (plugin?.onLogin) {
+                plugin.onLogin(uid);
+            }
+        }
+    }
+
 }).init();
 
 
@@ -104,11 +112,25 @@ function proxyBrowserWindowConstruct(target, [config], newTarget) {
     // 挂载窗口原preload
     window.webContents.preload = qqnt_preload_path;
 
-    //加载自定义协议
+    // 加载自定义协议
     protocolRegister(window.webContents.session.protocol);
 
     // 加载插件
     loader.onBrowserWindowCreated(window);
+
+    // 监听send
+    window.webContents.send = new Proxy(window.webContents.send, {
+        apply(target, thisArg, [channel, ...args]) {
+            if (channel.includes("IPC_DOWN_")) {
+                // 账号登录
+                if (args?.[1]?.[0]?.cmdName == "nodeIKernelSessionListener/onSessionInitComplete") {
+                    const uid = args[1][0].payload.uid;
+                    loader.onLogin(uid);
+                }
+            }
+            return Reflect.apply(target, thisArg, [channel, ...args]);
+        }
+    });
 
     return window;
 }
@@ -118,19 +140,13 @@ function proxyBrowserWindowConstruct(target, [config], newTarget) {
 require.cache["electron"] = new Proxy(require.cache["electron"], {
     get(target, property, receiver) {
         const electron = Reflect.get(target, property, receiver);
-        if (property == "exports") {
-            return new Proxy(electron, {
-                get(target, property, receiver) {
-                    const BrowserWindow = Reflect.get(target, property, receiver);
-                    if (property == "BrowserWindow") {
-                        return new Proxy(BrowserWindow, {
-                            construct: proxyBrowserWindowConstruct
-                        });
-                    }
-                    return BrowserWindow;
-                }
-            });
-        }
-        return electron;
+        return property != "exports" ? electron : new Proxy(electron, {
+            get(target, property, receiver) {
+                const BrowserWindow = Reflect.get(target, property, receiver);
+                return property != "BrowserWindow" ? BrowserWindow : new Proxy(BrowserWindow, {
+                    construct: proxyBrowserWindowConstruct
+                });
+            }
+        });
     }
 });
