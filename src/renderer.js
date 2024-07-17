@@ -57,6 +57,22 @@ const loader = await (new class {
         }
     }
 
+    onVueComponentMount(component) {
+        for (const [slug, plugin] of Object.entries(this.#exports)) {
+            if (plugin?.onVueComponentMount) {
+                plugin.onVueComponentMount(component);
+            }
+        }
+    }
+
+    onVueComponentUnmount(component) {
+        for (const [slug, plugin] of Object.entries(this.#exports)) {
+            if (plugin?.onVueComponentUnmount) {
+                plugin.onVueComponentUnmount(component);
+            }
+        }
+    }
+
     #createErrorView(error, slug, view) {
         const navItem = document.querySelector(`.nav-item[data-slug="${slug}"]`);
         navItem.classList.add("error");
@@ -113,7 +129,6 @@ async function watchURLHash(callback) {
 }
 
 
-// 加载彩蛋
 async function loadSettingInterface(currentHash) {
     if (currentHash.includes("#/setting")) {
         const settingInterface = new SettingInterface();
@@ -127,3 +142,51 @@ async function loadSettingInterface(currentHash) {
 
 // 指定页面触发
 watchURLHash(loadSettingInterface);
+
+
+Proxy = new Proxy(Proxy, {
+    construct(target, argArray, newTarget) {
+        const component = argArray[0]?._;
+        const element = component?.vnode?.el;
+        if (component?.uid >= 0) {
+            if (element) {
+                watchComponentUnmount(component);
+                loader.onVueComponentMount(component);
+            } else watchComponentMount(component);
+        }
+        return Reflect.construct(target, argArray, newTarget);
+    }
+});
+
+
+function watchComponentMount(component) {
+    let value = null;
+    let hooked = false;
+    Object.defineProperty(component.vnode, "el", {
+        get() { return value },
+        set(newValue) {
+            value = newValue;
+            if (!hooked && this.el) {
+                hooked = true;
+                watchComponentUnmount(component);
+                loader.onVueComponentMount(component);
+            }
+        }
+    });
+}
+
+
+function watchComponentUnmount(component) {
+    let value = null;
+    let unhooked = false;
+    Object.defineProperty(component, "isUnmounted", {
+        get() { return value },
+        set(newValue) {
+            value = newValue;
+            if (!unhooked && this.isUnmounted) {
+                unhooked = true;
+                loader.onVueComponentUnmount(component);
+            }
+        }
+    });
+}
