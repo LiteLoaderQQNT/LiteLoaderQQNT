@@ -151,12 +151,28 @@ Proxy = new Proxy(Proxy, {
         if (component?.uid >= 0) {
             if (element) {
                 watchComponentUnmount(component);
+                recordComponent(component);
                 loader.onVueComponentMount(component);
             } else watchComponentMount(component);
         }
         return Reflect.construct(target, argArray, newTarget);
     }
 });
+
+
+function recordComponent(component) {
+    let element = component.vnode.el;
+    while (!(element instanceof HTMLElement)) {
+        element = element.parentElement;
+    }
+
+    // Expose component to element's __VUE__ property
+    if (element.__VUE__) element.__VUE__.push(component);
+    else element.__VUE__ = [component];
+
+    // Add class to element
+    element.classList.add("vue-component");
+}
 
 
 function watchComponentMount(component) {
@@ -170,6 +186,9 @@ function watchComponentMount(component) {
                 hooked = true;
                 watchComponentUnmount(component);
                 loader.onVueComponentMount(component);
+            }
+            if (value) {
+                recordComponent(component);
             }
         }
     });
