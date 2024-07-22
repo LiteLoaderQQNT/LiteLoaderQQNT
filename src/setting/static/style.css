@@ -128,8 +128,15 @@
                 gap: 8px;
             }
 
-            & :nth-child(1) {
-                width: 120px;
+            & :nth-child(-n+3) {
+                min-width: 120px;
+            }
+
+            & :nth-child(3) {
+                max-width: 240px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
     }
