@@ -1,6 +1,6 @@
 require("./liteloader_api/main.js");
 
-const default_config = require("./setting/static/config.json");
+const default_config = require("./settings/static/config.json");
 
 const { protocol } = require("electron");
 const path = require("node:path");
