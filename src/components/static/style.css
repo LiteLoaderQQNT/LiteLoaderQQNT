@@ -1,4 +1,5 @@
 @scope (:host) {
+
     :scope[is-disabled],
     :scope [is-disabled] {
         opacity: 0.3;
@@ -210,7 +211,7 @@
         font-size: 12px;
         padding: 0px 8px;
     }
-    
+
     li:hover {
         background-color: var(--overlay_hover);
     }
@@ -317,6 +318,7 @@
             color: var(--on_brand_primary);
             border-color: var(--brand_standard);
         }
+
         button:hover {
             background-color: var(--nt_brand_standard_2_overlay_hover_brand_2_mix);
         }
@@ -332,6 +334,7 @@
             color: var(--text_primary);
             border-color: var(--fill_standard_primary);
         }
+
         button:hover {
             background-color: var(--overlay_hover);
         }
