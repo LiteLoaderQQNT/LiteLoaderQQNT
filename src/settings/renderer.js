@@ -36,7 +36,7 @@ export class SettingInterface {
     }
 
     async add(plugin) {
-        const default_thumb = `local://root/src/setting/static/default.svg`;
+        const default_thumb = `local://root/src/settings/static/default.svg`;
         const plugin_thumb = `local:///${plugin.path.plugin}/${plugin.manifest?.thumb}`;
         const thumb = plugin.manifest.thumb ? plugin_thumb : default_thumb;
         const nav_item = document.querySelector(".setting-tab .nav-item").cloneNode(true);
@@ -60,19 +60,19 @@ export class SettingInterface {
         const style = document.createElement("link");
         style.rel = "stylesheet";
         style.type = "text/css";
-        style.href = "local://root/src/setting/static/style.css";
+        style.href = "local://root/src/settings/static/style.css";
         document.head.append(style);
         const view = await this.add({
             manifest: {
                 slug: "config_view",
                 name: "LiteLoaderQQNT",
-                thumb: "./src/setting/static/default.svg"
+                thumb: "./src/settings/static/default.svg"
             },
             path: {
                 plugin: LiteLoader.path.root
             }
         });
-        view.innerHTML = await (await fetch("local://root/src/setting/static/view.html")).text();
+        view.innerHTML = await (await fetch("local://root/src/settings/static/view.html")).text();
         initVersions(view);
         initPluginList(view);
         initPath(view);
@@ -191,7 +191,7 @@ async function initPluginList(view) {
             continue;
         }
 
-        const default_icon = `local://root/src/setting/static/default.png`;
+        const default_icon = `local://root/src/settings/static/default.png`;
         const plugin_icon = `local:///${plugin.path.plugin}/${plugin.manifest?.icon}`;
         const icon = plugin.manifest?.icon ? plugin_icon : default_icon;
 
@@ -275,11 +275,25 @@ async function initAbout(view) {
     channel.addEventListener("click", () => LiteLoader.api.openExternal("https://t.me/LiteLoaderQQNT_Channel"));
 
     // Hitokoto - 一言
-    const fetchHitokoto = async () => {
+    let visible = true;
+    const hitokoto_text = view.querySelector(".about .hitokoto_text");
+    const hitokoto_author = view.querySelector(".about .hitokoto_author");
+    const observer = new IntersectionObserver((entries) => {
+        visible = entries[0].isIntersecting;
+    });
+    observer.observe(hitokoto_text);
+    async function trueUpdate() {
         const { hitokoto, creator } = await (await fetch("https://v1.hitokoto.cn")).json();
-        view.querySelector(".about .hitokoto_text").textContent = hitokoto;
-        view.querySelector(".about .hitokoto_author").textContent = creator;
+        hitokoto_text.textContent = hitokoto;
+        hitokoto_author.textContent = creator;
+    }
+    async function fetchHitokoto() {
+        // 页面不可见或一言不可见时不更新
+        if (document.hidden || !visible) {
+            return;
+        }
+        await trueUpdate();
     };
-    fetchHitokoto();
+    trueUpdate();
     setInterval(fetchHitokoto, 1000 * 10);
 }
