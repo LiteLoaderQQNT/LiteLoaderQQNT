@@ -275,11 +275,25 @@ async function initAbout(view) {
     channel.addEventListener("click", () => LiteLoader.api.openExternal("https://t.me/LiteLoaderQQNT_Channel"));
 
     // Hitokoto - 一言
-    const fetchHitokoto = async () => {
+    let visible = true;
+    const hitokoto_text = view.querySelector(".about .hitokoto_text");
+    const hitokoto_author = view.querySelector(".about .hitokoto_author");
+    const observer = new IntersectionObserver((entries) => {
+        visible = entries[0].isIntersecting;
+    });
+    observer.observe(hitokoto_text);
+    async function trueUpdate() {
         const { hitokoto, creator } = await (await fetch("https://v1.hitokoto.cn")).json();
-        view.querySelector(".about .hitokoto_text").textContent = hitokoto;
-        view.querySelector(".about .hitokoto_author").textContent = creator;
+        hitokoto_text.textContent = hitokoto;
+        hitokoto_author.textContent = creator;
+    }
+    async function fetchHitokoto() {
+        // 页面不可见或一言不可见时不更新
+        if (document.hidden || !visible) {
+            return;
+        }
+        await trueUpdate();
     };
-    fetchHitokoto();
+    trueUpdate();
     setInterval(fetchHitokoto, 1000 * 10);
 }
