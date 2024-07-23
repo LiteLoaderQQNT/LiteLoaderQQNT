@@ -203,6 +203,7 @@ async function initPluginList(view) {
         const plugin_item_description = plugin_item.querySelector(".description");
         const plugin_item_version = plugin_item.querySelector(".version");
         const plugin_item_authors = plugin_item.querySelector(".authors");
+        const plugin_item_repo = plugin_item.querySelector(".repo");
         const plugin_item_switch = plugin_item.querySelector(".switch");
 
         plugin_item_icon.innerHTML = await appropriateIcon(icon);
@@ -221,6 +222,14 @@ async function initPluginList(view) {
                 plugin_item_authors.append(" | ");
             }
         });
+
+        if(plugin.manifest.repository){
+            const repo_link = document.createElement("a");
+            const repo_url = `https://github.com/${plugin.manifest.repository.repo}/tree/${plugin.manifest.repository.branch}`;
+            repo_link.textContent = plugin.manifest.repository.repo;
+            repo_link.addEventListener("click", () => LiteLoader.api.openExternal(repo_url));
+            plugin_item_repo.append(repo_link);
+        }
 
         plugin_item_switch.toggleAttribute("is-active", !config.disabled_plugins.includes(slug));
         plugin_item_switch.addEventListener("click", () => {
