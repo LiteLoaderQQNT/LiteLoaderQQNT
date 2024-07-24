@@ -2,24 +2,8 @@ require("./liteloader_api/main.js");
 
 const default_config = require("./settings/static/config.json");
 
-const { protocol } = require("electron");
 const path = require("node:path");
 const fs = require("node:fs");
-
-
-protocol.registerSchemesAsPrivileged([
-    {
-        scheme: "local",
-        privileges: {
-            standard: false,
-            allowServiceWorkers: true,
-            corsEnabled: false,
-            supportFetchAPI: true,
-            stream: true,
-            bypassCSP: true
-        }
-    }
-]);
 
 
 // 找到所有插件并挂载到 LiteLoader.plugins 对象

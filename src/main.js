@@ -1,6 +1,7 @@
-const { net, ipcMain } = require("electron");
+const { ipcMain } = require("electron");
 const path = require("path");
 const fs = require("fs");
+const { protocolRegister } = require("./protocol_scheme/main.js");
 
 
 const loader = (new class {
@@ -63,22 +64,6 @@ function processPreloadPath(qqnt_preload_path) {
         fs.copyFileSync(liteloader_preload_path, new_preload_path);
     }
     return new_preload_path.replaceAll("\\", "/");
-}
-
-
-// 注册协议
-function protocolRegister(protocol) {
-    if (!protocol.isProtocolRegistered("local")) {
-        protocol.handle("local", (req) => {
-            const { host, pathname } = new URL(decodeURI(req.url));
-            const filepath = path.normalize(pathname.slice(1));
-            switch (host) {
-                case "root": return net.fetch(`file:///${LiteLoader.path.root}/${filepath}`);
-                case "profile": return net.fetch(`file:///${LiteLoader.path.profile}/${filepath}`);
-                default: return net.fetch(`file://${host}/${filepath}`);
-            }
-        });
-    }
 }
 
 
