@@ -36,7 +36,6 @@ const runPreloadScript = code => binding.createPreloadScript(`
             }
         }
     }
-
     contextBridge.exposeInMainWorld("LiteLoaderPreloadErrors", preloadErrors);
 })();
 

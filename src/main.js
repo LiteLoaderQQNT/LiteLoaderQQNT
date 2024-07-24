@@ -1,48 +1,14 @@
+require("./liteloader_api/main.js");
+require("./loader_core/plugin_loader.js");
+
+const { MainLoader } = require("./loader_core/main.js");
+const { protocolRegister } = require("./protocol_scheme/main.js");
 const { ipcMain } = require("electron");
 const path = require("path");
 const fs = require("fs");
-const { protocolRegister } = require("./protocol_scheme/main.js");
 
 
-const loader = (new class {
-
-    #exports = {};
-
-    init() {
-        // 加载插件
-        for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
-            if (plugin.disabled || plugin.incompatible) {
-                continue;
-            }
-            if (plugin.path.injects.main) {
-                try {
-                    this.#exports[slug] = require(plugin.path.injects.main);
-                }
-                catch (e) {
-                    plugin.error = { message: `[Main] ${e.message}`, stack: e.stack };
-                }
-            }
-        }
-        return this;
-    }
-
-    onBrowserWindowCreated(window) {
-        for (const [slug, plugin] of Object.entries(this.#exports)) {
-            if (plugin?.onBrowserWindowCreated) {
-                plugin.onBrowserWindowCreated(window);
-            }
-        }
-    }
-
-    onLogin(uid) {
-        for (const [slug, plugin] of Object.entries(this.#exports)) {
-            if (plugin?.onLogin) {
-                plugin.onLogin(uid);
-            }
-        }
-    }
-
-}).init();
+const loader = new MainLoader().init();
 
 
 ipcMain.handle("LiteLoader.LiteLoader.preload", (event) => {
