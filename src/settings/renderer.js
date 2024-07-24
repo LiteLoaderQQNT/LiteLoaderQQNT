@@ -1,4 +1,4 @@
-import default_config from "./static/config.json" assert {type: "json"};
+import default_config from "./static/config.json" with {type: "json"};
 
 
 export class SettingInterface {

@@ -51,30 +51,18 @@ ipcMain.handle("LiteLoader.LiteLoader.preload", (event) => {
 
 
 function processPreloadPath(qqnt_preload_path) {
+    const qqnt_preload_dirname = path.dirname(qqnt_preload_path);
+    const qqnt_preload_basename = path.basename(qqnt_preload_path);
+    const new_preload_path = `${qqnt_preload_dirname}/../application/${qqnt_preload_basename}`;
     const liteloader_preload_path = path.join(LiteLoader.path.root, "src/preload.js");
-    const asar_path = qqnt_preload_path.split(".asar")[0];
-
-    let preload_path = "";
-
-    if (asar_path == qqnt_preload_path) {
-        const preload_path_dirname = path.dirname(qqnt_preload_path).replaceAll("\\", "/");
-        preload_path = `${preload_path_dirname}/../application/preload.js`;
+    if (!fs.existsSync(new_preload_path)) {
+        fs.mkdirSync(qqnt_preload_dirname, { recursive: true });
+        fs.copyFileSync(liteloader_preload_path, new_preload_path);
     }
-    else {
-        const asar_path_dirname = path.dirname(qqnt_preload_path.split(".asar")[1]);
-        preload_path = `${asar_path}/../${path.basename(asar_path)}${asar_path_dirname}/preload.js`;
+    if (fs.readFileSync(new_preload_path) != fs.readFileSync(liteloader_preload_path)) {
+        fs.copyFileSync(liteloader_preload_path, new_preload_path);
     }
-
-    if (!fs.existsSync(preload_path)) {
-        fs.mkdirSync(path.dirname(preload_path), { recursive: true });
-        fs.copyFileSync(liteloader_preload_path, preload_path);
-    }
-
-    if (fs.readFileSync(preload_path, "utf-8") != fs.readFileSync(liteloader_preload_path, "utf-8")) {
-        fs.copyFileSync(liteloader_preload_path, preload_path);
-    }
-
-    return preload_path;
+    return new_preload_path.replaceAll("\\", "/");
 }
 
 
@@ -102,7 +90,6 @@ function proxyBrowserWindowConstruct(target, [config], newTarget) {
             webPreferences: {
                 ...config.webPreferences,
                 webSecurity: false,
-                devTools: true,
                 preload: processPreloadPath(qqnt_preload_path),
                 additionalArguments: ["--fetch-schemes=local"]
             }

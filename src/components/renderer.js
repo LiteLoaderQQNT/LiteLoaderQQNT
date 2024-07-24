@@ -1,4 +1,4 @@
-import style from "./static/style.css" assert { type: "css" };
+import style from "./static/style.css" with { type: "css" };
 
 const html_url = "local://root/src/components/static/template.html";
 const html_file = await (await fetch(html_url)).text();
