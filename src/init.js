@@ -12,15 +12,15 @@ let preloads = {};
 const liteloader_preload_path = path.join(LiteLoader.path.root, "src/preload.js");
 const qqnt_application_path = (() => {
     const app_path = path.join(process.resourcesPath, "app");
-    if (!fs.existsSync(path.join(app_path, "versions"))) return path.join(app_path, "application/");
-    else return path.join(app_path, "versions", LiteLoader.versions.qqnt, "application/");
+    if (!fs.existsSync(path.join(app_path, "versions"))) return path.join(app_path, "application");
+    else return path.join(app_path, "versions", LiteLoader.versions.qqnt, "application");
 })();
 
 const profile_application_path = path.join(LiteLoader.path.profile, "application");
-const inject_application_path = `${qqnt_application_path}../application`;
+const inject_application_path = `${qqnt_application_path}/../application`;
 
 const liteloader_preload_content = fs.readFileSync(liteloader_preload_path, "utf-8");
-const qqnt_application_content = fs.readdirSync(qqnt_application_path, "utf-8");
+const qqnt_application_content = fs.readdirSync(`${qqnt_application_path}.asar`, "utf-8");
 
 for (const item_name of qqnt_application_content) {
     if (!item_name.includes("preload")) continue;
@@ -29,7 +29,7 @@ for (const item_name of qqnt_application_content) {
     const qqnt_preload_content = fs.readFileSync(qqnt_preload_path, "utf-8");
 
     const inject_preload_path = `${inject_application_path}/${item_name}`;
-    const inject_preload_content = `${liteloader_preload_content}\n${qqnt_preload_content}`;
+    const inject_preload_content = `${liteloader_preload_content}\n{${qqnt_preload_content}}`;
 
     preloads[item_name] = inject_preload_content;
 
