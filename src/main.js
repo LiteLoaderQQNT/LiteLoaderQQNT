@@ -1,60 +1,31 @@
-require("./liteloader_api/main.js");
-require("./loader_core/plugin_loader.js");
-
 const { MainLoader } = require("./loader_core/main.js");
 const { protocolRegister } = require("./protocol_scheme/main.js");
-const { ipcMain } = require("electron");
 const path = require("path");
-const fs = require("fs");
 
 
 const loader = new MainLoader().init();
 
 
-ipcMain.handle("LiteLoader.LiteLoader.preload", (event) => {
-    const qqnt_preload_path = event.sender.preload;
-    return fs.readFileSync(qqnt_preload_path, "utf-8");
-});
-
-
-function processPreloadPath(qqnt_preload_path) {
-    const qqnt_preload_dirname = path.dirname(qqnt_preload_path);
-    const qqnt_preload_basename = path.basename(qqnt_preload_path);
-    const new_preload_path = `${qqnt_preload_dirname}/../application/${qqnt_preload_basename}`;
-    const liteloader_preload_path = path.join(LiteLoader.path.root, "src/preload.js");
-    if (!fs.existsSync(new_preload_path)) {
-        fs.mkdirSync(qqnt_preload_dirname, { recursive: true });
-        fs.copyFileSync(liteloader_preload_path, new_preload_path);
-    }
-    if (fs.readFileSync(new_preload_path) != fs.readFileSync(liteloader_preload_path)) {
-        fs.copyFileSync(liteloader_preload_path, new_preload_path);
-    }
+function processPreloadPath(preload_path) {
+    const preload_dirname = path.dirname(preload_path);
+    const preload_basename = path.basename(preload_path);
+    const new_preload_path = `${preload_dirname}/../application/${preload_basename}`;
     return new_preload_path.replaceAll("\\", "/");
 }
 
 
 function proxyBrowserWindowConstruct(target, [config], newTarget) {
-    const qqnt_preload_path = config.webPreferences.preload;
     const window = Reflect.construct(target, [
         {
             ...config,
             webPreferences: {
                 ...config.webPreferences,
                 webSecurity: false,
-                preload: processPreloadPath(qqnt_preload_path),
+                preload: processPreloadPath(config.webPreferences.preload),
                 additionalArguments: ["--fetch-schemes=local"]
             }
         }
     ], newTarget);
-
-    // 挂载窗口原preload
-    window.webContents.preload = qqnt_preload_path;
-
-    // 加载自定义协议
-    protocolRegister(window.webContents.session.protocol);
-
-    // 加载插件
-    loader.onBrowserWindowCreated(window);
 
     // 监听send
     window.webContents.send = new Proxy(window.webContents.send, {
@@ -69,6 +40,12 @@ function proxyBrowserWindowConstruct(target, [config], newTarget) {
             return Reflect.apply(target, thisArg, [channel, ...args]);
         }
     });
+
+    // 加载自定义协议
+    protocolRegister(window.webContents.session.protocol);
+
+    // 加载插件
+    loader.onBrowserWindowCreated(window);
 
     return window;
 }

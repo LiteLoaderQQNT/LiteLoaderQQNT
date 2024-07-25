@@ -1,4 +1,4 @@
-const { ipcRenderer, contextBridge } = require("electron");
+const { contextBridge } = require("electron");
 
 
 // 加载渲染进程
@@ -40,11 +40,4 @@ const runPreloadScript = code => binding.createPreloadScript(`
 })();
 
 
-// 加载 QQNT Preload
-let isLoaded = false;
-ipcRenderer.invoke("LiteLoader.LiteLoader.preload").then(preload => {
-    if (!isLoaded) {
-        runPreloadScript(preload);
-        isLoaded = true;
-    }
-});
+// 加载 QQNT Preload（这后面会被自动处理）
