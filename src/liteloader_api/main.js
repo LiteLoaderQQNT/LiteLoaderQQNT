@@ -69,14 +69,17 @@ const LiteLoader = {
 
 
 // 将LiteLoader对象挂载到全局
+const whitelist = [
+    LiteLoader.path.root,
+    LiteLoader.path.profile,
+    fs.realpathSync(LiteLoader.path.root),
+    fs.realpathSync(LiteLoader.path.profile),
+];
 Object.defineProperty(globalThis, "LiteLoader", {
     configurable: false,
     get() {
         const stack = new Error().stack.split("\n")[2];
-        if (stack.includes(LiteLoader.path.root)) {
-            return LiteLoader;
-        }
-        if (stack.includes(LiteLoader.path.profile)) {
+        if (whitelist.some(item => stack.includes(item))) {
             return LiteLoader;
         }
     }
