@@ -22,7 +22,7 @@ function proxyBrowserWindowConstruct(target, [config], newTarget) {
                 ...config.webPreferences,
                 webSecurity: false,
                 preload: processPreloadPath(config.webPreferences.preload),
-                additionalArguments: ["--fetch-schemes=local"]
+                additionalArguments: ["--fetch-schemes=local,app"]
             }
         }
     ], newTarget);
