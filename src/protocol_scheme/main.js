@@ -1,5 +1,13 @@
-const { protocol, net } = require("electron");
+const { app, protocol, net } = require("electron");
 const path = require("path");
+
+
+app.whenReady().then(() => {
+    const schemes = ["local"];
+    const old_schemes = app.commandLine.getSwitchValue("fetch-schemes");
+    const new_schemes = [old_schemes, ...schemes].join(",");
+    app.commandLine.appendSwitch("fetch-schemes", new_schemes);
+});
 
 
 protocol.registerSchemesAsPrivileged([
