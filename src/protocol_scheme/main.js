@@ -2,7 +2,7 @@ const { app, protocol, net } = require("electron");
 const path = require("path");
 
 
-app.whenReady().then(() => {
+app.on("ready", () => {
     const schemes = ["local"];
     const old_schemes = app.commandLine.getSwitchValue("fetch-schemes");
     const new_schemes = [old_schemes, ...schemes].join(",");
