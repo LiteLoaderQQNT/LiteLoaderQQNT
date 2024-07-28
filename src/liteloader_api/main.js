@@ -1,6 +1,10 @@
-const { ipcMain, shell } = require("electron");
+const { ipcMain, shell, dialog } = require("electron");
 const path = require("node:path");
 const fs = require("node:fs");
+
+
+const launcher_node = path.join(process.resourcesPath, "app/app_launcher/launcher.node");
+require(launcher_node).load("external_admzip", module);
 
 
 const root_path = path.join(__dirname, "..", "..");
@@ -35,6 +39,37 @@ function getConfig(slug, default_config) {
 }
 
 
+function pluginInstall(plugin_path) {
+    try {
+        if (fs.statSync(plugin_path).isFile()) {
+            // 通过 ZIP 格式文件安装插件
+            if (path.extname(plugin_path).toLowerCase() == ".zip") {
+                const plugin_zip = new exports.admZip.default(plugin_path);
+                for (const entry of plugin_zip.getEntries()) {
+                    if (entry.entryName == "manifest.json" || entry.entryName.split(/\/(.+)/)[1] == "manifest.json") {
+                        const { slug } = JSON.parse(entry.getData());
+                        const dest_path = path.join(LiteLoader.path.plugins, slug);
+                        plugin_zip.extractAllTo(dest_path);
+                        return true;
+                    }
+                }
+            }
+            // 通过 manifest.json 文件安装插件
+            if (path.basename(plugin_path) == "manifest.json") {
+                const { slug } = JSON.parse(fs.readFileSync(plugin_path));
+                const src_path = path.dirname(plugin_path);
+                const dest_path = path.join(LiteLoader.path.plugins, slug);
+                fs.cpSync(src_path, dest_path);
+                return true;
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
+    return false;
+}
+
+
 const LiteLoader = {
     path: {
         root: root_path,
@@ -62,8 +97,12 @@ const LiteLoader = {
             set: setConfig,
             get: getConfig
         },
+        plugin: {
+            install: pluginInstall,
+        },
         openExternal: shell.openExternal,
-        openPath: shell.openPath
+        openPath: shell.openPath,
+        openDialog: options => dialog.showOpenDialog(null, options)
     }
 };
 
@@ -95,23 +134,11 @@ ipcMain.on("LiteLoader.LiteLoader.LiteLoader", (event) => {
 });
 
 
-ipcMain.handle("LiteLoader.LiteLoader.api", (event, name, method, ...args) => {
-    if (name == "config") {
-        if (method == "get") {
-            return LiteLoader.api.config.get(...args);
-        }
-        if (method == "set") {
-            return LiteLoader.api.config.set(...args);
-        }
-    }
-    if (name == "openExternal") {
-        if (method == "openExternal") {
-            return LiteLoader.api.openExternal(...args);
-        }
-    }
-    if (name == "openPath") {
-        if (method == "openPath") {
-            return LiteLoader.api.openPath(...args);
-        }
+ipcMain.handle("LiteLoader.LiteLoader.api", (event, name, method, args) => {
+    try {
+        if (name == method) return LiteLoader.api[method](...args);
+        else return LiteLoader.api[name][method](...args);
+    } catch (error) {
+        return null;
     }
 });

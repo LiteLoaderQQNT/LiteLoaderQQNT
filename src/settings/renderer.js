@@ -163,12 +163,31 @@ async function initVersions(view) {
 
 async function initPluginList(view) {
     const plugin_item_template = view.querySelector("#plugin-item");
-    const plugin_loader_switch = view.querySelector(".plugins .loader setting-switch");
+    const plugin_install_button = view.querySelector(".plugins .plugin .install setting-button");
+    const plugin_loader_switch = view.querySelector(".plugins .plugin .loader setting-switch");
     const plugin_lists = {
         extension: view.querySelector(".plugins .extension"),
         theme: view.querySelector(".plugins .theme"),
         framework: view.querySelector(".plugins .framework"),
     };
+
+    plugin_install_button.addEventListener("click", async () => {
+        const resule = await LiteLoader.api.openDialog({
+            title: "LiteLoaderQQNT",
+            properties: ["openFile"],
+            filters: [
+                { name: "插件相关文件", extensions: ["zip", "json"] }
+            ]
+        });
+        if (!resule.canceled) {
+            const plugin_filepath = resule.filePaths[0];
+            if (LiteLoader.api.plugin.install(plugin_filepath)) {
+                alert(`插件安装成功，请重启程序\n${plugin_filepath}`);
+            } else {
+                alert(`插件安装失败，请检查文件\n${plugin_filepath}`);
+            }
+        }
+    });
 
     const config = await LiteLoader.api.config.get("LiteLoader", default_config);
     plugin_loader_switch.toggleAttribute("is-active", config.enable_plugins);
@@ -223,7 +242,7 @@ async function initPluginList(view) {
             }
         });
 
-        if(plugin.manifest.repository){
+        if (plugin.manifest.repository) {
             const repo_link = document.createElement("a");
             const repo_url = `https://github.com/${plugin.manifest.repository.repo}/tree/${plugin.manifest.repository.branch}`;
             repo_link.textContent = plugin.manifest.repository.repo;
