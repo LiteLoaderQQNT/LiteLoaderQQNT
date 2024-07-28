@@ -230,12 +230,15 @@ async function initPluginList(view) {
         plugin_item_name.title = plugin.manifest.name;
         plugin_item_description.textContent = plugin.manifest.description;
         plugin_item_description.title = plugin.manifest.description;
-        plugin_item_version.textContent = plugin.manifest.version;
+
+        const version_link = document.createElement("setting-link");
+        version_link.textContent = plugin.manifest.version;
+        plugin_item_version.append(version_link);
 
         plugin.manifest.authors?.forEach((author, index, array) => {
-            const author_link = document.createElement("a");
+            const author_link = document.createElement("setting-link");
             author_link.textContent = author.name;
-            author_link.addEventListener("click", () => LiteLoader.api.openExternal(author.link));
+            author_link.dataset["value"] = author.link;
             plugin_item_authors.append(author_link);
             if (index < array.length - 1) {
                 plugin_item_authors.append(" | ");
@@ -243,12 +246,12 @@ async function initPluginList(view) {
         });
 
         if (plugin.manifest.repository) {
-            const repo_link = document.createElement("a");
-            const repo_url = `https://github.com/${plugin.manifest.repository.repo}/tree/${plugin.manifest.repository.branch}`;
-            repo_link.textContent = plugin.manifest.repository.repo;
-            repo_link.addEventListener("click", () => LiteLoader.api.openExternal(repo_url));
+            const { repo, branch } = plugin.manifest.repository
+            const repo_link = document.createElement("setting-link");
+            repo_link.textContent = repo;
+            repo_link.dataset["value"] = `https://github.com/${repo}/tree/${branch}`;
             plugin_item_repo.append(repo_link);
-        }
+        } else plugin_item_repo.textContent = "暂无仓库信息";
 
         plugin_item_switch.toggleAttribute("is-active", !config.disabled_plugins.includes(slug));
         plugin_item_switch.addEventListener("click", () => {

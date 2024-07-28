@@ -365,6 +365,14 @@
 }
 
 
+@scope (:host(setting-link)) {
+    :scope {
+        color: var(--text_link);
+        cursor: pointer;
+    }
+}
+
+
 @scope (:host(setting-divider)) {
     :scope {
         display: block;

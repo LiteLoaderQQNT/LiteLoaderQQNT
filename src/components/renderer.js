@@ -213,6 +213,19 @@ customElements.define("setting-text", class extends SettingElementBase {
 });
 
 
+customElements.define("setting-link", class extends SettingElementBase {
+    static observedAttributes = ["data-value"];
+    constructor() {
+        super("setting-link");
+        this.addEventListener("click", () => {
+            if (this.dataset["value"]) {
+                LiteLoader.api.openExternal(this.dataset["value"]);
+            }
+        });
+    }
+});
+
+
 customElements.define("setting-divider", class extends SettingElementBase {
     static observedAttributes = ["data-direction"];
     constructor() {
