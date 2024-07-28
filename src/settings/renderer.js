@@ -181,7 +181,7 @@ async function initPluginList(view) {
         });
         if (!resule.canceled) {
             const plugin_filepath = resule.filePaths[0];
-            if (LiteLoader.api.plugin.install(plugin_filepath)) {
+            if (await LiteLoader.api.plugin.install(plugin_filepath)) {
                 alert(`插件安装成功，请重启程序\n${plugin_filepath}`);
             } else {
                 alert(`插件安装失败，请检查文件\n${plugin_filepath}`);

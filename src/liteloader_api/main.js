@@ -48,23 +48,43 @@ function pluginInstall(plugin_path) {
                 for (const entry of plugin_zip.getEntries()) {
                     if (entry.entryName == "manifest.json" || entry.entryName.split(/\/(.+)/)[1] == "manifest.json") {
                         const { slug } = JSON.parse(entry.getData());
-                        const dest_path = path.join(LiteLoader.path.plugins, slug);
-                        plugin_zip.extractAllTo(dest_path);
-                        return true;
+                        if (LiteLoader.api.plugin.uninstall(slug, false)) {
+                            const dest_path = path.join(LiteLoader.path.plugins, slug);
+                            plugin_zip.extractAllTo(dest_path);
+                            return true;
+                        }
                     }
                 }
             }
             // 通过 manifest.json 文件安装插件
             if (path.basename(plugin_path) == "manifest.json") {
                 const { slug } = JSON.parse(fs.readFileSync(plugin_path));
-                const src_path = path.dirname(plugin_path);
-                const dest_path = path.join(LiteLoader.path.plugins, slug);
-                fs.cpSync(src_path, dest_path);
-                return true;
+                if (LiteLoader.api.plugin.uninstall(slug, false)) {
+                    const src_path = path.dirname(plugin_path);
+                    const dest_path = path.join(LiteLoader.path.plugins, slug);
+                    fs.cpSync(src_path, dest_path, { recursive: true });
+                    return true;
+                }
             }
         }
     } catch (error) {
         console.error(error);
+    }
+    return false;
+}
+
+
+function pluginUninstall(slug, delete_data = false) {
+    if (!(slug in LiteLoader.plugins)) return true;
+    try {
+        const { plugin, data } = LiteLoader.plugins[slug].path;
+        if (delete_data) {
+            fs.rmdirSync(data);
+        }
+        fs.rmdirSync(plugin);
+        return true;
+    } catch (error) {
+        console.log(error);
     }
     return false;
 }
@@ -99,6 +119,7 @@ const LiteLoader = {
         },
         plugin: {
             install: pluginInstall,
+            uninstall: pluginUninstall,
         },
         openExternal: shell.openExternal,
         openPath: shell.openPath,
