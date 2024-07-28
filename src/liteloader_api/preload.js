@@ -17,7 +17,9 @@ Object.defineProperty(globalThis, "LiteLoader", {
             },
             plugin: {
                 install: (...args) => invokeAPI("plugin", "install", args),
-                uninstall: (...args) => invokeAPI("plugin", "uninstall", args)
+                uninstall: (...args) => invokeAPI("plugin", "uninstall", args),
+                enable: (...args) => invokeAPI("plugin", "enable", args),
+                disable: (...args) => invokeAPI("plugin", "disable", args)
             },
             openExternal: (...args) => invokeAPI("openExternal", "openExternal", args),
             openPath: (...args) => invokeAPI("openPath", "openPath", args),

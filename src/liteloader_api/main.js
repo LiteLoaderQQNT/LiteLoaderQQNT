@@ -1,3 +1,4 @@
+const default_config = require("../settings/static/config.json");
 const { ipcMain, shell, dialog } = require("electron");
 const path = require("node:path");
 const fs = require("node:fs");
@@ -90,6 +91,20 @@ function pluginUninstall(slug, delete_data = false) {
 }
 
 
+function pluginEnable(slug) {
+    const config = LiteLoader.api.config.get("LiteLoader", default_config);
+    config.disabled_plugins = config.disabled_plugins.filter(item => item != slug);
+    LiteLoader.api.config.set("LiteLoader", config);
+}
+
+
+function pluginDisable(slug) {
+    const config = LiteLoader.api.config.get("LiteLoader", default_config);
+    config.disabled_plugins = config.disabled_plugins.concat(slug);
+    LiteLoader.api.config.set("LiteLoader", config);
+}
+
+
 const LiteLoader = {
     path: {
         root: root_path,
@@ -120,6 +135,8 @@ const LiteLoader = {
         plugin: {
             install: pluginInstall,
             uninstall: pluginUninstall,
+            enable: pluginEnable,
+            disable: pluginDisable
         },
         openExternal: shell.openExternal,
         openPath: shell.openPath,

@@ -81,19 +81,6 @@ export class SettingInterface {
 }
 
 
-// 禁用插件
-async function disablePlugin(slug, disabled) {
-    const config = await LiteLoader.api.config.get("LiteLoader", default_config);
-    if (disabled) {
-        config.disabled_plugins = config.disabled_plugins.concat(slug);
-    }
-    else {
-        config.disabled_plugins = config.disabled_plugins.filter(item => item != slug);
-    }
-    await LiteLoader.api.config.set("LiteLoader", config);
-}
-
-
 async function appropriateIcon(pluginIconUrlUsingLocalPotocol) {
     if (pluginIconUrlUsingLocalPotocol.endsWith('.svg')) {
         return await (await fetch(pluginIconUrlUsingLocalPotocol)).text();
@@ -257,7 +244,7 @@ async function initPluginList(view) {
         plugin_item_switch.addEventListener("click", () => {
             const isActive = plugin_item_switch.hasAttribute("is-active");
             plugin_item_switch.toggleAttribute("is-active", !isActive);
-            disablePlugin(slug, isActive);
+            LiteLoader.api.plugin[isActive ? "disable" : "enable"](slug);
         });
 
         plugin_list.append(plugin_item);
