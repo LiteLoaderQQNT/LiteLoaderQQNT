@@ -35,7 +35,7 @@ export class SettingInterface {
         });
     }
 
-    async add(plugin) {
+    add(plugin) {
         const default_thumb = `local://root/src/settings/static/default.svg`;
         const plugin_thumb = `local:///${plugin.path.plugin}/${plugin.manifest?.thumb}`;
         const thumb = plugin.manifest.thumb ? plugin_thumb : default_thumb;
@@ -43,7 +43,7 @@ export class SettingInterface {
         const view = document.createElement("div");
         nav_item.classList.remove("nav-item-active");
         nav_item.setAttribute("data-slug", plugin.manifest.slug);
-        nav_item.querySelector(".q-icon").innerHTML = await appropriateIcon(thumb);
+        appropriateIcon(thumb).then(async text => nav_item.querySelector(".q-icon").innerHTML = text);
         nav_item.querySelector(".name").textContent = plugin.manifest.name;
         nav_item.addEventListener("click", event => {
             if (!event.currentTarget.classList.contains("nav-item-active")) {
@@ -56,13 +56,13 @@ export class SettingInterface {
         return view;
     }
 
-    async SettingInit() {
+    SettingInit() {
         const style = document.createElement("link");
         style.rel = "stylesheet";
         style.type = "text/css";
         style.href = "local://root/src/settings/static/style.css";
         document.head.append(style);
-        const view = await this.add({
+        const view = this.add({
             manifest: {
                 slug: "config_view",
                 name: "LiteLoaderQQNT",
@@ -72,11 +72,13 @@ export class SettingInterface {
                 plugin: LiteLoader.path.root
             }
         });
-        view.innerHTML = await (await fetch("local://root/src/settings/static/view.html")).text();
-        initVersions(view);
-        initPluginList(view);
-        initPath(view);
-        initAbout(view);
+        fetch("local://root/src/settings/static/view.html").then(async res => {
+            view.innerHTML = await res.text();
+            initVersions(view);
+            initPluginList(view);
+            initPath(view);
+            initAbout(view);
+        });
     }
 }
 

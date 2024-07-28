@@ -35,19 +35,17 @@ export class RendererLoader {
         return this;
     }
 
-    async onSettingWindowCreated(settingInterface) {
+    onSettingWindowCreated(settingInterface) {
         for (const [slug, plugin] of Object.entries(this.#exports)) {
             if (plugin?.onSettingWindowCreated || plugin?.error) {
-                const view = await settingInterface.add(LiteLoader.plugins[slug]);
-                (async () => {
-                    try {
-                        if (plugin.error) throw plugin.error;
-                        await plugin.onSettingWindowCreated(view);
-                    }
-                    catch (e) {
-                        this.#createErrorView(e, slug, view);
-                    }
-                })();
+                const view = settingInterface.add(LiteLoader.plugins[slug]);
+                try {
+                    if (plugin.error) throw plugin.error;
+                    plugin.onSettingWindowCreated(view);
+                }
+                catch (e) {
+                    this.#createErrorView(e, slug, view);
+                }
             }
         }
     }

@@ -8,7 +8,7 @@ const loader = await new RendererLoader().init();
 
 
 // 寻找指定元素
-async function findElement(selector, callback) {
+function findElement(selector, callback) {
     const observer = (_, observer) => {
         const element = document.querySelector(selector);
         if (element) {
@@ -41,12 +41,12 @@ async function watchURLHash(callback) {
 }
 
 
-async function loadSettingInterface(currentHash) {
+function loadSettingInterface(currentHash) {
     if (currentHash.includes("#/setting")) {
         const settingInterface = new SettingInterface();
-        findElement(".setting-tab .nav-bar", async () => {
-            await settingInterface.SettingInit();
-            await loader.onSettingWindowCreated(settingInterface);
+        findElement(".setting-tab .nav-bar", () => {
+            settingInterface.SettingInit();
+            loader.onSettingWindowCreated(settingInterface);
         });
     }
 }
