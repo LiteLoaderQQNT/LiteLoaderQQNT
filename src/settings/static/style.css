@@ -56,7 +56,7 @@
 
         &:focus,
         &:hover {
-            border: dashed var(--text_secondary) !important;
+            border-color: var(--text_secondary);
         }
 
         &::file-selector-button {
