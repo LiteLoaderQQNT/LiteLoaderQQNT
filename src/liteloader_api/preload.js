@@ -22,8 +22,7 @@ Object.defineProperty(globalThis, "LiteLoader", {
                 disable: (...args) => invokeAPI("plugin", "disable", args)
             },
             openExternal: (...args) => invokeAPI("openExternal", "openExternal", args),
-            openPath: (...args) => invokeAPI("openPath", "openPath", args),
-            openDialog: (...args) => invokeAPI("openDialog", "openDialog", args)
+            openPath: (...args) => invokeAPI("openPath", "openPath", args)
         }
     }
 });

@@ -1,5 +1,5 @@
 const default_config = require("../settings/static/config.json");
-const { ipcMain, shell, dialog } = require("electron");
+const { ipcMain, shell } = require("electron");
 const path = require("node:path");
 const fs = require("node:fs");
 
@@ -139,8 +139,7 @@ const LiteLoader = {
             disable: pluginDisable
         },
         openExternal: shell.openExternal,
-        openPath: shell.openPath,
-        openDialog: options => dialog.showOpenDialog(null, options)
+        openPath: shell.openPath
     }
 };
 
