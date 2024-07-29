@@ -54,8 +54,7 @@
         padding: 0.5em;
         transition: border-color 0.2s ease-in-out;
 
-        &:focus,
-        &:hover {
+        &:focus, &:hover {
             border-color: var(--text_secondary);
         }
 
@@ -67,7 +66,6 @@
             border-color: var(--fill_standard_primary);
             height: 2em;
             transition: background-color 0.2s ease-in-out;
-
         }
 
         &::file-selector-button:hover {
