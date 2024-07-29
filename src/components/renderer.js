@@ -232,3 +232,20 @@ customElements.define("setting-divider", class extends SettingElementBase {
         super("setting-divider");
     }
 });
+
+
+customElements.define("setting-modal", class extends SettingElementBase {
+    static observedAttributes = ["data-title", "is-active"];
+    constructor() {
+        super("setting-modal");
+        this._title = this.shadowRoot.querySelector(".title");
+        this._close = this.shadowRoot.querySelector(".close");
+        this._modal = this.shadowRoot.querySelector(".modal");
+        this._close.addEventListener("click", () => this.toggleAttribute("is-active"));
+        this._modal.addEventListener("click", () => this.toggleAttribute("is-active"));
+        this.update();
+    }
+    update() {
+        this._title.textContent = this.dataset["title"];
+    }
+});
