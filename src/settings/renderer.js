@@ -161,22 +161,12 @@ async function initPluginList(view) {
     };
 
     plugin_install_area.addEventListener("change", async () => {
-        const plugin_filepath = plugin_install_area.files?.[0]?.path;
-        // const result = await LiteLoader.api.openDialog({
-        //     title: "LiteLoaderQQNT",
-        //     properties: ["openFile"],
-        //     filters: [
-        //         { name: "插件相关文件", extensions: ["zip", "json"] }
-        //     ]
-        // });
-        // if (!result.canceled) {
-        //     const plugin_filepath = result.filePaths[0];
-            if (await LiteLoader.api.plugin.install(plugin_filepath)) {
-                alert(`插件安装成功，请重启程序\n${plugin_filepath}`);
-            } else {
-                alert(`插件安装失败，请检查文件\n${plugin_filepath}`);
-            }
-        // }
+        const plugin_filepath = plugin_install_area.files?.[0]?.path; // https://stackoverflow.com/a/38549837
+        if (await LiteLoader.api.plugin.install(plugin_filepath)) {
+            alert(`插件安装成功，请重启程序\n${plugin_filepath}`);
+        } else {
+            alert(`插件安装失败，请检查文件\n${plugin_filepath}`);
+        }
     });
 
     const config = await LiteLoader.api.config.get("LiteLoader", default_config);
