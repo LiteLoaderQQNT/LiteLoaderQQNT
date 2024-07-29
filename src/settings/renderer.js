@@ -163,9 +163,9 @@ async function initPluginList(view) {
     plugin_install_area.addEventListener("change", async () => {
         const plugin_filepath = plugin_install_area.files?.[0]?.path; // https://stackoverflow.com/a/38549837
         if (await LiteLoader.api.plugin.install(plugin_filepath)) {
-            alert(`插件安装成功，请重启程序\n${plugin_filepath}`);
+            alert("插件安装成功，请重启程序");
         } else {
-            alert(`插件安装失败，请检查文件\n${plugin_filepath}`);
+            alert("插件安装失败，请检查文件");
         }
     });
 
@@ -203,7 +203,11 @@ async function initPluginList(view) {
         const plugin_item_version = plugin_item.querySelector(".version");
         const plugin_item_authors = plugin_item.querySelector(".authors");
         const plugin_item_repo = plugin_item.querySelector(".repo");
-        const plugin_item_switch = plugin_item.querySelector(".switch");
+        const plugin_item_manager = plugin_item.querySelector(".manager");
+        const plugin_item_manager_modal = plugin_item.querySelector(".manager-modal");
+        const manager_modal_enable = plugin_item_manager_modal.querySelector(".enable");
+        const manager_modal_keepdata = plugin_item_manager_modal.querySelector(".keepdata");
+        const manager_modal_uninstall = plugin_item_manager_modal.querySelector(".uninstall");
 
         plugin_item_icon.innerHTML = await appropriateIcon(icon);
         plugin_item_name.textContent = plugin.manifest.name;
@@ -233,11 +237,22 @@ async function initPluginList(view) {
             plugin_item_repo.append(repo_link);
         } else plugin_item_repo.textContent = "暂无仓库信息";
 
-        plugin_item_switch.toggleAttribute("is-active", !config.disabled_plugins.includes(slug));
-        plugin_item_switch.addEventListener("click", () => {
-            const isActive = plugin_item_switch.hasAttribute("is-active");
-            plugin_item_switch.toggleAttribute("is-active", !isActive);
-            LiteLoader.api.plugin[isActive ? "disable" : "enable"](slug);
+        plugin_item_manager_modal.dataset["title"] = plugin.manifest.name;
+
+        plugin_item_manager.addEventListener("click", () => {
+            plugin_item_manager_modal.toggleAttribute("is-active");
+        });
+
+        manager_modal_enable.toggleAttribute("is-active", !config.disabled_plugins.includes(slug));
+        manager_modal_enable.addEventListener("click", () => {
+            const isActive = manager_modal_enable.hasAttribute("is-active");
+            manager_modal_enable.toggleAttribute("is-active", !isActive);
+            LiteLoader.api.plugin[isActive ? "disable" : "enable"](slug)
+        });
+
+        manager_modal_uninstall.addEventListener("click", () => {
+            const is_keep_data = manager_modal_keepdata.hasAttribute("is-active");
+            LiteLoader.api.plugin.uninstall(slug, is_keep_data)
         });
 
         plugin_list.append(plugin_item);

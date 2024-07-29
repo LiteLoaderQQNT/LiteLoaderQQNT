@@ -129,7 +129,7 @@
 
 
 /* 设置页面样式 */
-.config_view .plugins :is(.extension, .theme, .framework) setting-item {
+.config_view .plugins :is(.extension, .theme, .framework) > setting-item {
     & {
         gap: 8px;
     }
