@@ -79,3 +79,21 @@
 <template id="setting-divider">
     <slot></slot>
 </template>
+
+
+<template id="setting-modal">
+    <div class="modal"></div>
+    <div class="main">
+        <div class="container">
+            <div class="header">
+                <div class="title"></div>
+                <svg class="close" viewBox="0 0 24 24">
+                    <use xlink:href="/_upper_/resource/icons/close_24.svg#close_24"></use>
+                </svg>
+            </div>
+            <div class="body">
+                <slot></slot>
+            </div>
+        </div>
+    </div>
+</template>
