@@ -46,7 +46,7 @@ function pluginInstall(plugin_path, undone = false) {
             if (path.extname(plugin_path).toLowerCase() == ".zip") {
                 const plugin_zip = new exports.admZip.default(plugin_path);
                 for (const entry of plugin_zip.getEntries()) {
-                    if (entry.entryName == "manifest.json" || entry.entryName.split(/\/(.+)/)[1] == "manifest.json") {
+                    if (entry.entryName == "manifest.json" && !entry.isDirectory) {
                         const { slug } = JSON.parse(entry.getData());
                         if (slug in LiteLoader.plugins) LiteLoader.api.plugin.delete(slug, false, false);
                         const config = LiteLoader.api.config.get("LiteLoader", default_config);
