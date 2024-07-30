@@ -152,7 +152,7 @@ async function initVersions(view) {
 
 async function initPluginList(view) {
     const plugin_item_template = view.querySelector("#plugin-item");
-    const plugin_install_area = view.querySelector(".plugins .plugin .install input[type='file']");
+    const plugin_install_button = view.querySelector(".plugins .plugin .install setting-button");
     const plugin_loader_switch = view.querySelector(".plugins .plugin .loader setting-switch");
     const plugin_lists = {
         extension: view.querySelector(".plugins .extension"),
@@ -160,14 +160,18 @@ async function initPluginList(view) {
         framework: view.querySelector(".plugins .framework"),
     };
 
-    plugin_install_area.addEventListener("change", async () => {
-        const filepath = plugin_install_area.files?.[0]?.path;
+    const input_file = document.createElement("input");
+    input_file.type = "file";
+    input_file.accept = ".zip,.json";
+    input_file.addEventListener("change", async () => {
+        const filepath = input_file.files?.[0]?.path;
         const config = await LiteLoader.api.config.get("LiteLoader", default_config);
         const has_install = Object.values(config.installing_plugins).some(item => item.plugin_path == filepath);
         const is_install = await LiteLoader.api.plugin.install(filepath, has_install);
         alert(is_install ? (has_install ? "已取消安装此插件" : "将在下次启动时安装") : "无法安装无效插件");
-        plugin_install_area.value = null;
+        input_file.value = null;
     });
+    plugin_install_button.addEventListener("click", () => input_file.click());
 
     const config = await LiteLoader.api.config.get("LiteLoader", default_config);
     plugin_loader_switch.toggleAttribute("is-active", config.enable_plugins);
