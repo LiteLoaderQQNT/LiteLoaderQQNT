@@ -161,12 +161,12 @@ async function initPluginList(view) {
     };
 
     plugin_install_area.addEventListener("change", async () => {
-        const plugin_filepath = plugin_install_area.files?.[0]?.path; // https://stackoverflow.com/a/38549837
-        if (await LiteLoader.api.plugin.install(plugin_filepath)) {
-            alert("插件安装成功，请重启程序");
-        } else {
-            alert("插件安装失败，请检查文件");
-        }
+        const filepath = plugin_install_area.files?.[0]?.path;
+        const config = await LiteLoader.api.config.get("LiteLoader", default_config);
+        const has_install = Object.values(config.installing_plugins).some(item => item.plugin_path == filepath);
+        const is_install = await LiteLoader.api.plugin.install(filepath, has_install);
+        alert(is_install ? (has_install ? "已取消安装此插件" : "将在下次启动时安装") : "无法安装无效插件");
+        plugin_install_area.value = null;
     });
 
     const config = await LiteLoader.api.config.get("LiteLoader", default_config);
@@ -247,12 +247,23 @@ async function initPluginList(view) {
         manager_modal_enable.addEventListener("click", () => {
             const isActive = manager_modal_enable.hasAttribute("is-active");
             manager_modal_enable.toggleAttribute("is-active", !isActive);
-            LiteLoader.api.plugin[isActive ? "disable" : "enable"](slug)
+            LiteLoader.api.plugin.disable(slug, !isActive);
         });
 
+        manager_modal_keepdata.toggleAttribute("is-active", !!config.deleting_plugins?.[slug]?.data_path);
+        manager_modal_keepdata.addEventListener("click", async () => {
+            const isActive = manager_modal_keepdata.hasAttribute("is-active");
+            manager_modal_keepdata.toggleAttribute("is-active", !isActive);
+            const config = await LiteLoader.api.config.get("LiteLoader", default_config);
+            if (slug in config.deleting_plugins) LiteLoader.api.plugin.delete(slug, !isActive, false);
+        });
+
+        manager_modal_uninstall.toggleAttribute("is-active", !!config.deleting_plugins?.[slug]);
         manager_modal_uninstall.addEventListener("click", () => {
-            const is_keep_data = manager_modal_keepdata.hasAttribute("is-active");
-            LiteLoader.api.plugin.uninstall(slug, is_keep_data)
+            const isActive = manager_modal_uninstall.hasAttribute("is-active");
+            manager_modal_uninstall.toggleAttribute("is-active", !isActive);
+            const keepdata = manager_modal_keepdata.hasAttribute("is-active");
+            LiteLoader.api.plugin.delete(slug, keepdata, isActive);
         });
 
         plugin_list.append(plugin_item);

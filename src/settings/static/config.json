@@ -1,4 +1,6 @@
 {
     "enable_plugins": true,
-    "disabled_plugins": []
+    "disabled_plugins": [],
+    "deleting_plugins": {},
+    "installing_plugins": {}
 }

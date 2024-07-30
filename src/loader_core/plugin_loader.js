@@ -2,6 +2,8 @@ const default_config = require("../settings/static/config.json");
 const path = require("node:path");
 const fs = require("node:fs");
 
+const launcher_node = path.join(process.resourcesPath, "app/app_launcher/launcher.node");
+require(launcher_node).load("external_admzip", module);
 
 const output = (...args) => console.log("\x1b[32m%s\x1b[0m", "[LiteLoader]", ...args);
 const config = LiteLoader.api.config.get("LiteLoader", default_config);
@@ -32,6 +34,38 @@ if (!fs.existsSync(LiteLoader.path.plugins)) {
         output("Plugins directory created successfully!");
     });
     return;
+}
+
+for (const slug in config.deleting_plugins) {
+    try {
+        const { plugin_path, data_path } = config.deleting_plugins[slug];
+        if (data_path) fs.rmSync(data_path, { recursive: true });
+        fs.rmSync(plugin_path, { recursive: true });
+        delete config.deleting_plugins[slug];
+        LiteLoader.api.config.set("LiteLoader", config);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+for (const slug in config.installing_plugins) {
+    try {
+        const { plugin_path, plugin_type } = config.installing_plugins[slug];
+        const dest_path = path.join(LiteLoader.path.plugins, slug);
+        if (fs.existsSync(dest_path)) {
+            fs.renameSync(dest_path, `${dest_path}_${parseInt(Math.random() * 100000)} `);
+        }
+        if (plugin_type == "zip") {
+            new exports.admZip.default(plugin_path).extractAllTo(dest_path);
+        }
+        if (plugin_type == "json") {
+            fs.cpSync(path.dirname(plugin_path), dest_path, { recursive: true });
+        }
+        delete config.installing_plugins[slug];
+        LiteLoader.api.config.set("LiteLoader", config);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 // 读取插件目录
