@@ -7,10 +7,12 @@ const loader = new MainLoader().init();
 
 
 function processPreloadPath(preload_path) {
-    const preload_dirname = path.dirname(preload_path);
-    const preload_basename = path.basename(preload_path);
-    const new_preload_path = `${preload_dirname}/../application/${preload_basename}`;
-    return new_preload_path.replaceAll("\\", "/");
+    if (preload_path) {
+        const preload_dirname = path.dirname(preload_path);
+        const preload_basename = path.basename(preload_path);
+        const new_preload_path = `${preload_dirname}/../application/${preload_basename}`;
+        return new_preload_path.replaceAll("\\", "/");
+    }
 }
 
 
