@@ -144,8 +144,12 @@ const LiteLoader = {
 const whitelist = [
     LiteLoader.path.root,
     LiteLoader.path.profile,
+    LiteLoader.path.data,
+    LiteLoader.path.plugins,
     fs.realpathSync(LiteLoader.path.root),
     fs.realpathSync(LiteLoader.path.profile),
+    fs.realpathSync(LiteLoader.path.data),
+    fs.realpathSync(LiteLoader.path.plugins),
 ];
 Object.defineProperty(globalThis, "LiteLoader", {
     configurable: false,
