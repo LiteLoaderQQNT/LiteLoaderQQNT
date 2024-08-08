@@ -1,7 +1,7 @@
 {
     "name": "liteloader-qqnt",
     "version": "1.2.0",
-    "description": "QQNT 插件加载器 LiteLoaderQQNT —— 轻量 · 简洁 · 开源",
+    "description": "QQNT 插件加载器 LiteLoaderQQNT —— 轻量 · 简洁 · 开源 · 福瑞",
     "main": "./src/init.js",
     "private": true,
     "license": "MIT",
