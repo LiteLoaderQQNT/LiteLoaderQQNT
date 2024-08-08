@@ -2,14 +2,12 @@ const { contextBridge } = require("electron");
 
 
 // 加载渲染进程
-document.addEventListener("readystatechange", () => {
-    if (document.readyState == "interactive") {
-        const script = document.createElement("script");
-        script.type = "module";
-        script.src = `local://root/src/renderer.js`;
-        document.head.prepend(script);
-    }
-});
+document.addEventListener("DOMContentLoaded", () => {
+    const script = document.createElement("script");
+    script.type = "module";
+    script.src = `local://root/src/renderer.js`;
+    document.head.prepend(script);
+})
 
 
 const runPreloadScript = code => binding.createPreloadScript(`
