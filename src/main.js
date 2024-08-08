@@ -7,7 +7,7 @@ const loader = new MainLoader().init();
 
 
 function processPreloadPath(preload_path) {
-    if (preload_path.includes(process.resourcesPath)) {
+    if (preload_path?.includes?.(process.resourcesPath)) {
         const preload_dirname = path.dirname(preload_path);
         const preload_basename = path.basename(preload_path);
         const new_preload_path = `${preload_dirname}/../application/${preload_basename}`;
