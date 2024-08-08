@@ -21,21 +21,6 @@ if (!config.enable_plugins) {
 
 output("Start finding all plugins.");
 
-// 如果插件目录不存在
-if (!fs.existsSync(LiteLoader.path.plugins)) {
-    output("The plugins directory does not exist.");
-    output("A new plugin directory will be created.");
-    fs.mkdir(LiteLoader.path.plugins, { recursive: true }, error => {
-        if (error) {
-            output("Plugins directory creation failed!");
-            output("Please check the plugins directory.");
-            return;
-        }
-        output("Plugins directory created successfully!");
-    });
-    return;
-}
-
 for (const slug in config.deleting_plugins) {
     try {
         const { plugin_path, data_path } = config.deleting_plugins[slug];

@@ -146,11 +146,13 @@ const whitelist = [
     LiteLoader.path.profile,
     LiteLoader.path.data,
     LiteLoader.path.plugins,
-    fs.realpathSync(LiteLoader.path.root),
-    fs.realpathSync(LiteLoader.path.profile),
-    fs.realpathSync(LiteLoader.path.data),
-    fs.realpathSync(LiteLoader.path.plugins),
 ];
+try {
+    whitelist.push(fs.realpathSync(LiteLoader.path.root));
+    whitelist.push(fs.realpathSync(LiteLoader.path.profile));
+    whitelist.push(fs.realpathSync(LiteLoader.path.plugins));
+    whitelist.push(fs.realpathSync(LiteLoader.path.data));
+} catch { };
 Object.defineProperty(globalThis, "LiteLoader", {
     configurable: false,
     get() {
