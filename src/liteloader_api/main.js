@@ -20,21 +20,30 @@ const qqnt_version = (() => {   // 兼容无快更
 
 
 function setConfig(slug, new_config) {
-    const config_path = path.join(data_path, slug, "config.json");
-    fs.mkdirSync(path.dirname(config_path), { recursive: true });
-    fs.writeFileSync(config_path, JSON.stringify(new_config, null, 4), "utf-8");
+    try {
+        const config_path = path.join(data_path, slug, "config.json");
+        fs.mkdirSync(path.dirname(config_path), { recursive: true });
+        fs.writeFileSync(config_path, JSON.stringify(new_config, null, 4), "utf-8");
+        return true;
+    } catch {
+        return false;
+    }
 }
 
 
 function getConfig(slug, default_config) {
-    const config_path = path.join(data_path, slug, "config.json");
-    if (fs.existsSync(config_path)) {
-        const config = JSON.parse(fs.readFileSync(config_path, "utf-8"));
-        return Object.assign({}, default_config, config);
-    }
-    else {
-        setConfig(slug, default_config);
-        return Object.assign({}, default_config, {});
+    try {
+        const config_path = path.join(data_path, slug, "config.json");
+        if (fs.existsSync(config_path)) {
+            const config = JSON.parse(fs.readFileSync(config_path, "utf-8"));
+            return Object.assign({}, default_config, config);
+        }
+        else {
+            setConfig(slug, default_config);
+            return Object.assign({}, default_config, {});
+        }
+    } catch {
+        return default_config;
     }
 }
 
