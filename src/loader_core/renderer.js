@@ -10,19 +10,17 @@ export class RendererLoader {
                 check();
             });
         }
-
         // 加载插件
-        for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
+        for (const slug in LiteLoader.plugins) {
+            const plugin = LiteLoader.plugins[slug];
             if (plugin.disabled || plugin.incompatible) {
                 continue;
             }
-
             const error = plugin.error || LiteLoaderPreloadErrors[slug];
             if (error) {
                 this.#exports[slug] = { error };
                 continue
             }
-
             if (plugin.path.injects.renderer) {
                 try {
                     this.#exports[slug] = await import(`local:///${plugin.path.injects.renderer}`);
@@ -36,53 +34,31 @@ export class RendererLoader {
     }
 
     onSettingWindowCreated(settingInterface) {
-        for (const [slug, plugin] of Object.entries(this.#exports)) {
-            if (plugin?.onSettingWindowCreated || plugin?.error) {
+        for (const slug in this.#exports) {
+            const plugin = this.#exports[slug];
+            try {
+                if (plugin.error) throw plugin.error;
+                plugin.onSettingWindowCreated?.(settingInterface.add(LiteLoader.plugins[slug]));
+            }
+            catch (e) {
                 const view = settingInterface.add(LiteLoader.plugins[slug]);
-                try {
-                    if (plugin.error) throw plugin.error;
-                    plugin.onSettingWindowCreated(view);
-                }
-                catch (e) {
-                    this.#createErrorView(e, slug, view);
-                }
+                settingInterface.createErrorView(e, slug, view);
             }
         }
     }
 
     onVueComponentMount(component) {
-        for (const [slug, plugin] of Object.entries(this.#exports)) {
-            if (plugin?.onVueComponentMount) {
-                plugin.onVueComponentMount(component);
-            }
+        for (const slug in this.#exports) {
+            const plugin = this.#exports[slug];
+            plugin.onVueComponentMount?.(component);
         }
     }
 
     onVueComponentUnmount(component) {
-        for (const [slug, plugin] of Object.entries(this.#exports)) {
-            if (plugin?.onVueComponentUnmount) {
-                plugin.onVueComponentUnmount(component);
-            }
+        for (const slug in this.#exports) {
+            const plugin = this.#exports[slug];
+            plugin.onVueComponentUnmount?.(component);
         }
-    }
-
-    #createErrorView(error, slug, view) {
-        const navItem = document.querySelector(`.nav-item[data-slug="${slug}"]`);
-        navItem.classList.add("error");
-        navItem.title = "插件加载出错";
-
-        view.classList.add("error");
-        view.innerHTML =
-            `<h2>🙀 插件加载出错！</h2>
-            <p>可能是版本不兼容、Bug、冲突或文件损坏等导致的</p>
-            🐞 错误信息
-            <textarea readonly rows="8">${error.message}\n${error.stack}</textarea>
-            🧩 插件信息
-            <textarea readonly rows="12">${JSON.stringify(LiteLoader.plugins[slug])}</textarea>
-            <textarea readonly rows="3">${JSON.stringify(Object.keys(LiteLoader.plugins))}</textarea>
-            🖥️ 环境信息
-            <textarea readonly rows="3">${JSON.stringify({ ...LiteLoader.versions, ...LiteLoader.os })}</textarea>
-            <small>* 此页面仅在插件加载出现问题出现，不代表插件本身有设置页</small>`; // 没必要格式化json，方便截图
     }
 
 }

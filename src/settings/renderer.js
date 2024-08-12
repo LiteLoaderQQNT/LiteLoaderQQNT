@@ -80,6 +80,25 @@ export class SettingInterface {
             initAbout(view);
         });
     }
+
+    createErrorView(error, slug, view) {
+        const navItem = document.querySelector(`.nav-item[data-slug="${slug}"]`);
+        navItem.classList.add("error");
+        navItem.title = "插件加载出错";
+
+        view.classList.add("error");
+        view.innerHTML =
+            `<h2>🙀 插件加载出错！</h2>
+            <p>可能是版本不兼容、Bug、冲突或文件损坏等导致的</p>
+            🐞 错误信息
+            <textarea readonly rows="8">${error.message}\n${error.stack}</textarea>
+            🧩 插件信息
+            <textarea readonly rows="12">${JSON.stringify(LiteLoader.plugins[slug])}</textarea>
+            <textarea readonly rows="3">${JSON.stringify(Object.keys(LiteLoader.plugins))}</textarea>
+            🖥️ 环境信息
+            <textarea readonly rows="3">${JSON.stringify({ ...LiteLoader.versions, ...LiteLoader.os })}</textarea>
+            <small>* 此页面仅在插件加载出现问题出现，不代表插件本身有设置页</small>`; // 没必要格式化json，方便截图
+    }
 }
 
 

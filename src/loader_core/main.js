@@ -4,7 +4,8 @@ exports.MainLoader = class {
 
     init() {
         // 加载插件
-        for (const [slug, plugin] of Object.entries(LiteLoader.plugins)) {
+        for (const slug in LiteLoader.plugins) {
+            const plugin = LiteLoader.plugins[slug];
             if (plugin.disabled || plugin.incompatible) {
                 continue;
             }
@@ -21,18 +22,16 @@ exports.MainLoader = class {
     }
 
     onBrowserWindowCreated(window) {
-        for (const [slug, plugin] of Object.entries(this.#exports)) {
-            if (plugin?.onBrowserWindowCreated) {
-                plugin.onBrowserWindowCreated(window);
-            }
+        for (const slug in this.#exports) {
+            const plugin = this.#exports[slug];
+            plugin.onBrowserWindowCreated?.(window);
         }
     }
 
     onLogin(uid) {
-        for (const [slug, plugin] of Object.entries(this.#exports)) {
-            if (plugin?.onLogin) {
-                plugin.onLogin(uid);
-            }
+        for (const slug in this.#exports) {
+            const plugin = this.#exports[slug];
+            plugin.onLogin?.(uid);
         }
     }
 
