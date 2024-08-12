@@ -1,3 +1,18 @@
+function topologicalSort(dependencies) {
+    const sorted = [];
+    const visited = new Set();
+    const visit = (slug) => {
+        if (visited.has(slug)) return;
+        visited.add(slug);
+        const plugin = LiteLoader.plugins[slug];
+        plugin.manifest.dependencies?.forEach(depSlug => visit(depSlug));
+        sorted.push(slug);
+    }
+    dependencies.forEach(slug => visit(slug));
+    return sorted;
+}
+
+
 export class RendererLoader {
 
     #exports = {};
@@ -11,7 +26,7 @@ export class RendererLoader {
             });
         }
         // 加载插件
-        for (const slug in LiteLoader.plugins) {
+        for (const slug of topologicalSort(Object.keys(LiteLoader.plugins))) {
             const plugin = LiteLoader.plugins[slug];
             if (plugin.disabled || plugin.incompatible) {
                 continue;
