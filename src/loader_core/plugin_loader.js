@@ -3,8 +3,18 @@ const path = require("node:path");
 const fs = require("node:fs");
 
 const default_config = require("../settings/static/config.json");
-const launcher_node = path.join(process.resourcesPath, "app/app_launcher/launcher.node");
-require(launcher_node).load("external_admzip", module);
+
+const admZip = (() => {
+    const major_node = path.join(process.resourcesPath, "app/major.node");
+    const launcher_node = path.join(process.resourcesPath, "app/app_launcher/launcher.node");
+    if (fs.existsSync(major_node)) {
+        require(major_node).load("internal_admzip", module);
+    }
+    else {
+        require(launcher_node).load("external_admzip", module);
+    }
+    return exports.admZip.default;
+})();
 
 
 const output = (...args) => console.log("\x1b[32m%s\x1b[0m", "[LiteLoader]", ...args);
@@ -42,7 +52,7 @@ function InstallPlugin(slug) {
             fs.renameSync(dest_path, `${dest_path}_${parseInt(Math.random() * 100000)} `);
         }
         if (plugin_type == "zip") {
-            new exports.admZip.default(plugin_path).extractAllTo(dest_path);
+            new admZip(plugin_path).extractAllTo(dest_path);
         }
         if (plugin_type == "json") {
             fs.cpSync(path.dirname(plugin_path), dest_path, { recursive: true });

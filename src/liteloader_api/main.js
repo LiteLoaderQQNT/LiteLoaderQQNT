@@ -3,8 +3,17 @@ const { ipcMain, shell } = require("electron");
 const path = require("node:path");
 const fs = require("node:fs");
 
-const launcher_node = path.join(process.resourcesPath, "app/app_launcher/launcher.node");
-require(launcher_node).load("external_admzip", module);
+const admZip = (() => {
+    const major_node = path.join(process.resourcesPath, "app/major.node");
+    const launcher_node = path.join(process.resourcesPath, "app/app_launcher/launcher.node");
+    if (fs.existsSync(major_node)) {
+        require(major_node).load("internal_admzip", module);
+    }
+    else {
+        require(launcher_node).load("external_admzip", module);
+    }
+    return exports.admZip.default;
+})();
 
 
 const root_path = path.join(__dirname, "..", "..");
@@ -13,7 +22,7 @@ const data_path = path.join(profile_path, "data");
 const plugins_path = path.join(profile_path, "plugins");
 const liteloader_package = require(path.join(root_path, "package.json"));
 const qqnt_package = require(path.join(process.resourcesPath, "app/package.json"))
-const qqnt_version = (() => {   // 兼容无快更
+const qqnt_version = (() => {
     const config_filepath = path.join(process.resourcesPath, "app/versions/config.json");
     return fs.existsSync(config_filepath) ? require(config_filepath) : qqnt_package;
 })();
@@ -53,7 +62,7 @@ function pluginInstall(plugin_path, undone = false) {
         if (fs.statSync(plugin_path).isFile()) {
             // 通过 ZIP 格式文件安装插件
             if (path.extname(plugin_path).toLowerCase() == ".zip") {
-                const plugin_zip = new exports.admZip.default(plugin_path);
+                const plugin_zip = new admZip(plugin_path);
                 for (const entry of plugin_zip.getEntries()) {
                     if (entry.entryName == "manifest.json" && !entry.isDirectory) {
                         const { slug } = JSON.parse(entry.getData());
