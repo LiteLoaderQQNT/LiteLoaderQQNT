@@ -68,6 +68,7 @@ function InstallPlugin(slug) {
 function findAllPlugin() {
     const plugins = [];
     try {
+        fs.mkdirSync(LiteLoader.path.plugins, { recursive: true });
         for (const pathname of fs.readdirSync(LiteLoader.path.plugins, "utf-8")) {
             try {
                 const filepath = path.join(LiteLoader.path.plugins, pathname, "manifest.json");
