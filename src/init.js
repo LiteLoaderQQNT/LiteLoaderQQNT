@@ -83,3 +83,18 @@ if (!isLatest) {
         });
     }
 }
+
+if (LiteLoader.package.qqnt.buildVersion >= 28060) {
+    const package_path = path.join(process.resourcesPath, "app/package.json");
+    const package = JSON.parse(fs.readFileSync(package_path, "utf-8"));
+
+    package.main = "./application/app_launcher/index.js";
+    fs.writeFileSync(package_path, JSON.stringify(package, null, 4), "utf-8");
+
+    require(path.join(process.resourcesPath, "app/app_launcher/index.js"));
+
+    setTimeout(() => {
+        package.main = "./app_launcher/llqqnt.js";
+        fs.writeFileSync(package_path, JSON.stringify(package, null, 4), "utf-8");
+    }, 0);
+}
