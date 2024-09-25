@@ -1,34 +1,15 @@
 const { MainLoader } = require("./loader_core/main.js");
 const { protocolRegister } = require("./protocol_scheme/main.js");
+const { session } = require('electron');
 const path = require("path");
+const fs = require("fs");
 
 
 const loader = new MainLoader().init();
 
 
-function processPreloadPath(preload_path) {
-    if (preload_path?.includes?.(process.resourcesPath)) {
-        const preload_dirname = path.dirname(preload_path);
-        const preload_basename = path.basename(preload_path);
-        const new_preload_path = `${preload_dirname}/../application/${preload_basename}`;
-        return new_preload_path.replaceAll("\\", "/");
-    }
-    // 小程序啥的就不要了
-    return preload_path;
-}
-
-
-function proxyBrowserWindowConstruct(target, [config], newTarget) {
-    const window = Reflect.construct(target, [
-        {
-            ...config,
-            webPreferences: {
-                ...config.webPreferences,
-                webSecurity: false,
-                preload: processPreloadPath(config.webPreferences.preload)
-            }
-        }
-    ], newTarget);
+function proxyBrowserWindowConstruct(target, argArray, newTarget) {
+    const window = Reflect.construct(target, argArray, newTarget);
 
     // 监听send
     window.webContents.send = new Proxy(window.webContents.send, {
@@ -43,6 +24,18 @@ function proxyBrowserWindowConstruct(target, [config], newTarget) {
             return Reflect.apply(target, thisArg, [channel, ...args]);
         }
     });
+
+    // 这旧时代的方法又能用了
+    session.defaultSession.setPreloads.call(window.webContents.session, [
+        ...window.webContents.session.getPreloads(),
+        (() => {
+            const versions_path = path.join(process.resourcesPath, "app/versions");
+            const prefix_old_path = path.join(versions_path, LiteLoader.versions.qqnt, "application");
+            const prefix_new_path = path.join(process.resourcesPath, "app/application");
+            const prefix_path = fs.existsSync(versions_path) ? prefix_old_path : prefix_new_path;
+            return `${prefix_path}/../application/preload.js`.replaceAll("\\", "/");
+        })()
+    ]);
 
     // 加载自定义协议
     protocolRegister(window.webContents.session.protocol);

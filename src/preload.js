@@ -29,6 +29,3 @@ Object.defineProperty(globalThis, "runPreloadScript", {
     runPreloadScript(await (await fetch(`local://root/src/liteloader_api/preload.js`)).text());
     runPreloadScript(await (await fetch(`local://root/src/loader_core/preload.js`)).text());
 })();
-
-
-// 加载 QQNT Preload（这后面会被自动处理）
