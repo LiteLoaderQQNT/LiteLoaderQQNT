@@ -29,7 +29,7 @@ function findElement(selector, callback) {
 
 
 // 监听页面变化
-async function watchURLHash(callback) {
+function watchURLHash(callback) {
     if (!location.hash.includes("#/blank")) {
         callback(location.hash);
     }
@@ -41,7 +41,8 @@ async function watchURLHash(callback) {
 }
 
 
-function loadSettingInterface(currentHash) {
+// 指定页面触发
+watchURLHash((currentHash) => {
     if (currentHash.includes("#/setting")) {
         const settingInterface = new SettingInterface();
         findElement(".setting-tab .nav-bar", () => {
@@ -49,11 +50,7 @@ function loadSettingInterface(currentHash) {
             loader.onSettingWindowCreated(settingInterface);
         });
     }
-}
-
-
-// 指定页面触发
-watchURLHash(loadSettingInterface);
+});
 
 
 Proxy = new Proxy(Proxy, {

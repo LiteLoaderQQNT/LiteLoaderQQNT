@@ -1,8 +1,6 @@
 const { MainLoader } = require("./loader_core/main.js");
 const { protocolRegister } = require("./protocol_scheme/main.js");
-const { session } = require('electron');
 const path = require("path");
-const fs = require("fs");
 
 
 const loader = new MainLoader().init();
