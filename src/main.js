@@ -25,17 +25,15 @@ function proxyBrowserWindowConstruct(target, argArray, newTarget) {
         }
     });
 
-    // 这旧时代的方法又能用了
-    session.defaultSession.setPreloads.call(window.webContents.session, [
-        ...window.webContents.session.getPreloads(),
-        (() => {
-            const versions_path = path.join(process.resourcesPath, "app/versions");
-            const prefix_old_path = path.join(versions_path, LiteLoader.versions.qqnt, "application");
-            const prefix_new_path = path.join(process.resourcesPath, "app/application");
-            const prefix_path = fs.existsSync(versions_path) ? prefix_old_path : prefix_new_path;
-            return `${prefix_path}/../application/preload.js`.replaceAll("\\", "/");
-        })()
-    ]);
+    // 加载Preload
+    window.webContents._getPreloadPaths = new Proxy(window.webContents._getPreloadPaths, {
+        apply(target, thisArg, argArray) {
+            return [
+                ...Reflect.apply(target, thisArg, argArray),
+                path.join(LiteLoader.path.root, "src/preload.js")
+            ];
+        }
+    });
 
     // 加载自定义协议
     protocolRegister(window.webContents.session.protocol);
