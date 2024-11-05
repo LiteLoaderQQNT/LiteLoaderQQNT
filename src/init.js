@@ -4,9 +4,10 @@ require("./main.js");
 require(require("path").join(process.resourcesPath, "app/app_launcher/index.js"));
 
 setTimeout(() => {
-    if (LiteLoader.package.qqnt.buildVersion >= 28060) {
-        global.launcher.installPathPkgJson.main = "./application/app_launcher/index.js";
-    } else {
-        global.launcher.installPathPkgJson.main = "./app_launcher/index.js";
-    }
+    const version = LiteLoader.package.qqnt.buildVersion;
+    global.launcher.installPathPkgJson.main = (() => {
+        if (version >= 29271) return "./application.asar/app_launcher/index.js";
+        if (version >= 28060) return "./application/app_launcher/index.js";
+        return "./app_launcher/index.js";
+    })();
 }, 0);
