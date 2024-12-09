@@ -140,8 +140,19 @@ async function initVersions(view) {
         const release_latest_url = `${repo_url.slice(0, repo_url.lastIndexOf(".git"))}/releases/latest`;
         fetch(release_latest_url).then((res) => {
             const new_version = res.url.slice(res.url.lastIndexOf("/") + 1);
+            // 比较版本号
+            const compareVersions = (v1, v2) => {
+                const v1Parts = v1.split(/[.-]/).map(part => isNaN(part) ? 0 : Number(part));
+                const v2Parts = v2.split(/[.-]/).map(part => isNaN(part) ? 0 : Number(part));
+                for (let i = 0; i < Math.max(v1Parts.length, v2Parts.length); i++) {
+                    const p1 = v1Parts[i] || 0;
+                    const p2 = v2Parts[i] || 0;
+                    if (p1 !== p2) return p1 < p2;
+                }
+                return false;
+            };
             // 有新版
-            if (LiteLoader.versions.liteloader != new_version) {
+            if (compareVersions(LiteLoader.versions.liteloader, new_version)) {
                 title.textContent = `发现 LiteLoaderQQNT 新版本 ${new_version}`;
                 update_btn.textContent = "去瞅一眼";
                 update_btn.value = res.url;
