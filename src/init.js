@@ -1,7 +1,16 @@
+const { join } = require("path");
+const { existsSync } = require("fs");
+
 require("./liteloader_api/main.js");
 require("./loader_core/plugin_loader.js");
 require("./main.js");
-require(require("path").join(process.resourcesPath, "app/app_launcher/index.js"));
+
+const app_launcher_index = join(process.resourcesPath, "app/app_launcher/index.js");
+
+if (existsSync(app_launcher_index))
+    require(app_launcher_index);
+else
+    require('./app_launcher/index.js');
 
 setImmediate(() => {
     const version = LiteLoader.package.qqnt.buildVersion;
