@@ -1,18 +1,12 @@
+const default_config = require("../settings/static/config.json");
 const { app, dialog } = require("electron");
 const path = require("node:path");
 const fs = require("node:fs");
 
-const default_config = require("../settings/static/config.json");
 
 const admZip = (() => {
-    const major_node = path.join(process.resourcesPath, "app/major.node");
-    const launcher_node = path.join(process.resourcesPath, "app/app_launcher/launcher.node");
-    if (fs.existsSync(major_node)) {
-        require(major_node).load("internal_admzip", module);
-    }
-    else {
-        require(launcher_node).load("external_admzip", module);
-    }
+    const major_node = path.join(process.resourcesPath, "app", "major.node");
+    require(major_node).load("internal_admzip", module);
     return exports.admZip.default;
 })();
 

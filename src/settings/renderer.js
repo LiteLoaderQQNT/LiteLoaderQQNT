@@ -112,6 +112,10 @@ async function appropriateIcon(pluginIconUrlUsingLocalPotocol) {
 
 
 async function initVersions(view) {
+    if (globalThis.qwqnt) {
+        view.querySelector(".versions .qwqnt").style.display = "block";
+    }
+
     const liteloader = view.querySelectorAll(".versions .current .liteloader setting-text");
     const qqnt = view.querySelectorAll(".versions .current .qqnt setting-text");
     const electron = view.querySelectorAll(".versions .current .electron setting-text");

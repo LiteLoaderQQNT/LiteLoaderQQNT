@@ -3,21 +3,17 @@ const { ipcMain, shell } = require("electron");
 const path = require("node:path");
 const fs = require("node:fs");
 
+
 const admZip = (() => {
-    const major_node = path.join(process.resourcesPath, "app/major.node");
-    const launcher_node = path.join(process.resourcesPath, "app/app_launcher/launcher.node");
-    if (fs.existsSync(major_node)) {
-        require(major_node).load("internal_admzip", module);
-    }
-    else {
-        require(launcher_node).load("external_admzip", module);
-    }
+    const major_node = path.join(process.resourcesPath, "app", "major.node");
+    require(major_node).load("internal_admzip", module);
     return exports.admZip.default;
 })();
 
 
+const qwqnt_path = path.join(globalThis.qwqnt.framework.paths.data, "LiteLoader");
 const root_path = path.join(__dirname, "..", "..");
-const profile_path = process.env.LITELOADERQQNT_PROFILE ?? root_path;
+const profile_path = process.env.LITELOADERQQNT_PROFILE ?? (globalThis.qwqnt ? qwqnt_path : root_path);
 const data_path = path.join(profile_path, "data");
 const plugins_path = path.join(profile_path, "plugins");
 const liteloader_package = require(path.join(root_path, "package.json"));
