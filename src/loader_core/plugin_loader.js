@@ -18,7 +18,9 @@ const config = LiteLoader.api.config.get("LiteLoader", default_config);
 function deletePlugin(slug) {
     try {
         const { plugin_path, data_path } = config.deleting_plugins[slug];
-        if (data_path) fs.rmSync(data_path, { recursive: true });
+        if (data_path && fs.existsSync(data_path)) {
+            fs.rmSync(data_path, { recursive: true });
+        }
         fs.rmSync(plugin_path, { recursive: true });
     }
     catch (error) {
