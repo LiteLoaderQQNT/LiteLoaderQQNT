@@ -11,7 +11,7 @@ const admZip = (() => {
 })();
 
 
-const qwqnt_path = path.join(globalThis.qwqnt.framework.paths.data, "LiteLoader");
+const qwqnt_path = path.join(globalThis.qwqnt?.framework?.paths?.data ?? "", "LiteLoader");
 const root_path = path.join(__dirname, "..", "..");
 const profile_path = process.env.LITELOADERQQNT_PROFILE ?? (globalThis.qwqnt ? qwqnt_path : root_path);
 const data_path = path.join(profile_path, "data");
