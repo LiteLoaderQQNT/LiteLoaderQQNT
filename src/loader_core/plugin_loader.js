@@ -15,6 +15,21 @@ const output = (...args) => console.log("\x1b[32m%s\x1b[0m", "[LiteLoader]", ...
 const config = LiteLoader.api.config.get("LiteLoader", default_config);
 
 
+function showErrorDialog(title, message) {
+    const showDialog = () => {
+        dialog.showMessageBox(null, {
+            type: "error",
+            title: "LiteLoaderQQNT",
+            message: `${title}\n${message}`
+        });
+    };
+    if (app.isReady()) {
+        showDialog();
+    } else {
+        app.once("ready", showDialog);
+    }
+}
+
 function deletePlugin(slug) {
     try {
         const { plugin_path, data_path } = config.deleting_plugins[slug];
@@ -25,13 +40,7 @@ function deletePlugin(slug) {
     }
     catch (error) {
         output("Deleting Plugin Error", error);
-        app.on("ready", () => {
-            dialog.showMessageBox(null, {
-                type: "error",
-                title: "LiteLoaderQQNT",
-                message: `删除插件时报错，请检查并手动删除\n${error}`
-            });
-        });
+        showErrorDialog("删除插件时报错，请检查并手动删除", error);
     }
     finally {
         delete config.deleting_plugins[slug];
@@ -56,13 +65,7 @@ function InstallPlugin(slug) {
     }
     catch (error) {
         output("Installing Plugin Error", error);
-        app.on("ready", () => {
-            dialog.showMessageBox(null, {
-                type: "error",
-                title: "LiteLoaderQQNT",
-                message: `安装插件时报错，请检查并手动安装\n${error}`
-            });
-        });
+        showErrorDialog("安装插件时报错，请检查并手动安装", error);
     }
     finally {
         delete config.installing_plugins[slug];
@@ -86,13 +89,7 @@ function findAllPlugin() {
     }
     catch (error) {
         output("Find Plugin Error", error);
-        app.on("ready", () => {
-            dialog.showMessageBox(null, {
-                type: "warning",
-                title: "LiteLoaderQQNT",
-                message: `在读取数据目录时报错了！请检查插件目录或忽略继续启动\n${error}`
-            });
-        });
+        showErrorDialog("在读取数据目录时报错了！请检查插件目录或忽略继续启动", error);
     }
     return plugins;
 }
@@ -135,13 +132,7 @@ function loadAllPlugin() {
     const missing = [...dependencies].filter(slug => !slugs.includes(slug));
     for (const slug of missing) {
         output("Missing Plugin:", slug);
-        app.on("ready", () => {
-            dialog.showMessageBox(null, {
-                type: "warning",
-                title: "LiteLoaderQQNT",
-                message: `插件缺少依赖：${slug}`
-            });
-        });
+        showErrorDialog("插件缺少依赖", slug);
     }
 }
 
