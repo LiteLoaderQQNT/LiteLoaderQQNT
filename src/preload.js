@@ -7,21 +7,23 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// 运行外部脚本
-Object.defineProperty(globalThis, "runPreloadScript", {
-    configurable: false,
-    value: content => new Function(
-        "require",
-        "process",
-        "Buffer",
-        "global",
-        "setImmediate",
-        "clearImmediate",
-        "exports",
-        "module",
-        content
-    )(...arguments)
-});
+// 运行预加载脚本
+function runPreloadScript(content) {
+    const objects = {
+        require,
+        process,
+        Buffer,
+        global,
+        setImmediate,
+        clearImmediate,
+        exports,
+        module,
+        runPreloadScript
+    };
+    const keys = Object.keys(objects);
+    const values = Object.values(objects);
+    return new Function(...keys, content)(...values);
+}
 
 
 // 加载插件 Preload
