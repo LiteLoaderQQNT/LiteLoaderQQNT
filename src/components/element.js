@@ -27,12 +27,11 @@ export class BaseElement extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
-        const template = this.getTemplate();
-        if (template) {
-            this.shadowRoot.innerHTML = template;
-        }
-        const sheet = new CSSStyleSheet();
-        sheet.replaceSync(`
+        this.shadowRoot.innerHTML = this.getTemplate();
+        const element_sheet = new CSSStyleSheet();
+        const default_sheet = new CSSStyleSheet();
+        element_sheet.replaceSync(this.getStyles());
+        default_sheet.replaceSync(`
             :host([is-disabled]), [is-disabled] {
                 opacity: 0.3;
                 cursor: not-allowed;
@@ -42,16 +41,7 @@ export class BaseElement extends HTMLElement {
                 display: none !important;
             }
         `);
-        this.shadowRoot.adoptedStyleSheets = [sheet];
-        const styles = this.getStyles();
-        if (styles) {
-            const sheet = new CSSStyleSheet();
-            sheet.replaceSync(styles);
-            this.shadowRoot.adoptedStyleSheets = [
-                ...this.shadowRoot.adoptedStyleSheets,
-                sheet
-            ];
-        }
+        this.shadowRoot.adoptedStyleSheets = [default_sheet, element_sheet];
     }
 
     setTitle(title) {

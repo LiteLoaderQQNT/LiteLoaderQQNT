@@ -105,31 +105,24 @@ export class List extends BaseElement {
     }
 
     #updateDividers() {
+        const direction = this.getDirection();
+        const collapsible = this.getCollapsible();
         const dividers = this.querySelectorAll("setting-divider");
         const children = this._slot.assignedElements();
         dividers.forEach(node => node.remove());
         children.forEach((node, index) => {
             const divider = document.createElement("setting-divider");
-            switch (this.getDirection()) {
-                case "column": {
-                    divider.setDirection("row");
-                    node.setDirection("row");
-                    break;
-                }
-                case "row": {
-                    divider.setDirection("column");
-                    node.setDirection("column");
-                    break;
-                }
-            }
-            if (this.getCollapsible()) {
-                if (index < children.length) {
-                    node.before(divider);
-                }
-            } else {
-                if (index + 1 < children.length) {
-                    node.after(divider);
-                }
+            const dividerDirection = direction == "column" ? "row" : "column";
+            const shouldInsertBefore = collapsible && index < children.length;
+            const shouldInsertAfter = !collapsible && index + 1 < children.length;
+            requestAnimationFrame(() => {
+                divider.setDirection(dividerDirection);
+                node.setDirection(dividerDirection);
+            });
+            if (shouldInsertBefore) {
+                node.before(divider);
+            } else if (shouldInsertAfter) {
+                node.after(divider);
             }
         });
     }
