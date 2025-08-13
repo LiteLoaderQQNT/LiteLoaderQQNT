@@ -1,3 +1,4 @@
+const { log } = require("console");
 const { MainLoader } = require("./loader_core/main.js");
 const { protocolRegister } = require("./protocol_scheme/main.js");
 const path = require("path");
@@ -12,11 +13,9 @@ function proxyBrowserWindowConstruct(target, argArray, newTarget) {
     // 监听send
     window.webContents.send = new Proxy(window.webContents.send, {
         apply(target, thisArg, [channel, ...args]) {
-            if (channel.includes("IPC_DOWN_")) {
-                // 账号登录
-                if (args?.[1]?.[0]?.cmdName == "nodeIKernelSessionListener/onSessionInitComplete") {
-                    const uid = args[1][0].payload.uid;
-                    loader.onLogin(uid);
+            if (channel.includes("RM_IPCFROM_")) {
+                if (args?.[1]?.cmdName == "nodeIKernelSessionListener/onSessionInitComplete") {
+                    loader.onLogin(args[1].payload.uid);
                 }
             }
             return Reflect.apply(target, thisArg, [channel, ...args]);
