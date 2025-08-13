@@ -20,11 +20,9 @@ export class Divider extends BaseElement {
                 margin: unset;
                 background-color: rgba(127, 127, 127, 0.15);
             }
-
             :host([data-direction="row"]) {
                 height: 1px;
             }
-
             :host([data-direction="column"]) {
                 width: 1px;
             }

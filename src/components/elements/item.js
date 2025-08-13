@@ -19,7 +19,6 @@ export class Item extends BaseElement {
                 padding: 0px 10px;
                 text-align: center;
             }
-
             :host([data-direction="row"]) {
                 padding: 12px 0px;
                 display: flex;

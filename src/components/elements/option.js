@@ -24,7 +24,12 @@ export class Option extends BaseElement {
             :host {
                 display: block;
             }
-
+            :host([is-selected]) li {
+                background-color: var(--overlay_active);
+            }
+            :host([is-selected]) svg {
+                display: block;
+            }
             li {
                 display: flex;
                 justify-content: space-between;
@@ -34,27 +39,19 @@ export class Option extends BaseElement {
                 color: var(--text_primary);
                 font-size: 12px;
                 padding: 0px 8px;
+                &:hover {
+                    background-color: var(--overlay_hover);
+                }
+                &:active {
+                    background-color: var(--overlay_pressed);
+                }
             }
-
-            li:hover {
-                background-color: var(--overlay_hover);
-            }
-
-            li:active {
-                background-color: var(--overlay_pressed);
-            }
-
-            :host([is-selected]) li {
-                background-color: var(--overlay_active);
-            }
-
             span {
                 margin-right: 8px;
                 overflow: hidden;
                 text-wrap: nowrap;
                 text-overflow: ellipsis;
             }
-
             svg {
                 flex-shrink: 0;
                 display: none;
@@ -64,10 +61,6 @@ export class Option extends BaseElement {
                 position: relative;
                 right: -4px;
                 top: 7px;
-            }
-
-            :host([is-selected]) svg {
-                display: block;
             }
         `;
     }

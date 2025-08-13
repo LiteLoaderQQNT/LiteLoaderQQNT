@@ -35,7 +35,6 @@ export class Modal extends BaseElement {
             :host {
                 display: none;
             }
-
             :host([is-active]) {
                 display: flex;
                 justify-content: center;
@@ -47,7 +46,6 @@ export class Modal extends BaseElement {
                 left: 0;
                 background: var(--msp-container);
                 z-index: 5000;
-
                 .modal {
                     position: fixed;
                     top: 0;
@@ -56,7 +54,6 @@ export class Modal extends BaseElement {
                     left: 0;
                     background-color: rgba(0, 0, 0, 0.5);
                 }
-
                 .main {
                     width: 480px;
                     height: fit-content;
@@ -67,40 +64,35 @@ export class Modal extends BaseElement {
                     border: var(--border_primary);
                     border-radius: 8px;
                     overflow: hidden;
-                }
-
-                .container {
-                    background-color: var(--bg_bottom_standard);
-                    overflow: hidden;
-                }
-
-                .header {
-                    height: 28px;
-                    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-                    position: relative;
-                }
-
-                .title {
-                    font-family: "PingFang SC";
-                    font-size: 12px;
-                    font-weight: 400;
-                    line-height: 28px;
-                    text-align: center;
-                }
-
-                .close {
-                    width: 16px;
-                    height: 16px;
-                    position: absolute;
-                    right: 4px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    color: var(--icon-primary);
-                }
-
-                .body {
-                    border-radius: 8px;
-                    padding: 20px 20px 0px 20px;
+                    & .container {
+                        background-color: var(--bg_bottom_standard);
+                        overflow: hidden;
+                        & .header {
+                            height: 28px;
+                            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+                            position: relative;
+                            & .title {
+                                font-family: "PingFang SC";
+                                font-size: 12px;
+                                font-weight: 400;
+                                line-height: 28px;
+                                text-align: center;
+                            }
+                            & .close {
+                                width: 16px;
+                                height: 16px;
+                                position: absolute;
+                                right: 4px;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                color: var(--icon-primary);
+                            }
+                        }
+                        & .body {
+                            border-radius: 8px;
+                            padding: 20px 20px 0px 20px;
+                        }
+                    }
                 }
             }
         `;

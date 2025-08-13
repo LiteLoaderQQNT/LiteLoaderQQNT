@@ -22,7 +22,6 @@ export class Text extends BaseElement {
                 -webkit-line-clamp: 1;
                 overflow: hidden;
             }
-
             :host([data-type="secondary"]) slot {
                 color: var(--text_secondary);
                 font-size: min(var(--font_size_2), 16px);
