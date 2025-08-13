@@ -29,13 +29,20 @@ export class List extends BaseElement {
                 display: block;
                 padding: 0px 16px;
             }
-
             :host([data-direction="row"]) {
                 display: flex;
                 justify-content: space-between;
                 padding: 16px 0px;
             }
-
+            :host([is-collapsible]) slot {
+                display: none !important;
+            }
+            :host([is-active]) slot {
+                display: block !important;
+            }
+            :host([is-active]) svg {
+                transform: rotate(-180deg);
+            }
             svg {
                 width: 1rem;
                 height: 1rem;
@@ -45,25 +52,11 @@ export class List extends BaseElement {
                 transition-delay: 0s;
                 transition-property: transform;
             }
-
-            :host([is-collapsible]) slot {
-                display: none !important;
-            }
-
-            :host([is-active]) slot {
-                display: block !important;
-            }
-
-            :host([is-active]) svg {
-                transform: rotate(-180deg);
-            }
-
             setting-item {
                 cursor: pointer;
                 font-size: min(var(--font_size_3), 18px);
                 line-height: min(var(--line_height_3), 24px);
             }
-
             h2 {
                 box-sizing: border-box;
                 font-size: 100%;
@@ -115,10 +108,8 @@ export class List extends BaseElement {
             const dividerDirection = direction == "column" ? "row" : "column";
             const shouldInsertBefore = collapsible && index < children.length;
             const shouldInsertAfter = !collapsible && index + 1 < children.length;
-            requestAnimationFrame(() => {
-                divider.setDirection(dividerDirection);
-                node.setDirection(dividerDirection);
-            });
+            divider.setDirection(dividerDirection);
+            node.setDirection?.(dividerDirection);
             if (shouldInsertBefore) {
                 node.before(divider);
             } else if (shouldInsertAfter) {
