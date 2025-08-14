@@ -1,4 +1,6 @@
-const { log } = require("console");
+require("./liteloader_api/main.js");
+require("./loader_core/plugin_loader.js");
+
 const { MainLoader } = require("./loader_core/main.js");
 const { protocolRegister } = require("./protocol_scheme/main.js");
 const path = require("path");
@@ -45,11 +47,11 @@ function proxyBrowserWindowConstruct(target, argArray, newTarget) {
 // 监听窗口创建
 require.cache["electron"] = new Proxy(require.cache["electron"], {
     get(target, property, receiver) {
-        const electron = Reflect.get(target, property, receiver);
-        return property != "exports" ? electron : new Proxy(electron, {
+        const module = Reflect.get(target, property, receiver);
+        return property != "exports" ? module : new Proxy(module, {
             get(target, property, receiver) {
-                const BrowserWindow = Reflect.get(target, property, receiver);
-                return property != "BrowserWindow" ? BrowserWindow : new Proxy(BrowserWindow, {
+                const exports = Reflect.get(target, property, receiver);
+                return property != "BrowserWindow" ? exports : new Proxy(exports, {
                     construct: proxyBrowserWindowConstruct
                 });
             }

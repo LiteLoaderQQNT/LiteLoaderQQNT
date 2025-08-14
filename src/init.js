@@ -1,5 +1,3 @@
-require("./liteloader_api/main.js");
-require("./loader_core/plugin_loader.js");
 require("./main.js");
 
 if (!globalThis.qwqnt) {
