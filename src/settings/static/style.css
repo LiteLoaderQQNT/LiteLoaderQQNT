@@ -104,47 +104,66 @@
 /* 设置页面样式 */
 .config_view .plugins :is(.extension, .theme, .framework) > setting-item {
     & {
-        gap: 8px;
-    }
-
-    & > div {
         & {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
             gap: 8px;
         }
 
-        & > div {
-            height: 48px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        &.disabled, &.deleted {
+            & .info-area > div > div {
+                opacity: 0.5;
+                font-weight: bold;
+                font-style: italic;
+            }
+
+            &.deleted {
+                & .info-area > div > div {
+                    text-decoration: line-through;
+                    color: var(--text-error);
+                }
+            }
         }
 
-        & > setting-text {
+
+        & .info-area {
             & {
+                flex: 1;
                 display: flex;
+                flex-direction: column;
                 gap: 8px;
             }
 
-            & :nth-child(-n+3) {
-                min-width: 120px;
+            & > div {
+                & {
+                    height: 48px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+
+                & .icon :is(img, svg) {
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 8px;
+                }
             }
 
-            & :nth-child(3) {
-                max-width: 240px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
+            & > setting-text {
+                & {
+                    display: flex;
+                    gap: 8px;
+                }
+
+                & :nth-child(-n+3) {
+                    min-width: 120px;
+                }
+
+                & :nth-child(3) {
+                    max-width: 240px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
             }
         }
-    }
-
-    /* 插件缩略图 */
-    & .icon :is(img, svg) {
-        width: 48px;
-        height: 48px;
-        border-radius: 8px;
     }
 }

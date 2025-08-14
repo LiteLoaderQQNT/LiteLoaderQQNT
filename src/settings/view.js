@@ -143,7 +143,7 @@ async function initPluginList(view) {
         const icon = plugin.manifest?.icon ? plugin_icon : default_icon;
 
         const plugin_list = plugin_lists[plugin.manifest.type] || plugin_lists.extension;
-        const plugin_item = document.importNode(plugin_item_template.content, true);
+        const plugin_item = document.importNode(plugin_item_template.content, true).querySelector("setting-item");
 
         const plugin_item_icon = plugin_item.querySelector(".icon");
         const plugin_item_name = plugin_item.querySelector(".name");
@@ -195,24 +195,30 @@ async function initPluginList(view) {
         manager_modal_enable.addEventListener("click", () => {
             const isActive = manager_modal_enable.getActive();
             manager_modal_enable.setActive(!isActive);
+            plugin_item.classList.toggle("disabled", isActive);
             LiteLoader.api.plugin.disable(slug, !isActive);
         });
+        plugin_item.classList.toggle("disabled", !manager_modal_enable.getActive());
 
         manager_modal_keepdata.setActive(!!config.deleting_plugins?.[slug]?.data_path);
         manager_modal_keepdata.addEventListener("click", async () => {
             const isActive = manager_modal_keepdata.getActive();
             manager_modal_keepdata.setActive(!isActive);
+            plugin_item.classList.toggle("deleted", !isActive);
             const config = await LiteLoader.api.config.get("LiteLoader", default_config);
             if (slug in config.deleting_plugins) LiteLoader.api.plugin.delete(slug, !isActive, false);
         });
+        plugin_item.classList.toggle("deleted", manager_modal_keepdata.getActive());
 
         manager_modal_uninstall.setActive(!!config.deleting_plugins?.[slug]);
         manager_modal_uninstall.addEventListener("click", () => {
             const isActive = manager_modal_uninstall.getActive();
             manager_modal_uninstall.setActive(!isActive);
+            plugin_item.classList.toggle("deleted", !isActive);
             const keepdata = manager_modal_keepdata.getActive();
             LiteLoader.api.plugin.delete(slug, keepdata, isActive);
         });
+        plugin_item.classList.toggle("deleted", manager_modal_uninstall.getActive());
 
         plugin_list.append(plugin_item);
 
