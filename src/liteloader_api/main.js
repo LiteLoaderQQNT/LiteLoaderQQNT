@@ -151,23 +151,26 @@ const LiteLoader = {
 
 
 // 将LiteLoader对象挂载到全局
-const whitelist = [
+const whitelist = new Set([
     LiteLoader.path.root,
     LiteLoader.path.profile,
     LiteLoader.path.data,
     LiteLoader.path.plugins,
-];
+]);
 try {
-    whitelist.push(fs.realpathSync(LiteLoader.path.root));
-    whitelist.push(fs.realpathSync(LiteLoader.path.profile));
-    whitelist.push(fs.realpathSync(LiteLoader.path.plugins));
-    whitelist.push(fs.realpathSync(LiteLoader.path.data));
+    whitelist.add(fs.realpathSync(LiteLoader.path.root));
+    whitelist.add(fs.realpathSync(LiteLoader.path.profile));
+    whitelist.add(fs.realpathSync(LiteLoader.path.plugins));
+    whitelist.add(fs.realpathSync(LiteLoader.path.data));
 } catch { };
+whitelist.values().forEach(item => {
+    whitelist.add(item.replaceAll("\\", "/"));
+});
 Object.defineProperty(globalThis, "LiteLoader", {
     configurable: false,
     get() {
         const stack = new Error().stack.split("\n")[2];
-        if (whitelist.some(item => stack.includes(item))) {
+        if (whitelist.values().some(item => stack.includes(item))) {
             return LiteLoader;
         }
     }
