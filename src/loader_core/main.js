@@ -1,3 +1,4 @@
+const { pathToFileURL } = require("url");
 const error = (...args) => console.error("\x1b[32m%s\x1b[0m", "[LiteLoader]", ...args);
 
 function topologicalSort(dependencies) {
@@ -31,8 +32,7 @@ exports.MainLoader = class {
                     if (plugin.manifest.esm) {
                         this.#exports[slug] = {};
                         // FIXME: Async and delayed loading might cause errors for dependencies
-                        // TODO: Proper escaping?
-                        import("file:///" + plugin.path.injects.main).then((exported) => {
+                        import(pathToFileURL(plugin.path.injects.main)).then((exported) => {
                             this.#exports[slug] = exported;
                         }).catch((e) => {
                             error(`Error loading ${plugin.manifest.name}:`, e);
