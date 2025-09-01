@@ -11,12 +11,12 @@
 LiteLoaderQQNT is a plugin loader for QQNT, often referred to simply as LiteLoader within the QQNT environment. It allows you to freely add various plugins to QQNT, enabling features such as theme customization, functionality enhancements, and more. For more details, visit LiteLoaderQQNT website at <https://liteloaderqqnt.github.io>.
 
 > [!CAUTION]
-> QQ Security Center may flag LiteLoaderQQNT as third-party software and restrict your device access, or even result in account suspension. It is recommended to use a secondary account when installing LiteLoaderQQNT (some users have already received warnings from QQ Security). Please use LiteLoaderQQNT with caution.
+> QQ Security Center may identify LiteLoaderQQNT as an "illegal cheat tool" and disconnect your device, and may also ban your account. **Please use LiteLoaderQQNT with caution.**
 
 ## Installation
 
 > [!NOTE]
-> This documentation is written for LiteLoaderQQNT 1.2.4. Currently, it only supports Windows 64-bit and requires an unreleased `dbghelp.dll` from the Telegram channel.
+> This version of LiteLoaderQQNT requires the use of an unreleased `dbghelp.dll` from the Telegram channel to function properly.
 
 ### Download LiteLoaderQQNT
 
@@ -32,6 +32,28 @@ First, download LiteLoaderQQNT to any location. There are two methods:
 ### Bypassing QQNT File Verification on Windows
 
 Download the `dbghelp_*.dll` file from the Telegram group according to your system architecture, rename it to `dbghelp.dll`, and place it in the same directory as `QQ.exe`.
+
+### Modify the files to install
+1. Go to the QQNT installation directory. For example, if the version is `9.9.21-38711`, the path would be `QQNT\versions\9.9.21-38711 (depending on your version)\resources\app`. 
+2. Create the `app_launcher` directory. 
+3. Create a `LiteLoader.js` file (the file name can be set arbitrarily, but the extension `.js` must be retained) in this directory and write the following content: 
+
+    ```javascript
+    require(String.raw`Modify to the absolute path of the LiteLoaderQQNT core, keep the backquotes`) 
+    ```
+
+4. Modify the `app\package.json` file and change the value after `main` to `./app_launcher/LiteLoader.js`, where `LiteLoader` is the name of the file you created.
+
+    ```diff
+    -   "main": "./application.asar/app_launcher/index.js",
+    +   "main": "./app_launcher/LiteLoader.js",
+    ```
+
+### Change Plugin Data Directory (Optional)
+
+You can set the `LITELOADERQQNT_PROFILE` environment variable to specify the storage location for `data` and `plugins`, allowing read and write operations to be performed outside the main directory. If the main directory lacks write permissions (e.g., QQNT on macOS and Linux platforms, or QQNT packaged with solutions like flatpak), please set this variable to a location where the current user has read and write permissions.
+
+If you wish to merge the main directory with the storage directory, delete the `LITELOADERQQNT_PROFILE` environment variable and move the `data` and `plugins` folders back to the root directory of the main installation.
 
 ### Verifying Installation
 
