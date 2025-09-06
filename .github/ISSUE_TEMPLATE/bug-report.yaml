@@ -40,6 +40,8 @@ body:
           required: true
         - label: 我已使用一个全新安装的 QQNT 和最新的 LiteLoaderQQNT (当前 Commit / Release) 且无其他插件的环境下测试过，问题依旧存在。
           required: true
+        - label: 我已知晓并同意，如果我使用的是 Windows，则 Windows 和 QQNT 均需为 ARM64 或 x64 架构，否则我的 Issue 可能会被无条件关闭/锁定。
+          required: true
         - label: 我已在 [Issue Tracker](https://github.com/LiteLoaderQQNT/LiteLoaderQQNT/issues) 中找过我要提出的问题，没有找到类似 Issue。
           required: true
         - label: 我已知晓并同意，此处仅用于汇报 LiteLoaderQQNT 框架中存在的问题，否则我的 Issue 可能会被无条件关闭/锁定。
@@ -65,6 +67,13 @@ body:
       label: LiteLoaderQQNT Release 版本（或 Commit Id）
     validations:
       required: true
+
+  - type: input
+    id: env-dbghelp-version
+    attributes:
+      label: dbghelp 版本及架构 (如在 Windows 平台上运行, 请注明)
+    validations:
+      required: false
 
   - type: dropdown
     id: env-system
