@@ -256,6 +256,15 @@ async function initAbout(view) {
     group.addEventListener("click", () => LiteLoader.api.openExternal("https://t.me/LiteLoaderQQNT"));
     channel.addEventListener("click", () => LiteLoader.api.openExternal("https://t.me/LiteLoaderQQNT_Channel"));
 
+        // MIT License 展开/收起
+        const licenseToggleBtn = view.querySelector(".about .license-toggle");
+        const licenseFullText = view.querySelector(".about .license-full-text");
+        licenseToggleBtn.addEventListener("click", () => {
+            const isOpen = licenseFullText.style.display !== "none";
+            licenseFullText.style.display = isOpen ? "none" : "inline-block";
+            licenseToggleBtn.textContent = isOpen ? "查看全文" : "收起";
+        });
+
     // Hitokoto - 一言
     let visible = true;
     const hitokoto_text = view.querySelector(".about .hitokoto_text");
