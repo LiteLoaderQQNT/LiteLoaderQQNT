@@ -1,5 +1,5 @@
 name: 回报错误
-description: 在使用过程中遇到了错误
+description: 在使用框架过程中遇到了错误
 title: "[Bug]: "
 labels: ["bug"]
 
@@ -7,13 +7,13 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## 感谢您愿意填写错误回报！
+        ## 感谢您愿意为 LiteLoaderQQNT 提交错误回报
         ## 以下是一些注意事项，请务必阅读让我们能够更容易处理
 
         ### ❗ | 确定没有相同问题的ISSUE已被提出。
         ### 🌎 | 请准确填写环境信息。
         ### ❔ | 使用命令行模式启动进行复现，并提供完整日志内容。请自行删除日志内存在的个人信息及敏感内容。
-        ### 如果您不知道如何有效、精准地表述，我们建议您先阅读《提问的智慧》
+        ### 如果您不知道如何有效、精准地表述，我们建议您先阅读[《提问的智慧》](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way)，另有英文原文可供参考: [How to Ask Questions the Smart Way](http://www.catb.org/~esr/faqs/smart-questions.html)
 
         #### 在 Windows 下显示终端日志
 
@@ -36,14 +36,18 @@ body:
     attributes:
       label: 请确保您已阅读以上注意事项，并勾选下方的确认框。
       options:
-        - label: 我已经使用一个干净且无其它非必要的插件的环境测试过，问题依旧存在。
+        - label: 我已知晓并同意，如果我不按照模板提供的指示进行填写，则我的 Issue 可能会被无条件关闭/锁定。
           required: true
-        - label: 我已经在 [Issue Tracker](https://github.com/LiteLoaderQQNT/LiteLoaderQQNT/issues) 中找过我要提出的问题，没有找到相同问题的ISSUE。
+        - label: 我已使用一个全新安装的 QQNT 和最新的 LiteLoaderQQNT (当前 Commit / Release) 且无其他插件的环境下测试过，问题依旧存在。
           required: true
-        - label: 我已知晓并同意，此处仅用于汇报主程序中存在的问题。若这个 Issue 是关于其他非程序本身问题，则我的 Issue 可能会被无条件自动关闭或/并锁定。
+        - label: 我已知晓并同意，如果我使用的是 Windows，则 Windows 和 QQNT 均需为 ARM64 或 x64 架构，否则我的 Issue 可能会被无条件关闭/锁定。
           required: true
-        - label: 我已知晓并同意，如果我不按照模板提供的指示进行填写，则我的 Issue 可能会被无条件删除。
+        - label: 我已在 [Issue Tracker](https://github.com/LiteLoaderQQNT/LiteLoaderQQNT/issues) 中找过我要提出的问题，没有找到类似 Issue。
           required: true
+        - label: 我已知晓并同意，此处仅用于汇报 LiteLoaderQQNT 框架中存在的问题，否则我的 Issue 可能会被无条件关闭/锁定。
+          required: true
+        - label: (可选) 我在同意上一条的同时, 同意本组织可能会代我向相关项目反馈该问题, 以便更好地解决该问题。
+          required: false
 
   - type: markdown
     attributes:
@@ -51,27 +55,34 @@ body:
         ## 环境信息
 
   - type: input
-    id: env-qqnt-ver
+    id: env-QQNT-version
     attributes:
-      label: QQNT 版本
+      label: QQNT 版本 (如在沙箱或类似 Flatpak 环境中运行, 请注明)
     validations:
       required: true
 
   - type: input
-    id: env-LiteLoaderQQNT-ver
+    id: env-LiteLoaderQQNT-version
     attributes:
-      label: LiteLoaderQQNT 版本 （或 Commit Id）
+      label: LiteLoaderQQNT Release 版本（或 Commit Id）
     validations:
       required: true
 
+  - type: input
+    id: env-dbghelp-version
+    attributes:
+      label: dbghelp 版本及架构 (如在 Windows 平台上运行, 请注明)
+    validations:
+      required: false
+
   - type: dropdown
-    id: env-vm-ver
+    id: env-system
     attributes:
       label: 运行环境
       description: 选择系统版本
       options:
         - Windows
-        - Linux
+        - Linux (请说明发行版)
         - MacOS
         - 其它（请在下方说明）
     validations:
@@ -88,25 +99,27 @@ body:
       required: true
 
   - type: textarea
-    id: expected
+    id: expected-results
     attributes:
       label: 期望的结果是什么？
     validations:
       required: true
 
   - type: textarea
-    id: actual
+    id: actual-results
     attributes:
       label: 实际的结果是什么？
     validations:
       required: true
 
   - type: textarea
-    id: logging
+    id: logs
     attributes:
       label: 日志记录
+    validations:
+      required: true
 
   - type: textarea
-    id: extra-desc
+    id: extra-description
     attributes:
       label: 补充说明（可选）
