@@ -3,7 +3,9 @@ require("./loader_core/plugin_loader.js");
 
 const { MainLoader } = require("./loader_core/main.js");
 const { protocolRegister } = require("./protocol_scheme/main.js");
+const { ipcMain } = require("electron");
 const path = require("path");
+const fs = require("fs");
 
 
 const loader = new MainLoader().init();
@@ -25,12 +27,17 @@ function proxyBrowserWindowConstruct(target, argArray, newTarget) {
     });
 
     // 加载Preload
-    window.webContents._getPreloadPaths = new Proxy(window.webContents._getPreloadPaths, {
+    window.webContents._getPreloadScript = new Proxy(window.webContents._getPreloadScript, {
         apply(target, thisArg, argArray) {
-            return [
-                ...Reflect.apply(target, thisArg, argArray),
-                path.join(LiteLoader.path.root, "src/preload.js")
-            ];
+            const orig = Reflect.apply(target, thisArg, argArray);
+            ipcMain.once("LiteLoader.LiteLoader.preload", (event) => {
+                event.returnValue = orig.filePath ? fs.readFileSync(orig.filePath, "utf-8") : null;
+            });
+            return {
+                filePath: path.join(LiteLoader.path.root, "src/preload.js"),
+                id: "",
+                type: "frame"
+            }
         }
     });
 

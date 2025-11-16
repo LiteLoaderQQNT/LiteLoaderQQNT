@@ -1,3 +1,6 @@
+const { ipcRenderer } = require("electron");
+
+
 // 加载渲染进程
 document.addEventListener("DOMContentLoaded", () => {
     const script = document.createElement("script");
@@ -28,6 +31,7 @@ function runPreloadScript(content) {
 
 // 加载插件 Preload
 (async () => {
+    runPreloadScript(ipcRenderer.sendSync("LiteLoader.LiteLoader.preload"));
     runPreloadScript(await (await fetch(`local://root/src/liteloader_api/preload.js`)).text());
     runPreloadScript(await (await fetch(`local://root/src/loader_core/preload.js`)).text());
 })();
