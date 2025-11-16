@@ -2,13 +2,22 @@ import { BaseElement } from "../element.js";
 
 
 export class Link extends BaseElement {
-    constructor() {
-        super();
-        this.addEventListener("click", () => {
-            if (this.getValue()) {
-                LiteLoader.api.openExternal(this.getValue());
-            }
-        });
+    #openExternalBound = this.#openExternal.bind(this);
+
+    connectedCallback() {
+        super.connectedCallback();
+        this.addEventListener("click", this.#openExternalBound);
+    }
+
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        this.removeEventListener("click", this.#openExternalBound);
+    }
+
+    #openExternal() {
+        if (this.getValue()) {
+            LiteLoader.api.openExternal(this.getValue());
+        }
     }
 
     getTemplate() {
@@ -19,10 +28,7 @@ export class Link extends BaseElement {
 
     getStyles() {
         return /*css*/ `
-            :host {
-                color: var(--text_link);
-                cursor: pointer;
-            }
+            :host { color: var(--text_link); cursor: pointer; }
         `;
     }
 }

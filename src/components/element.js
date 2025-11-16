@@ -28,20 +28,13 @@ export class BaseElement extends HTMLElement {
         super();
         this.attachShadow({ mode: "open" });
         this.shadowRoot.innerHTML = this.getTemplate();
-        const element_sheet = new CSSStyleSheet();
-        const default_sheet = new CSSStyleSheet();
-        element_sheet.replaceSync(this.getStyles());
-        default_sheet.replaceSync(`
-            :host([is-disabled]), [is-disabled] {
-                opacity: 0.3;
-                cursor: not-allowed;
-                pointer-events: none;
-            }
-            :host(.hidden), .hidden {
-                display: none !important;
-            }
+        const sheet = new CSSStyleSheet();
+        sheet.replaceSync(`
+            :host([is-disabled]) { opacity: .3; cursor: not-allowed; pointer-events: none; }
+            :host(.hidden), .hidden { display: none !important; }
+            ${this.getStyles()}
         `);
-        this.shadowRoot.adoptedStyleSheets = [default_sheet, element_sheet];
+        this.shadowRoot.adoptedStyleSheets = [sheet];
     }
 
     setTitle(title) {

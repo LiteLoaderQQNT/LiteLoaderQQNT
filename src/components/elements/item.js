@@ -2,10 +2,6 @@ import { BaseElement } from "../element.js";
 
 
 export class Item extends BaseElement {
-    constructor() {
-        super();
-    }
-
     getTemplate() {
         return /*html*/ `
             <slot></slot>

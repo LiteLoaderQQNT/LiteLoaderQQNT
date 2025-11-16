@@ -1,4 +1,3 @@
-// 导入组件
 import { Section } from "./elements/section.js";
 import { Panel } from "./elements/panel.js";
 import { List } from "./elements/list.js";
@@ -12,17 +11,10 @@ import { Link } from "./elements/link.js";
 import { Divider } from "./elements/divider.js";
 import { Modal } from "./elements/modal.js";
 
-// 注册所有组件
-function registerAll(elements) {
-    for (const { tag, element } of elements) {
-        if (!customElements.get(tag)) {
-            customElements.define(tag, element);
-        }
-    }
-}
-
-// 初始化
-registerAll([
+/**
+ * 组件注册表
+ */
+const COMPONENTS = [
     { tag: "setting-section", element: Section },
     { tag: "setting-panel", element: Panel },
     { tag: "setting-list", element: List },
@@ -35,4 +27,13 @@ registerAll([
     { tag: "setting-link", element: Link },
     { tag: "setting-divider", element: Divider },
     { tag: "setting-modal", element: Modal }
-]);
+];
+
+/**
+ * 注册所有自定义元素
+ */
+COMPONENTS.forEach(({ tag, element }) => {
+    if (!customElements.get(tag)) {
+        customElements.define(tag, element);
+    }
+});

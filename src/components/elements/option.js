@@ -2,10 +2,6 @@ import { BaseElement } from "../element.js";
 
 
 export class Option extends BaseElement {
-    constructor() {
-        super();
-    }
-
     getTemplate() {
         return /*html*/ `
             <li>
@@ -21,46 +17,34 @@ export class Option extends BaseElement {
 
     getStyles() {
         return /*css*/ `
-            :host {
-                display: block;
-            }
-            :host([is-selected]) li {
-                background-color: var(--overlay_active);
-            }
-            :host([is-selected]) svg {
-                display: block;
-            }
+            :host { display: block; }
+            :host([is-selected]) li { background-color: var(--overlay_active); }
+            :host([is-selected]) svg { display: block; }
             li {
                 display: flex;
                 justify-content: space-between;
-                border-radius: 4px;
-                box-sizing: border-box;
-                line-height: 24px;
+                padding: 0px 8px;
                 color: var(--text_primary);
                 font-size: 12px;
-                padding: 0px 8px;
-                &:hover {
-                    background-color: var(--overlay_hover);
-                }
-                &:active {
-                    background-color: var(--overlay_pressed);
-                }
+                line-height: 24px;
+                border-radius: 4px;
+                cursor: pointer;
             }
+            li:hover { background-color: var(--overlay_hover); }
+            li:active { background-color: var(--overlay_pressed); }
             span {
                 margin-right: 8px;
                 overflow: hidden;
-                text-wrap: nowrap;
+                white-space: nowrap;
                 text-overflow: ellipsis;
             }
             svg {
-                flex-shrink: 0;
                 display: none;
+                flex-shrink: 0;
                 width: 1em;
                 height: 1em;
+                margin: 7px -4px 0px 0px;
                 color: var(--icon_primary);
-                position: relative;
-                right: -4px;
-                top: 7px;
             }
         `;
     }
