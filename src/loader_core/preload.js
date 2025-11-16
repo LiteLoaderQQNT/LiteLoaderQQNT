@@ -27,7 +27,7 @@ function topologicalSort(dependencies) {
             }
             if (plugin.path.injects.preload) {
                 try {
-                    runPreloadScript(await (await fetch(`local:///${plugin.path.injects.preload}`)).text());
+                    runPreloadScript(readFileRequestSync(`local:///${plugin.path.injects.preload}`));
                 }
                 catch (e) {
                     preloadErrors[slug] = { message: `[Preload] ${e.message}`, stack: e.stack };

@@ -10,6 +10,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+// 同步读取文件
+function readFileRequestSync(file) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", file, false);
+    xhr.send();
+    return xhr.responseText;
+}
+
+
 // 运行预加载脚本
 function runPreloadScript(content) {
     const objects = {
@@ -21,7 +30,8 @@ function runPreloadScript(content) {
         clearImmediate,
         exports,
         module,
-        runPreloadScript
+        runPreloadScript,
+        readFileRequestSync
     };
     const keys = Object.keys(objects);
     const values = Object.values(objects);
@@ -30,8 +40,6 @@ function runPreloadScript(content) {
 
 
 // 加载插件 Preload
-(async () => {
-    runPreloadScript(ipcRenderer.sendSync("LiteLoader.LiteLoader.preload"));
-    runPreloadScript(await (await fetch(`local://root/src/liteloader_api/preload.js`)).text());
-    runPreloadScript(await (await fetch(`local://root/src/loader_core/preload.js`)).text());
-})();
+runPreloadScript(readFileRequestSync("local://root/src/liteloader_api/preload.js"));
+runPreloadScript(readFileRequestSync("local://root/src/loader_core/preload.js"));
+runPreloadScript(ipcRenderer.sendSync("LiteLoader.LiteLoader.preload"));
