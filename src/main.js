@@ -9,7 +9,7 @@ const path = require("path");
 const loader = new MainLoader().init();
 
 /**
- * 代理 send 以监听登录事件
+ * 代理 send
  */
 function proxySend(func) {
     return new Proxy(func, {
@@ -25,7 +25,7 @@ function proxySend(func) {
 }
 
 /**
- * 代理 getPreloadScripts 以注入 preload 脚本
+ * 代理 getPreloadScripts
  */
 function proxyPreload(func) {
     return new Proxy(func, {
@@ -40,17 +40,14 @@ function proxyPreload(func) {
 }
 
 /**
- * 构造 BrowserWindow 代理
+ * 代理 BrowserWindow
  */
-function proxyBrowserWindow(target, argArray, newTarget) {
+function proxyWindow(target, argArray, newTarget) {
+    loader.onBrowserWindowCreating(target, argArray, newTarget);
     const window = Reflect.construct(target, argArray, newTarget);
-    // 监听登录事件
-    window.webContents.send = proxySend(window.webContents.send);
-    // 注入 Preload 脚本
-    window.webContents.session.getPreloadScripts = proxyPreload(window.webContents.session.getPreloadScripts);
-    // 注册自定义协议
     protocolRegister(window.webContents.session.protocol);
-    // 触发插件窗口创建事件
+    window.webContents.send = proxySend(window.webContents.send);
+    window.webContents.session.getPreloadScripts = proxyPreload(window.webContents.session.getPreloadScripts);
     loader.onBrowserWindowCreated(window);
     return window;
 }
@@ -64,7 +61,7 @@ require.cache["electron"] = new Proxy(require.cache["electron"], {
             get(target, property, receiver) {
                 const exports = Reflect.get(target, property, receiver);
                 return property != "BrowserWindow" ? exports : new Proxy(exports, {
-                    construct: proxyBrowserWindow
+                    construct: proxyWindow
                 });
             }
         });

@@ -72,6 +72,13 @@ exports.MainLoader = class {
         plugin.error = { message: `[Main] ${e.message}`, stack: e.stack };
     }
 
+    onBrowserWindowCreating(target, argArray, newTarget) {
+        for (const slug in this.#exports) {
+            const plugin = this.#exports[slug];
+            plugin.onBrowserWindowCreating?.(target, argArray, newTarget);
+        }
+    }
+
     onBrowserWindowCreated(window) {
         for (const slug in this.#exports) {
             const plugin = this.#exports[slug];
