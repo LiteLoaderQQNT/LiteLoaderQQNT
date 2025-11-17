@@ -233,38 +233,12 @@ async function initPluginList(view) {
 
 
 async function initPath(view) {
-    const root_path_content = view.querySelectorAll(".path .root setting-text")[2];
-    const root_path_button = view.querySelector(".path .root setting-button");
-    const profile_path_content = view.querySelectorAll(".path .profile setting-text")[2];
-    const profile_path_button = view.querySelector(".path .profile setting-button");
-
-    root_path_content.textContent = LiteLoader.path.root;
-    root_path_button.addEventListener("click", () => LiteLoader.api.openPath(LiteLoader.path.root));
-    profile_path_content.textContent = LiteLoader.path.profile;
-    profile_path_button.addEventListener("click", () => LiteLoader.api.openPath(LiteLoader.path.profile));
+    view.querySelector(".path .root").setValue(LiteLoader.path.root);
+    view.querySelector(".path .profile").setValue(LiteLoader.path.profile);
 }
 
 
 async function initAbout(view) {
-    const liteloaderqqnt = view.querySelector(".about .liteloaderqqnt");
-    const github = view.querySelector(".about .github");
-    const group = view.querySelector(".about .group");
-    const channel = view.querySelector(".about .channel");
-
-    liteloaderqqnt.addEventListener("click", () => LiteLoader.api.openExternal("https://liteloaderqqnt.github.io"));
-    github.addEventListener("click", () => LiteLoader.api.openExternal("https://github.com/LiteLoaderQQNT"));
-    group.addEventListener("click", () => LiteLoader.api.openExternal("https://t.me/LiteLoaderQQNT"));
-    channel.addEventListener("click", () => LiteLoader.api.openExternal("https://t.me/LiteLoaderQQNT_Channel"));
-
-        // MIT License 展开/收起
-        const licenseToggleBtn = view.querySelector(".about .license-toggle");
-        const licenseFullText = view.querySelector(".about .license-full-text");
-        licenseToggleBtn.addEventListener("click", () => {
-            const isOpen = licenseFullText.style.display !== "none";
-            licenseFullText.style.display = isOpen ? "none" : "inline-block";
-            licenseToggleBtn.textContent = isOpen ? "查看全文" : "收起";
-        });
-
     // Hitokoto - 一言
     let visible = true;
     const hitokoto_text = view.querySelector(".about .hitokoto_text");

@@ -109,16 +109,13 @@
         </setting-list>
     </setting-panel>
     <setting-panel>
-        <setting-list data-title="扩展" is-collapsible data-direction="column" class="extension">
-        </setting-list>
+        <setting-list data-title="扩展" is-collapsible data-direction="column" class="extension"></setting-list>
     </setting-panel>
     <setting-panel>
-        <setting-list data-title="主题" is-collapsible data-direction="column" class="theme">
-        </setting-list>
+        <setting-list data-title="主题" is-collapsible data-direction="column" class="theme"></setting-list>
     </setting-panel>
     <setting-panel>
-        <setting-list data-title="依赖" is-collapsible data-direction="column" class="framework">
-        </setting-list>
+        <setting-list data-title="依赖" is-collapsible data-direction="column" class="framework"></setting-list>
     </setting-panel>
 </setting-section>
 
@@ -126,21 +123,23 @@
 <setting-section data-title="目录" class="path">
     <setting-panel>
         <setting-list data-direction="column">
-            <setting-item class="root">
+            <setting-item>
                 <div>
                     <setting-text>本体目录位置</setting-text>
                     <setting-text data-type="secondary">LiteLoaderQQNT 本体的安装位置，可以安装到任意位置</setting-text>
-                    <setting-text data-type="secondary"></setting-text>
+                    <setting-text data-type="secondary">
+                        <setting-link class="root"></setting-link>
+                    </setting-text>
                 </div>
-                <setting-button data-type="secondary">进入目录</setting-button>
             </setting-item>
-            <setting-item class="profile">
+            <setting-item>
                 <div>
                     <setting-text>数据目录位置</setting-text>
                     <setting-text data-type="secondary">可通过 LITELOADERQQNT_PROFILE 环境变量指定数据存放位置</setting-text>
-                    <setting-text data-type="secondary"></setting-text>
+                    <setting-text data-type="secondary">
+                        <setting-link class="profile"></setting-link>
+                    </setting-text>
                 </div>
-                <setting-button data-type="secondary">进入目录</setting-button>
             </setting-item>
         </setting-list>
     </setting-panel>
@@ -160,30 +159,8 @@
             <setting-item>
                 <div>
                     <setting-text>开源协议</setting-text>
-                    <setting-text data-type="secondary">MIT License</setting-text>
-                </div>
-                    <setting-button data-type="secondary" class="license-toggle">查看全文</setting-button>
-            </setting-item>
-                    <setting-text class="license-full-text" data-type="secondary" style="display:none; margin-top:1px; white-space:pre-line;">MIT License
-                    Copyright (c) 2023-2025 LiteLoaderQQNT
-
-                    Permission is hereby granted, free of charge, to any person obtaining a copy
-                    of this software and associated documentation files (the "Software"), to deal
-                    in the Software without restriction, including without limitation the rights
-                    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-                    copies, and to permit persons to whom the Software is
-                    furnished to do so, subject to the following conditions:
-
-                    The above copyright notice and this permission notice shall be included in all
-                    copies or substantial portions of the Software.
-
-                    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-                    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-                    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-                    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-                    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-                    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-                    SOFTWARE.
+                    <setting-text data-type="secondary">
+                        <setting-link data-value="https://github.com/LiteLoaderQQNT/LiteLoaderQQNT/blob/main/LICENSE">MIT License</setting-link>
                     </setting-text>
                 </div>
             </setting-item>
@@ -194,38 +171,42 @@
             <setting-item>
                 <div>
                     <setting-text>LiteLoaderQQNT 官网</setting-text>
-                    <setting-text data-type="secondary">https://liteloaderqqnt.github.io</setting-text>
+                    <setting-text data-type="secondary">
+                        <setting-link data-value="https://liteloaderqqnt.github.io"></setting-link>
+                    </setting-text>
                 </div>
-                <setting-button data-type="secondary" class="liteloaderqqnt">进去瞅瞅</setting-button>
             </setting-item>
             <setting-item>
                 <div>
                     <setting-text>GitHub 仓库</setting-text>
-                    <setting-text data-type="secondary">https://github.com/LiteLoaderQQNT</setting-text>
+                    <setting-text data-type="secondary">
+                        <setting-link data-value="https://github.com/LiteLoaderQQNT"></setting-link>
+                    </setting-text>
                 </div>
-                <setting-button data-type="secondary" class="github">进去瞅瞅</setting-button>
             </setting-item>
             <setting-item>
                 <div>
                     <setting-text>Telegram 群组</setting-text>
-                    <setting-text data-type="secondary">https://t.me/LiteLoaderQQNT</setting-text>
+                    <setting-text data-type="secondary">
+                        <setting-link data-value="https://t.me/LiteLoaderQQNT"></setting-link>
+                    </setting-text>
                 </div>
-                <setting-button data-type="secondary" class="group">进去瞅瞅</setting-button>
             </setting-item>
             <setting-item>
                 <div>
                     <setting-text>Telegram 频道</setting-text>
-                    <setting-text data-type="secondary">https://t.me/LiteLoaderQQNT_Channel</setting-text>
+                    <setting-text data-type="secondary">
+                        <setting-link data-value="https://t.me/LiteLoaderQQNT_Channel"></setting-link>
+                    </setting-text>
                 </div>
-                <setting-button data-type="secondary" class="channel">进去瞅瞅</setting-button>
             </setting-item>
         </setting-list>
     </setting-panel>
     <setting-panel>
         <setting-list data-direction="column">
             <setting-item>
-                <setting-text class="hitokoto_text">正在加载：Hitokoto - 一言</s>
-                    <div></div>
+                <setting-text class="hitokoto_text">正在加载：Hitokoto - 一言</setting-text>
+                <div></div>
             </setting-item>
             <setting-item>
                 <div></div>
