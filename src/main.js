@@ -3,19 +3,16 @@ require("./loader_core/plugin_loader.js");
 
 const { MainLoader } = require("./loader_core/main.js");
 const { protocolRegister } = require("./protocol_scheme/main.js");
-const { ipcMain } = require("electron");
 const path = require("path");
-const fs = require("fs");
 
 
 const loader = new MainLoader().init();
 
-
-function proxyBrowserWindowConstruct(target, argArray, newTarget) {
-    const window = Reflect.construct(target, argArray, newTarget);
-
-    // 监听send
-    window.webContents.send = new Proxy(window.webContents.send, {
+/**
+ * 代理 send 以监听登录事件
+ */
+function proxySend(func) {
+    return new Proxy(func, {
         apply(target, thisArg, [channel, ...args]) {
             if (channel.includes("RM_IPCFROM_")) {
                 if (args?.[1]?.cmdName == "nodeIKernelSessionListener/onSessionInitComplete") {
@@ -25,28 +22,36 @@ function proxyBrowserWindowConstruct(target, argArray, newTarget) {
             return Reflect.apply(target, thisArg, [channel, ...args]);
         }
     });
+}
 
-    // 加载Preload
-    window.webContents._getPreloadScript = new Proxy(window.webContents._getPreloadScript, {
+/**
+ * 代理 getPreloadScripts 以注入 preload 脚本
+ */
+function proxyPreload(func) {
+    return new Proxy(func, {
         apply(target, thisArg, argArray) {
-            const orig = Reflect.apply(target, thisArg, argArray);
-            ipcMain.once("LiteLoader.LiteLoader.preload", (event) => {
-                event.returnValue = orig.filePath ? fs.readFileSync(orig.filePath, "utf-8") : null;
-            });
-            return {
+            return [{
                 filePath: path.join(LiteLoader.path.root, "src/preload.js"),
                 id: "",
                 type: "frame"
-            }
+            }, ...Reflect.apply(target, thisArg, argArray)];
         }
     });
+}
 
-    // 加载自定义协议
+/**
+ * 构造 BrowserWindow 代理
+ */
+function proxyBrowserWindow(target, argArray, newTarget) {
+    const window = Reflect.construct(target, argArray, newTarget);
+    // 监听登录事件
+    window.webContents.send = proxySend(window.webContents.send);
+    // 注入 Preload 脚本
+    window.webContents.session.getPreloadScripts = proxyPreload(window.webContents.session.getPreloadScripts);
+    // 注册自定义协议
     protocolRegister(window.webContents.session.protocol);
-
-    // 加载插件
+    // 触发插件窗口创建事件
     loader.onBrowserWindowCreated(window);
-
     return window;
 }
 
@@ -59,7 +64,7 @@ require.cache["electron"] = new Proxy(require.cache["electron"], {
             get(target, property, receiver) {
                 const exports = Reflect.get(target, property, receiver);
                 return property != "BrowserWindow" ? exports : new Proxy(exports, {
-                    construct: proxyBrowserWindowConstruct
+                    construct: proxyBrowserWindow
                 });
             }
         });
