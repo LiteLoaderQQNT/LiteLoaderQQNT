@@ -11,6 +11,7 @@ const admZip = (() => {
 })();
 
 
+// 路径配置
 const qwqnt_path = path.join(globalThis.qwqnt?.framework?.paths?.data ?? "", "LiteLoader");
 const root_path = path.join(__dirname, "..", "..");
 const profile_path = process.env.LITELOADERQQNT_PROFILE ?? (globalThis.qwqnt ? qwqnt_path : root_path);
@@ -31,7 +32,9 @@ function setConfig(slug, new_config) {
     }
 }
 
-
+/**
+ * 获取插件配置
+ */
 function getConfig(slug, default_config) {
     try {
         const config_path = path.join(data_path, slug, "config.json");
@@ -85,12 +88,15 @@ function pluginInstall(plugin_path, undone = false) {
             }
         }
     } catch (error) {
-        console.error(error);
+        console.error("Plugin install error:", error);
     }
     return false;
 }
 
 
+/**
+ * 删除插件
+ */
 function pluginDelete(slug, delete_data = false, undone = false) {
     if (!(slug in LiteLoader.plugins)) return true;
     const { plugin, data } = LiteLoader.plugins[slug].path;
@@ -103,7 +109,9 @@ function pluginDelete(slug, delete_data = false, undone = false) {
     LiteLoader.api.config.set("LiteLoader", config);
 }
 
-
+/**
+ * 禁用/启用插件
+ */
 function pluginDisable(slug, undone = false) {
     const config = LiteLoader.api.config.get("LiteLoader", default_config);
     if (undone) config.disabled_plugins = config.disabled_plugins.filter(item => item != slug);
@@ -150,47 +158,63 @@ const LiteLoader = {
 };
 
 
-// 将LiteLoader对象挂载到全局
-const whitelist = new Set([
-    LiteLoader.path.root,
-    LiteLoader.path.profile,
-    LiteLoader.path.data,
-    LiteLoader.path.plugins,
-]);
-try {
-    whitelist.add(fs.realpathSync(LiteLoader.path.root));
-    whitelist.add(fs.realpathSync(LiteLoader.path.profile));
-    whitelist.add(fs.realpathSync(LiteLoader.path.plugins));
-    whitelist.add(fs.realpathSync(LiteLoader.path.data));
-} catch { };
-whitelist.values().forEach(item => {
-    whitelist.add(item.replaceAll("\\", "/"));
-});
+/**
+ * 创建白名单
+ */
+const whitelist = (() => {
+    const whitelist = new Set([
+        LiteLoader.path.root,
+        LiteLoader.path.profile,
+        LiteLoader.path.data,
+        LiteLoader.path.plugins
+    ]);
+    // 添加真实路径
+    for (const path of whitelist) {
+        try {
+            whitelist.add(fs.realpathSync(path));
+        } catch { }
+    }
+    // 添加标准化路径（统一使用正斜杠）
+    for (const path of whitelist) {
+        whitelist.add(path.replaceAll("\\", "/"));
+    }
+    return whitelist;
+})();
+
+/**
+ * 将 LiteLoader 对象挂载到全局，仅允许白名单路径访问
+ */
 Object.defineProperty(globalThis, "LiteLoader", {
     configurable: false,
     get() {
         const stack = new Error().stack.split("\n")[2];
-        if (whitelist.values().some(item => stack.includes(item))) {
+        if ([...whitelist].some(item => stack.includes(item))) {
             return LiteLoader;
         }
     }
 });
 
 
-// 将LiteLoader对象挂载到window
+/**
+ * 将 LiteLoader 对象暴露给渲染进程（隐藏 API）
+ */
 ipcMain.on("LiteLoader.LiteLoader.LiteLoader", (event) => {
     event.returnValue = {
         ...LiteLoader,
-        api: void null
-    }
+        api: null
+    };
 });
 
-
+/**
+ * 处理 API 调用请求
+ */
 ipcMain.handle("LiteLoader.LiteLoader.api", (event, name, method, args) => {
     try {
-        if (name == method) return LiteLoader.api[method](...args);
-        else return LiteLoader.api[name][method](...args);
+        // 直接调用或嵌套调用
+        const target = name === method ? LiteLoader.api[method] : LiteLoader.api[name][method];
+        return target?.(...args) ?? null;
     } catch (error) {
+        console.error("API call error:", error);
         return null;
     }
 });

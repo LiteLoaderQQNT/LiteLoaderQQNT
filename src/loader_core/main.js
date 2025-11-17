@@ -1,6 +1,18 @@
 const { pathToFileURL } = require("url");
-const error = (...args) => console.error("\x1b[32m%s\x1b[0m", "[LiteLoader]", ...args);
 
+/**
+ * 控制台错误输出
+ * @param {...any} args - 错误参数
+ */
+function error(...args) {
+    console.error("\x1b[31m%s\x1b[0m", "[LiteLoader]", ...args);
+}
+
+/**
+ * 拓扑排序 - 根据依赖关系排序插件
+ * @param {string[]} dependencies - 插件slug数组
+ * @returns {string[]} 排序后的插件slug数组
+ */
 function topologicalSort(dependencies) {
     const sorted = [];
     const visited = new Set();
@@ -10,45 +22,54 @@ function topologicalSort(dependencies) {
         const plugin = LiteLoader.plugins[slug];
         plugin.manifest.dependencies?.forEach(depSlug => visit(depSlug));
         sorted.push(slug);
-    }
+    };
     dependencies.forEach(slug => visit(slug));
     return sorted;
 }
 
 
 exports.MainLoader = class {
-
     #exports = {};
 
     init() {
-        // 加载插件
-        for (const slug of topologicalSort(Object.keys(LiteLoader.plugins))) {
+        const sortedPlugins = topologicalSort(Object.keys(LiteLoader.plugins));
+        for (const slug of sortedPlugins) {
             const plugin = LiteLoader.plugins[slug];
-            if (plugin.disabled || plugin.incompatible) {
-                continue;
-            }
-            if (plugin.path.injects.main) {
-                try {
-                    if (plugin.manifest.esm) {
-                        this.#exports[slug] = {};
-                        // FIXME: Async and delayed loading might cause errors for dependencies
-                        import(pathToFileURL(plugin.path.injects.main)).then((exported) => {
-                            this.#exports[slug] = exported;
-                        }).catch((e) => {
-                            error(`Error loading ${plugin.manifest.name}:`, e);
-                            plugin.error = { message: `[Main] ${e.message}`, stack: e.stack };
-                        });
-                    } else {
-                        this.#exports[slug] = require(plugin.path.injects.main);
-                    }
-                }
-                catch (e) {
-                    error(`Error loading ${plugin.manifest.name}:`, e);
-                    plugin.error = { message: `[Main] ${e.message}`, stack: e.stack };
-                }
-            }
+
+            // 跳过禁用或不兼容的插件
+            if (
+                plugin.disabled ||
+                plugin.incompatible ||
+                !plugin.path.injects.main
+            ) continue;
+
+            this.#loadPlugin(slug, plugin);
         }
+
         return this;
+    }
+
+    #loadPlugin(slug, plugin) {
+        try {
+            if (plugin.manifest.esm) {
+                this.#exports[slug] = {};
+                // FIXME: 异步加载可能导致依赖错误
+                import(pathToFileURL(plugin.path.injects.main))
+                    .then(exported => {
+                        this.#exports[slug] = exported;
+                    })
+                    .catch(e => this.#handleError(plugin, e));
+            } else {
+                this.#exports[slug] = require(plugin.path.injects.main);
+            }
+        } catch (e) {
+            this.#handleError(plugin, e);
+        }
+    }
+
+    #handleError(plugin, e) {
+        error(`Error loading ${plugin.manifest.name}:`, e);
+        plugin.error = { message: `[Main] ${e.message}`, stack: e.stack };
     }
 
     onBrowserWindowCreated(window) {
@@ -64,5 +85,4 @@ exports.MainLoader = class {
             plugin.onLogin?.(uid);
         }
     }
-
-}
+};

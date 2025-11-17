@@ -57,11 +57,19 @@ export class SettingInterface {
     }
 
     SettingInit() {
-        const style = document.createElement("link");
-        style.rel = "stylesheet";
-        style.type = "text/css";
-        style.href = "local://root/src/settings/static/style.css";
-        document.head.append(style);
+        this.#loadStylesheet();
+        this.#loadLiteLoaderView();
+    }
+
+    #loadStylesheet() {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.type = "text/css";
+        link.href = "local://root/src/settings/static/style.css";
+        document.head.append(link);
+    }
+
+    #loadLiteLoaderView() {
         const view = this.add({
             manifest: {
                 slug: "config_view",
@@ -72,7 +80,9 @@ export class SettingInterface {
                 plugin: LiteLoader.path.root
             }
         });
-        fetch("local://root/src/settings/static/view.html").then(async res => initView(view, await res.text()));
+        fetch("local://root/src/settings/static/view.html")
+            .then(res => res.text())
+            .then(html => initView(view, html));
     }
 
     createErrorView(error, slug, view) {
@@ -81,8 +91,8 @@ export class SettingInterface {
         navItem.title = "插件加载出错";
 
         view.classList.add("error");
-        view.innerHTML =
-            `<h2>🙀 插件加载出错！</h2>
+        view.innerHTML = `
+            <h2>🙀 插件加载出错！</h2>
             <p>可能是版本不兼容、Bug、冲突或文件损坏等导致的</p>
             🐞 错误信息
             <textarea readonly rows="8">${error.message}\n${error.stack}</textarea>
@@ -91,6 +101,7 @@ export class SettingInterface {
             <textarea readonly rows="3">${JSON.stringify(Object.keys(LiteLoader.plugins))}</textarea>
             🖥️ 环境信息
             <textarea readonly rows="3">${JSON.stringify({ ...LiteLoader.versions, ...LiteLoader.os })}</textarea>
-            <small>* 此页面仅在插件加载出现问题出现，不代表插件本身有设置页</small>`; // 没必要格式化json，方便截图
+            <small>* 此页面仅在插件加载出现问题时显示，不代表插件本身有设置页</small>
+        `;
     }
 }

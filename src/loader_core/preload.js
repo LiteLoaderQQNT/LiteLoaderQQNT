@@ -1,6 +1,10 @@
 const { contextBridge } = require("electron");
 
-
+/**
+ * 拓扑排序 - 根据依赖关系排序插件
+ * @param {string[]} dependencies - 插件slug数组
+ * @returns {string[]} 排序后的插件slug数组
+ */
 function topologicalSort(dependencies) {
     const sorted = [];
     const visited = new Set();
@@ -10,32 +14,40 @@ function topologicalSort(dependencies) {
         const plugin = LiteLoader.plugins[slug];
         plugin.manifest.dependencies?.forEach(depSlug => visit(depSlug));
         sorted.push(slug);
-    }
+    };
     dependencies.forEach(slug => visit(slug));
     return sorted;
 }
 
-
-(new class {
-
+(new class PreloadLoader {
     async init() {
-        const preloadErrors = {}
-        for (const slug of topologicalSort(Object.keys(LiteLoader.plugins))) {
+        const preloadErrors = {};
+        const sortedPlugins = topologicalSort(Object.keys(LiteLoader.plugins));
+
+        for (const slug of sortedPlugins) {
             const plugin = LiteLoader.plugins[slug];
-            if (plugin.disabled || plugin.incompatible || plugin.error) {
-                continue;
-            }
-            if (plugin.path.injects.preload) {
-                try {
-                    runPreloadScript(readFileRequestSync(`local:///${plugin.path.injects.preload}`));
-                }
-                catch (e) {
-                    preloadErrors[slug] = { message: `[Preload] ${e.message}`, stack: e.stack };
-                }
+
+            // 跳过无效插件
+            if (
+                plugin.disabled ||
+                plugin.incompatible ||
+                plugin.error ||
+                !plugin.path.injects.preload
+            ) continue;
+
+            try {
+                const scriptPath = `local:///${plugin.path.injects.preload}`;
+                const scriptContent = readFileRequestSync(scriptPath);
+                runPreloadScript(scriptContent);
+            } catch (e) {
+                preloadErrors[slug] = {
+                    message: `[Preload] ${e.message}`,
+                    stack: e.stack
+                };
             }
         }
+
         contextBridge.exposeInMainWorld("LiteLoaderPreloadErrors", preloadErrors);
         return this;
     }
-
 }).init();
