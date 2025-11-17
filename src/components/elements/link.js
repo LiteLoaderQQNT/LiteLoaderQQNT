@@ -15,9 +15,17 @@ export class Link extends BaseElement {
     }
 
     #openExternal() {
-        if (this.getValue()) {
-            LiteLoader.api.openExternal(this.getValue());
+        const value = this.getValue();
+        try {
+            new URL(value);
+            LiteLoader.api.openExternal(value);
+        } catch {
+            LiteLoader.api.openPath(value);
         }
+    }
+
+    update() {
+        this.textContent ||= this.getValue();
     }
 
     getTemplate() {
