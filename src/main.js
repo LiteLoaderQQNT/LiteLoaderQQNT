@@ -5,7 +5,6 @@ const { MainLoader } = require("./loader_core/main.js");
 const { protocolRegister } = require("./protocol_scheme/main.js");
 const path = require("path");
 
-
 const loader = new MainLoader().init();
 
 /**
@@ -28,7 +27,15 @@ function proxySend(func) {
  * 代理 getPreloadScripts
  */
 function proxyPreload(func) {
-    return new Proxy(func, {
+    if (func?.name == "_getPreloadScript") return new Proxy(func, {
+        apply(target, thisArg, argArray) {
+            return [
+                ...Reflect.apply(target, thisArg, argArray),
+                path.join(LiteLoader.path.root, "src/preload.js")
+            ];
+        }
+    });
+    if (func?.name == "getPreloadScripts") return new Proxy(func, {
         apply(target, thisArg, argArray) {
             return [{
                 filePath: path.join(LiteLoader.path.root, "src/preload.js"),
@@ -47,23 +54,11 @@ function proxyWindow(target, argArray, newTarget) {
     const window = Reflect.construct(target, argArray, newTarget);
     protocolRegister(window.webContents.session.protocol);
     window.webContents.send = proxySend(window.webContents.send);
-    if (window.webContents._getPreloadScript) {
-        window.webContents.session.getPreloadScripts = proxyPreload(window.webContents.session.getPreloadScripts);
-    }
-    else {
-        window.webContents._getPreloadPaths = new Proxy(window.webContents._getPreloadPaths, {
-            apply(target, thisArg, argArray) {
-                return [
-                    ...Reflect.apply(target, thisArg, argArray),
-                    path.join(LiteLoader.path.root, "src/preload.js")
-                ];
-            }
-        });
-    }
+    window.webContents._getPreloadPaths = proxyPreload(window.webContents._getPreloadPaths);
+    window.webContents.session.getPreloadScripts = proxyPreload(window.webContents.session.getPreloadScripts);
     loader.onBrowserWindowCreated(window);
     return window;
 }
-
 
 // 监听窗口创建
 require.cache["electron"] = new Proxy(require.cache["electron"], {
@@ -79,7 +74,6 @@ require.cache["electron"] = new Proxy(require.cache["electron"], {
         });
     }
 });
-
 
 if (!globalThis.qwqnt) {
     const main_path = "./application.asar/app_launcher/index.js";
