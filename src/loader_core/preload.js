@@ -36,9 +36,7 @@ function topologicalSort(dependencies) {
             ) continue;
 
             try {
-                const scriptPath = `local:///${plugin.path.injects.preload}`;
-                const scriptContent = readFileRequestSync(scriptPath);
-                runPreloadScript(scriptContent);
+                require(plugin.path.injects.preload);
             } catch (e) {
                 preloadErrors[slug] = {
                     message: `[Preload] ${e.message}`,

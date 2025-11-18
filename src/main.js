@@ -24,24 +24,33 @@ function proxySend(func) {
 }
 
 /**
- * 代理 getPreloadScripts
+ * 代理 Preload
  */
 function proxyPreload(func) {
     if (func?.name == "_getPreloadScript") return new Proxy(func, {
         apply(target, thisArg, argArray) {
             return [
-                ...Reflect.apply(target, thisArg, argArray),
-                path.join(LiteLoader.path.root, "src/preload.js")
+                path.join(LiteLoader.path.root, "./src/liteloader_api/preload.js"),
+                path.join(LiteLoader.path.root, "./src/preload.js"),
+                ...Reflect.apply(target, thisArg, argArray)
             ];
         }
     });
     if (func?.name == "getPreloadScripts") return new Proxy(func, {
         apply(target, thisArg, argArray) {
-            return [{
-                filePath: path.join(LiteLoader.path.root, "src/preload.js"),
-                id: "",
-                type: "frame"
-            }, ...Reflect.apply(target, thisArg, argArray)];
+            return [
+                {
+                    filePath: path.join(LiteLoader.path.root, "./src/liteloader_api/preload.js"),
+                    id: "",
+                    type: "frame"
+                },
+                {
+                    filePath: path.join(LiteLoader.path.root, "./src/preload.js"),
+                    id: "",
+                    type: "frame"
+                },
+                ...Reflect.apply(target, thisArg, argArray)
+            ];
         }
     });
 }
