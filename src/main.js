@@ -47,7 +47,19 @@ function proxyWindow(target, argArray, newTarget) {
     const window = Reflect.construct(target, argArray, newTarget);
     protocolRegister(window.webContents.session.protocol);
     window.webContents.send = proxySend(window.webContents.send);
-    window.webContents.session.getPreloadScripts = proxyPreload(window.webContents.session.getPreloadScripts);
+    if (window.webContents._getPreloadScript) {
+        window.webContents.session.getPreloadScripts = proxyPreload(window.webContents.session.getPreloadScripts);
+    }
+    else {
+        window.webContents._getPreloadPaths = new Proxy(window.webContents._getPreloadPaths, {
+            apply(target, thisArg, argArray) {
+                return [
+                    ...Reflect.apply(target, thisArg, argArray),
+                    path.join(LiteLoader.path.root, "src/preload.js")
+                ];
+            }
+        });
+    }
     loader.onBrowserWindowCreated(window);
     return window;
 }
