@@ -1,21 +1,4 @@
-/**
- * 拓扑排序 - 根据依赖关系排序插件
- * @param {string[]} dependencies - 插件slug数组
- * @returns {string[]} 排序后的插件slug数组
- */
-function topologicalSort(dependencies) {
-    const sorted = [];
-    const visited = new Set();
-    const visit = (slug) => {
-        if (visited.has(slug)) return;
-        visited.add(slug);
-        const plugin = LiteLoader.plugins[slug];
-        plugin.manifest.dependencies?.forEach(depSlug => visit(depSlug));
-        sorted.push(slug);
-    };
-    dependencies.forEach(slug => visit(slug));
-    return sorted;
-}
+import { topologicalSort } from "../common/utils/sort.mjs"
 
 class RendererLoader {
     #exports = {};

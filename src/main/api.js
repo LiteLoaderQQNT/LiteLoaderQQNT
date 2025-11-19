@@ -2,13 +2,7 @@ const default_config = require("../common/static/config.json");
 const { ipcMain, shell } = require("electron");
 const path = require("node:path");
 const fs = require("node:fs");
-
-
-const admZip = (() => {
-    const major_node = path.join(process.resourcesPath, "app", "major.node");
-    require(major_node).load("internal_admzip", module);
-    return exports.admZip.default;
-})();
+const { zip } = require("../common/utils/zip.cjs");
 
 
 // 路径配置
@@ -57,7 +51,7 @@ function pluginInstall(plugin_path, undone = false) {
         if (fs.statSync(plugin_path).isFile()) {
             // 通过 ZIP 格式文件安装插件
             if (path.extname(plugin_path).toLowerCase() == ".zip") {
-                const plugin_zip = new admZip(plugin_path);
+                const plugin_zip = new zip(plugin_path);
                 for (const entry of plugin_zip.getEntries()) {
                     if (entry.entryName == "manifest.json" && !entry.isDirectory) {
                         const { slug } = JSON.parse(entry.getData());

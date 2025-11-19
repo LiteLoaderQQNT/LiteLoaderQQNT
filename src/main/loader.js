@@ -1,32 +1,6 @@
 const { pathToFileURL } = require("url");
-
-/**
- * 控制台错误输出
- * @param {...any} args - 错误参数
- */
-function error(...args) {
-    console.error("\x1b[31m%s\x1b[0m", "[LiteLoader]", ...args);
-}
-
-/**
- * 拓扑排序 - 根据依赖关系排序插件
- * @param {string[]} dependencies - 插件slug数组
- * @returns {string[]} 排序后的插件slug数组
- */
-function topologicalSort(dependencies) {
-    const sorted = [];
-    const visited = new Set();
-    const visit = (slug) => {
-        if (visited.has(slug)) return;
-        visited.add(slug);
-        const plugin = LiteLoader.plugins[slug];
-        plugin.manifest.dependencies?.forEach(depSlug => visit(depSlug));
-        sorted.push(slug);
-    };
-    dependencies.forEach(slug => visit(slug));
-    return sorted;
-}
-
+const { Log } = require("../common/utils/log.cjs");
+const { topologicalSort } = require("../common/utils/sort.cjs");
 
 class MainLoader {
     #exports = {};
@@ -68,7 +42,7 @@ class MainLoader {
     }
 
     #handleError(plugin, e) {
-        error(`Error loading ${plugin.manifest.name}:`, e);
+        Log.error(`Error loading ${plugin.manifest.name}:`, e);
         plugin.error = { message: `[Main] ${e.message}`, stack: e.stack };
     }
 

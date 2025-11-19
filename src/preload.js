@@ -78,6 +78,8 @@ class Module {
         if (!this.loaded) {
             switch (Path.extname(this.filename)) {
                 case ".js": this.#loadJS(); break;
+                case ".cjs": this.#loadJS(); break;
+                case ".mjs": this.#loadJS(); break;
                 case ".json": this.#loadJSON(); break;
                 default: throw new Error(`Unsupported module extension: ${this.filename}`);
             }

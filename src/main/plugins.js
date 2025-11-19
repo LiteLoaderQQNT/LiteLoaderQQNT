@@ -1,48 +1,13 @@
 const default_config = require("../common/static/config.json");
 const { app, dialog } = require("electron");
-const path = require("node:path");
-const fs = require("node:fs");
-
-const admZip = (() => {
-    const major_node = path.join(process.resourcesPath, "app", "major.node");
-    require(major_node).load("internal_admzip", module);
-    return exports.admZip.default;
-})();
+const path = require("path");
+const fs = require("fs");
+const { zip } = require("../common/utils/zip.cjs");
+const { Log } = require("../common/utils/log.cjs");
+const { showErrorDialog } = require("../common/utils/dialog.cjs");
 
 const config = LiteLoader.api.config.get("LiteLoader", default_config);
 
-
-/**
- * 控制台日志输出
- * @param {...any} args - 日志参数
- */
-function log(...args) {
-    console.log("\x1b[32m%s\x1b[0m", "[LiteLoader]", ...args);
-}
-
-
-/**
- * 控制台错误输出
- * @param {...any} args - 错误参数
- */
-function error(...args) {
-    console.error("\x1b[31m%s\x1b[0m", "[LiteLoader]", ...args);
-}
-
-
-/**
- * 显示错误对话框
- */
-function showErrorDialog(title, message) {
-    const showDialog = () => {
-        dialog.showMessageBox(null, {
-            type: "error",
-            title: "LiteLoaderQQNT",
-            message: `${title}\n${message}`
-        });
-    };
-    app.isReady() ? showDialog() : app.once("ready", showDialog);
-}
 
 /**
  * 删除插件
@@ -57,7 +22,7 @@ function deletePlugin(slug) {
             fs.rmSync(plugin_path, { recursive: true });
         }
     } catch (err) {
-        error("Deleting Plugin Error:", err);
+        Log.error("Deleting Plugin Error:", err);
         showErrorDialog("删除插件时报错，请检查并手动删除", err.message);
     } finally {
         delete config.deleting_plugins[slug];
@@ -82,12 +47,12 @@ function installPlugin(slug) {
 
         // 根据类型安装
         if (plugin_type === "zip") {
-            new admZip(plugin_path).extractAllTo(dest_path);
+            new zip(plugin_path).extractAllTo(dest_path);
         } else if (plugin_type === "json") {
             fs.cpSync(path.dirname(plugin_path), dest_path, { recursive: true });
         }
     } catch (err) {
-        error("Installing Plugin Error:", err);
+        Log.error("Installing Plugin Error:", err);
         showErrorDialog("安装插件时报错，请检查并手动安装", err.message);
     } finally {
         delete config.installing_plugins[slug];
@@ -120,7 +85,7 @@ function findAllPlugin() {
             }
         }
     } catch (err) {
-        error("Find Plugin Error:", err);
+        Log.error("Find Plugin Error:", err);
         showErrorDialog("在读取数据目录时报错了！请检查插件目录或忽略继续启动", err.message);
     }
 
@@ -163,7 +128,7 @@ function loadAllPlugin() {
 
     // 加载插件信息
     for (const { pathname, manifest } of plugins) {
-        log("Found Plugin:", manifest.name);
+        Log.info("Found Plugin:", manifest.name);
         LiteLoader.plugins[manifest.slug] = getPluginInfo(pathname, manifest);
         slugs.add(manifest.slug);
         manifest.dependencies?.forEach(slug => dependencies.add(slug));
@@ -172,7 +137,7 @@ function loadAllPlugin() {
     // 检查缺失的依赖
     const missing = [...dependencies].filter(slug => !slugs.has(slug));
     if (missing.length > 0) {
-        log("Missing Dependencies:", missing.join(", "));
+        Log.info("Missing Dependencies:", missing.join(", "));
         showErrorDialog("插件缺少依赖", missing.join(", "));
     }
 }
