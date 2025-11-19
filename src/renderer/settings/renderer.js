@@ -1,4 +1,4 @@
-import default_config from "./static/config.json" with {type: "json"};
+import default_config from "../../common/static/config.json" with {type: "json"};
 
 
 export function initView(view, html) {
@@ -138,7 +138,7 @@ async function initPluginList(view) {
             continue;
         }
 
-        const default_icon = `local://root/src/settings/static/default.png`;
+        const default_icon = `local://root/src/common/static/default.png`;
         const plugin_icon = `local:///${plugin.path.plugin}/${plugin.manifest?.icon}`;
         const icon = plugin.manifest?.icon ? plugin_icon : default_icon;
 

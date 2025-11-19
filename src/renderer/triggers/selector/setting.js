@@ -1,5 +1,5 @@
 import { BaseSelector } from "../selector.js"
-import { loader } from "../../loader_core/renderer.js";
+import { loader } from "../../../renderer/loader.js";
 import { initView, appropriateIcon } from "../../settings/renderer.js";
 
 export class Setting extends BaseSelector {
@@ -39,7 +39,7 @@ export class Setting extends BaseSelector {
     }
 
     add(plugin) {
-        const default_thumb = `local://root/src/settings/static/default.svg`;
+        const default_thumb = `local://root/src/common/static/default.svg`;
         const plugin_thumb = `local:///${plugin.path.plugin}/${plugin.manifest?.thumb}`;
         const thumb = plugin.manifest.thumb ? plugin_thumb : default_thumb;
         const nav_item = document.querySelector(".setting-tab .nav-item").cloneNode(true);
@@ -91,19 +91,18 @@ export class Setting extends BaseSelector {
         const link = document.createElement("link");
         link.rel = "stylesheet";
         link.type = "text/css";
-        link.href = "local://root/src/settings/static/style.css";
+        link.href = "local://root/src/renderer/settings/style.css";
         document.head.append(link);
         const view = this.add({
             manifest: {
                 slug: "config_view",
-                name: "LiteLoaderQQNT",
-                thumb: "./src/settings/static/default.svg"
+                name: "LiteLoaderQQNT"
             },
             path: {
                 plugin: LiteLoader.path.root
             }
         });
-        fetch("local://root/src/settings/static/view.html")
+        fetch("local://root/src/renderer/settings/view.html")
             .then(res => res.text())
             .then(html => initView(view, html));
         loader.onSettingWindowCreated(this);

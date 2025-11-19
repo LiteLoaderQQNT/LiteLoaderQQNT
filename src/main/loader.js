@@ -28,7 +28,7 @@ function topologicalSort(dependencies) {
 }
 
 
-exports.MainLoader = class {
+class MainLoader {
     #exports = {};
 
     init() {
@@ -93,3 +93,6 @@ exports.MainLoader = class {
         }
     }
 };
+
+
+exports.loader = new MainLoader().init();

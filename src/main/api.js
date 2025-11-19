@@ -1,4 +1,4 @@
-const default_config = require("../settings/static/config.json");
+const default_config = require("../common/static/config.json");
 const { ipcMain, shell } = require("electron");
 const path = require("node:path");
 const fs = require("node:fs");

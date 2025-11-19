@@ -1,6 +1,6 @@
-import "./components/renderer.js";
-import "./triggers/renderer.js";
-import { loader } from "./loader_core/renderer.js";
+import "./renderer/components/renderer.js";
+import "./renderer/triggers/renderer.js";
+import { loader } from "./renderer/loader.js";
 
 
 /**

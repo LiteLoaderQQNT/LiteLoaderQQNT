@@ -1,11 +1,9 @@
-require("./liteloader_api/main.js");
-require("./loader_core/plugin_loader.js");
+require("./main/api.js");
+require("./main/plugins.js");
 
-const { MainLoader } = require("./loader_core/main.js");
-const { protocolRegister } = require("./protocol_scheme/main.js");
+const { loader } = require("./main/loader.js");
+const { protocolRegister } = require("./main/protocol.js");
 const path = require("path");
-
-const loader = new MainLoader().init();
 
 /**
  * 代理 send
@@ -30,7 +28,7 @@ function proxyPreload(func) {
     if (func?.name == "_getPreloadScript") return new Proxy(func, {
         apply(target, thisArg, argArray) {
             return [
-                path.join(LiteLoader.path.root, "./src/liteloader_api/preload.js"),
+                path.join(LiteLoader.path.root, "./src/preload/api.js"),
                 path.join(LiteLoader.path.root, "./src/preload.js"),
                 ...Reflect.apply(target, thisArg, argArray)
             ];
@@ -40,7 +38,7 @@ function proxyPreload(func) {
         apply(target, thisArg, argArray) {
             return [
                 {
-                    filePath: path.join(LiteLoader.path.root, "./src/liteloader_api/preload.js"),
+                    filePath: path.join(LiteLoader.path.root, "./src/preload/api.js"),
                     id: "",
                     type: "frame"
                 },

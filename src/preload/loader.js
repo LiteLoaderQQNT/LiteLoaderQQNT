@@ -19,7 +19,7 @@ function topologicalSort(dependencies) {
     return sorted;
 }
 
-(new class PreloadLoader {
+class PreloadLoader {
     async init() {
         const preloadErrors = {};
         const sortedPlugins = topologicalSort(Object.keys(LiteLoader.plugins));
@@ -48,4 +48,6 @@ function topologicalSort(dependencies) {
         contextBridge.exposeInMainWorld("LiteLoaderPreloadErrors", preloadErrors);
         return this;
     }
-}).init();
+}
+
+exports.loader = new PreloadLoader().init();

@@ -133,7 +133,7 @@ class Require {
     }
 }
 
-new Require(require).require("./src/loader_core/preload.js", LiteLoader.path.root);
+new Require(require).require("./src/preload/loader.js", LiteLoader.path.root);
 
 document.addEventListener("DOMContentLoaded", () => {
     const script = document.createElement("script");
