@@ -66,52 +66,48 @@ class Path {
     }
 }
 
-class Loader {
-    static extensions = {
-        ".js": Loader.loadJS,
-        ".json": Loader.loadJSON
-    };
-    static loadJS(module) {
+class Module {
+    constructor(require, filename) {
+        this.require = (id) => require(id, this.dirname);
+        this.filename = filename;
+        this.exports = {};
+        this.dirname = Path.dirname(filename);
+        this.loaded = false;
+    }
+    load() {
+        if (!this.loaded) {
+            switch (Path.extname(this.filename)) {
+                case ".js": this.#loadJS(); break;
+                case ".json": this.#loadJSON(); break;
+                default: throw new Error(`Unsupported module extension: ${this.filename}`);
+            }
+            this.loaded = true;
+        }
+    }
+    #loadJS() {
         const context = {
             global,
             process,
             Buffer,
             setImmediate,
             clearImmediate,
-            module,
-            require: module.require,
-            exports: module.exports,
-            __filename: module.id,
-            __dirname: module.dirname,
+            module: this,
+            require: this.require,
+            exports: this.exports,
+            __filename: this.filename,
+            __dirname: this.dirname,
         };
-        new Function(...Object.keys(context), File.read(module.id))(...Object.values(context));
+        new Function(...Object.keys(context), File.read(this.filename))(...Object.values(context));
     }
-    static loadJSON(module) {
-        module.exports = JSON.parse(File.read(module.id));
-    }
-}
-
-class Module {
-    constructor(id, requireInstance) {
-        this.id = id;
-        this.exports = {};
-        this.dirname = Path.dirname(id);
-        this.loaded = false;
-        this.require = (childId) => requireInstance.require(childId, this.dirname);
-    }
-    load() {
-        if (!this.loaded) {
-            const ext = Path.extname(this.id);
-            const loader = Loader.extensions[ext];
-            loader?.(this);
-            this.loaded = true;
-        }
+    #loadJSON() {
+        this.exports = JSON.parse(File.read(this.filename));
     }
 }
 
 class Require {
+    #require;
     constructor(require) {
-        this.orig_require = require;
+        this.#require = require;
         this.cache = {};
     }
     resolve(id, basePath) {
@@ -125,11 +121,11 @@ class Require {
     }
     require(id, basePath) {
         try {
-            return this.orig_require(id);
+            return this.#require(id);
         } catch {
             const filename = this.resolve(id, basePath);
             if (this.cache[filename]) return this.cache[filename].exports;
-            const module = new Module(filename, this);
+            const module = new Module(this.require.bind(this), filename);
             this.cache[filename] = module;
             module.load();
             return module.exports;
@@ -137,7 +133,7 @@ class Require {
     }
 }
 
-new Require(require).require("./loader_core/preload.js", LiteLoader.path.root + "/src");
+new Require(require).require("./src/loader_core/preload.js", LiteLoader.path.root);
 
 document.addEventListener("DOMContentLoaded", () => {
     const script = document.createElement("script");
