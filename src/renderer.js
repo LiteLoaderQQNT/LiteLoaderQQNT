@@ -1,5 +1,5 @@
 import "./components/renderer.js";
-import "./easter_eggs/renderer.js";
+import "./triggers/renderer.js";
 import { SettingInterface } from "./settings/renderer.js";
 import { RendererLoader } from "./loader_core/renderer.js";
 
