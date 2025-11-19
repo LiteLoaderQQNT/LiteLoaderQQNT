@@ -98,6 +98,7 @@ class Module {
             exports: this.exports,
             __filename: this.filename,
             __dirname: this.dirname,
+            LiteLoader: module.LiteLoader
         };
         new Function(...Object.keys(context), File.read(this.filename))(...Object.values(context));
     }
@@ -135,7 +136,7 @@ class Require {
     }
 }
 
-new Require(require).require("./src/preload/loader.js", LiteLoader.path.root);
+new Require(require).require("./src/preload/loader.js", module.LiteLoader.path.root);
 
 document.addEventListener("DOMContentLoaded", () => {
     const script = document.createElement("script");
