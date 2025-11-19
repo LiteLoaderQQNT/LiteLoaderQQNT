@@ -1,66 +1,6 @@
 import "./components/renderer.js";
 import "./triggers/renderer.js";
-import { SettingInterface } from "./settings/renderer.js";
-import { RendererLoader } from "./loader_core/renderer.js";
-
-
-const loader = await new RendererLoader().init();
-
-
-/**
- * 寻找指定元素，如果不存在则等待其出现
- * @param {string} selector - CSS选择器
- * @param {Function} callback - 回调函数
- */
-function findElement(selector, callback) {
-    const checkElement = () => {
-        const element = document.querySelector(selector);
-        if (element) {
-            callback(element);
-            return true;
-        }
-        return false;
-    };
-    if (checkElement()) return;
-    const observer = new MutationObserver(() => {
-        if (checkElement()) {
-            observer.disconnect();
-        }
-    });
-    observer.observe(document, {
-        subtree: true,
-        childList: true
-    });
-}
-
-
-/**
- * 监听 URL hash 变化
- * @param {Function} callback - 回调函数
- */
-function watchURLHash(callback) {
-    if (!location.hash.includes("#/blank")) {
-        callback(location.hash);
-        return;
-    }
-    navigation.addEventListener("navigatesuccess",
-        () => callback(location.hash),
-        { once: true }
-    );
-}
-
-
-/**
- * 监听设置页面加载
- */
-watchURLHash((currentHash) => {
-    if (!currentHash.includes("#/setting")) return;
-    const settingInterface = new SettingInterface();
-    findElement(".setting-tab .nav-bar", () => {
-        settingInterface.SettingInit();
-        loader.onSettingWindowCreated(settingInterface);
-    });
-});
+import { loader } from "./loader_core/renderer.js";
 
 
 /**

@@ -1,4 +1,5 @@
 import { Search } from "./selector/search.js";
+import { Setting } from "./selector/setting.js";
 import { Title } from "./selector/title.js";
 import { Update } from "./selector/update.js";
 
@@ -7,6 +8,7 @@ import { Update } from "./selector/update.js";
  */
 const TRIGGERS = [
     Search,
+    Setting,
     Title,
     Update
 ];

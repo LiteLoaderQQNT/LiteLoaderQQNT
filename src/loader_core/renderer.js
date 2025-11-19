@@ -17,7 +17,7 @@ function topologicalSort(dependencies) {
     return sorted;
 }
 
-export class RendererLoader {
+class RendererLoader {
     #exports = {};
 
     async init() {
@@ -102,3 +102,5 @@ export class RendererLoader {
         }
     }
 }
+
+export const loader = await new RendererLoader().init();
