@@ -1,5 +1,4 @@
 const default_config = require("../common/static/config.json");
-const { app, dialog } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const { zip } = require("../common/utils/zip.cjs");

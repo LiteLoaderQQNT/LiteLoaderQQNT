@@ -1,3 +1,5 @@
+const { app, dialog } = require("electron");
+
 /**
  * 显示错误对话框
  */
