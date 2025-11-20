@@ -1,4 +1,3 @@
-const { pathToFileURL } = require("url");
 const { Log } = require("../common/utils/log.cjs");
 const { topologicalSort } = require("../common/utils/sort.cjs");
 
@@ -17,33 +16,15 @@ class MainLoader {
                 !plugin.path.injects.main
             ) continue;
 
-            this.#loadPlugin(slug, plugin);
+            try {
+                this.#exports[slug] = require(plugin.path.injects.main);
+            } catch (e) {
+                Log.error(`Error loading ${plugin.manifest.name}:`, e);
+                plugin.error = { message: `[Main] ${e.message}`, stack: e.stack };
+            }
         }
 
         return this;
-    }
-
-    #loadPlugin(slug, plugin) {
-        try {
-            if (plugin.manifest.esm) {
-                this.#exports[slug] = {};
-                // FIXME: 异步加载可能导致依赖错误
-                import(pathToFileURL(plugin.path.injects.main))
-                    .then(exported => {
-                        this.#exports[slug] = exported;
-                    })
-                    .catch(e => this.#handleError(plugin, e));
-            } else {
-                this.#exports[slug] = require(plugin.path.injects.main);
-            }
-        } catch (e) {
-            this.#handleError(plugin, e);
-        }
-    }
-
-    #handleError(plugin, e) {
-        Log.error(`Error loading ${plugin.manifest.name}:`, e);
-        plugin.error = { message: `[Main] ${e.message}`, stack: e.stack };
     }
 
     onBrowserWindowCreating(target, argArray, newTarget) {
