@@ -146,8 +146,8 @@ const LiteLoader = {
             delete: pluginDelete,
             disable: pluginDisable
         },
-        openExternal: shell.openExternal,
-        openPath: shell.openPath
+        openExternal: (url) => (shell.openExternal(url), true),
+        openPath: (path) => (shell.openPath(path), true)
     }
 };
 
@@ -188,27 +188,10 @@ Object.defineProperty(globalThis, "LiteLoader", {
     }
 });
 
-
 /**
- * 将 LiteLoader 对象暴露给渲染进程（隐藏 API）
+ * 将 LiteLoader 对象暴露给渲染进程
  */
-ipcMain.on("LiteLoader.LiteLoader.LiteLoader", (event) => {
-    event.returnValue = {
-        ...LiteLoader,
-        api: null
-    };
-});
-
-/**
- * 处理 API 调用请求
- */
-ipcMain.handle("LiteLoader.LiteLoader.api", (event, name, method, args) => {
-    try {
-        // 直接调用或嵌套调用
-        const target = name === method ? LiteLoader.api[method] : LiteLoader.api[name][method];
-        return target?.(...args) ?? null;
-    } catch (error) {
-        console.error("API call error:", error);
-        return null;
-    }
+ipcMain.on("LiteLoader.LiteLoader.LiteLoader", (event, method = [], args = []) => {
+    if (!method.length) event.returnValue = JSON.parse(JSON.stringify(LiteLoader));
+    else event.returnValue = method.reduce((obj, key) => obj?.[key], LiteLoader)?.(...args);
 });

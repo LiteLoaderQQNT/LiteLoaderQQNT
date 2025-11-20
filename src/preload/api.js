@@ -6,24 +6,24 @@ function exposeInMainWorld(key, api) {
     webFrame.executeJavaScript(script, false, callback);
 }
 
-function invokeAPI(name, method, args) {
-    return ipcRenderer.invoke("LiteLoader.LiteLoader.api", name, method, args);
+function sendSync(method = [], args = []) {
+    return ipcRenderer.sendSync("LiteLoader.LiteLoader.LiteLoader", method, args);
 }
 
 module.LiteLoader = {
-    ...ipcRenderer.sendSync("LiteLoader.LiteLoader.LiteLoader"),
+    ...sendSync(),
     api: {
         config: {
-            get: (...args) => invokeAPI("config", "get", args),
-            set: (...args) => invokeAPI("config", "set", args)
+            get: async (...args) => sendSync(["api", "config", "get"], args),
+            set: async (...args) => sendSync(["api", "config", "set"], args)
         },
         plugin: {
-            install: (...args) => invokeAPI("plugin", "install", args),
-            delete: (...args) => invokeAPI("plugin", "delete", args),
-            disable: (...args) => invokeAPI("plugin", "disable", args)
+            install: async (...args) => sendSync(["api", "plugin", "install"], args),
+            delete: async (...args) => sendSync(["api", "plugin", "delete"], args),
+            disable: async (...args) => sendSync(["api", "plugin", "disable"], args)
         },
-        openExternal: (...args) => invokeAPI("openExternal", "openExternal", args),
-        openPath: (...args) => invokeAPI("openPath", "openPath", args)
+        openExternal: async (...args) => sendSync(["api", "openExternal"], args),
+        openPath: async (...args) => sendSync(["api", "openPath"], args)
     }
 }
 
