@@ -10,7 +10,7 @@ function sendSync(method = [], args = []) {
     return ipcRenderer.sendSync("LiteLoader.LiteLoader.LiteLoader", method, args);
 }
 
-module.LiteLoader = {
+module.exports.LiteLoader = {
     ...sendSync(),
     api: {
         config: {
@@ -27,4 +27,4 @@ module.LiteLoader = {
     }
 }
 
-exposeInMainWorld("LiteLoader", module.LiteLoader);
+exposeInMainWorld("LiteLoader", module.exports.LiteLoader);

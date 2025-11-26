@@ -1,86 +1,29 @@
 require("./main/api.js");
-require("./main/plugins.js");
+const store = require("./main/store.js");
+const { installHook } = require("./main/hook.js");
+const { loadAllPlugins } = require("./main/loader.js");
+const { Runtime } = require("./main/runtime.js");
+const default_config = require("./common/static/config.json");
+const config = LiteLoader.api.config.get("LiteLoader", default_config);
 
-const { loader } = require("./main/loader.js");
-const { protocolRegister } = require("./main/protocol.js");
-const path = require("path");
+installHook();
+loadAllPlugins();
 
-/**
- * 代理 send
- */
-function proxySend(func) {
-    return new Proxy(func, {
-        apply(target, thisArg, [channel, ...args]) {
-            if (channel.includes("RM_IPCFROM_")) {
-                if (args?.[1]?.cmdName == "nodeIKernelSessionListener/onSessionInitComplete") {
-                    loader.onLogin(args[1].payload.uid);
-                }
-            }
-            return Reflect.apply(target, thisArg, [channel, ...args]);
-        }
-    });
+for (const slug in config.deleting_plugins) {
+    store.uninstallPlugin(slug);
 }
 
-/**
- * 代理 Preload
- */
-function proxyPreload(func) {
-    if (func?.name == "_getPreloadScript") return new Proxy(func, {
-        apply(target, thisArg, argArray) {
-            return [
-                path.join(LiteLoader.path.root, "./src/preload/api.js"),
-                path.join(LiteLoader.path.root, "./src/preload.js"),
-                ...Reflect.apply(target, thisArg, argArray)
-            ];
-        }
-    });
-    if (func?.name == "getPreloadScripts") return new Proxy(func, {
-        apply(target, thisArg, argArray) {
-            return [
-                {
-                    filePath: path.join(LiteLoader.path.root, "./src/preload/api.js"),
-                    id: "",
-                    type: "frame"
-                },
-                {
-                    filePath: path.join(LiteLoader.path.root, "./src/preload.js"),
-                    id: "",
-                    type: "frame"
-                },
-                ...Reflect.apply(target, thisArg, argArray)
-            ];
-        }
-    });
+for (const slug in config.installing_plugins) {
+    store.installPlugin(slug);
 }
 
-/**
- * 代理 BrowserWindow
- */
-function proxyWindow(target, argArray, newTarget) {
-    loader.onBrowserWindowCreating(target, argArray, newTarget);
-    const window = Reflect.construct(target, argArray, newTarget);
-    protocolRegister(window.webContents.session.protocol);
-    window.webContents.send = proxySend(window.webContents.send);
-    window.webContents._getPreloadPaths = proxyPreload(window.webContents._getPreloadPaths);
-    window.webContents.session.getPreloadScripts = proxyPreload(window.webContents.session.getPreloadScripts);
-    loader.onBrowserWindowCreated(window);
-    return window;
+for (const slug in LiteLoader.plugins) {
+    const plugin = LiteLoader.plugins[slug];
+    const plugin_path = plugin.path.injects.main;
+    if (plugin.disabled || plugin.incompatible || !plugin_path) continue;
+    try { Runtime.registerPlugin(plugin, require(plugin_path)); }
+    catch (error) { plugin.error = { message: `[Main] ${error.message}`, stack: error.stack }; }
 }
-
-// 监听窗口创建
-require.cache["electron"] = new Proxy(require.cache["electron"], {
-    get(target, property, receiver) {
-        const module = Reflect.get(target, property, receiver);
-        return property != "exports" ? module : new Proxy(module, {
-            get(target, property, receiver) {
-                const exports = Reflect.get(target, property, receiver);
-                return property != "BrowserWindow" ? exports : new Proxy(exports, {
-                    construct: proxyWindow
-                });
-            }
-        });
-    }
-});
 
 if (!globalThis.qwqnt) {
     const main_path = "./application.asar/app_launcher/index.js";

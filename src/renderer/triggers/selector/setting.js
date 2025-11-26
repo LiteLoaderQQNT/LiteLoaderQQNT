@@ -1,5 +1,5 @@
 import { BaseSelector } from "../selector.js"
-import { loader } from "../../../renderer/loader.js";
+import { Runtime } from "../../runtime.js"
 import { initView, appropriateIcon } from "../../settings/renderer.js";
 
 export class Setting extends BaseSelector {
@@ -105,6 +105,10 @@ export class Setting extends BaseSelector {
         fetch("local://root/src/renderer/settings/view.html")
             .then(res => res.text())
             .then(html => initView(view, html));
-        loader.onSettingWindowCreated(this);
+        Runtime.triggerHooks("onSettingWindowCreated", (plugin) => {
+            const view = this.add(plugin);
+            if (!plugin.error) return [view];
+            else this.createErrorView(plugin.error, plugin.manifest.slug, view);
+        });
     }
 }
