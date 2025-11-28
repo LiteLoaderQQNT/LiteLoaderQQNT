@@ -1,16 +1,16 @@
-import { Search } from "./selector/search.js";
-import { Setting } from "./selector/setting.js";
-import { Title } from "./selector/title.js";
-import { Update } from "./selector/update.js";
+import search from "./selector/search.js";
+import setting from "./selector/setting.js";
+import title from "./selector/title.js";
+import update from "./selector/update.js";
 
 /**
  * 触发器注册表
  */
 const TRIGGERS = [
-    Search,
-    Setting,
-    Title,
-    Update
+    search,
+    setting,
+    title,
+    update
 ];
 
 /**
@@ -21,17 +21,13 @@ const TRIGGERS = [
 function watchElement(target, callback) {
     const check = () => {
         const element = document.querySelector(target);
-        if (element) {
-            callback(element);
-            return true;
-        }
-        return false;
+        if (!element) return false;
+        callback(element);
+        return true;
     };
     if (check()) return;
     const observer = new MutationObserver(() => {
-        if (check()) {
-            observer.disconnect();
-        }
+        if (check()) observer.disconnect();
     });
     observer.observe(document, {
         subtree: true,
@@ -46,11 +42,9 @@ function watchElement(target, callback) {
  */
 function watchHash(target, callback) {
     const check = () => {
-        if (location.hash.includes(target)) {
-            callback();
-            return true;
-        }
-        return false;
+        if (!location.hash.includes(target)) return false;
+        callback();
+        return true;
     };
     if (check()) return;
     navigation.addEventListener("navigatesuccess", check, { once: true });
@@ -59,17 +53,8 @@ function watchHash(target, callback) {
 /**
  * 注册所有触发器
  */
-TRIGGERS.forEach((Trigger) => {
-    const trigger = new Trigger();
-    const hash = trigger.getHash();
-    const selector = trigger.getSelector();
-    watchHash(hash, () => {
-        watchElement(selector, (element) => {
-            trigger.dispatchEvent(new CustomEvent("trigger", {
-                bubbles: true,
-                composed: true,
-                detail: { element }
-            }));
-        });
+TRIGGERS.forEach((trigger) => {
+    watchHash(trigger.hash, () => {
+        watchElement(trigger.selector, trigger.action);
     })
 });

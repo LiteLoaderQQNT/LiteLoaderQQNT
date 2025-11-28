@@ -1,16 +1,13 @@
-import { BaseSelector } from "../selector.js"
+const search_word = "furry";
+const images_apis = [
+    "https://uapis.cn/api/imgapi/furry/img4k.php",
+    "https://uapis.cn/api/imgapi/furry/imgz4k.php",
+    "https://uapis.cn/api/imgapi/furry/imgs4k.php"
+];
 
-export class Search extends BaseSelector {
-    #search_word = "furry";
-    #images_apis = [
-        "https://uapis.cn/api/imgapi/furry/img4k.php",
-        "https://uapis.cn/api/imgapi/furry/imgz4k.php",
-        "https://uapis.cn/api/imgapi/furry/imgs4k.php"
-    ];
-
-    #getMenuItem() {
-        const template = document.createElement("template");
-        template.innerHTML = `
+function getMenuItem() {
+    const template = document.createElement("template");
+    template.innerHTML = `
             <a class="furry q-context-menu-item q-context-menu-item--normal">
                 <div class="q-context-menu-item__icon q-context-menu-item__head">
                     <svg class="q-icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
@@ -20,28 +17,22 @@ export class Search extends BaseSelector {
                 <span class="q-context-menu-item__text">随机 Furry 图片</span>
             </a>
         `;
-        return template.content.firstElementChild;
-    }
+    return template.content.firstElementChild;
+}
 
-    getHash() {
-        return "#/main";
-    }
-
-    getSelector() {
-        return ".contact-top-bar";
-    }
-
-    trigger(event) {
-        const contact_topbar = event.detail.element;
-        const menu_item = this.#getMenuItem();
+export default {
+    hash: "#/main",
+    selector: ".contact-top-bar",
+    action(contact_topbar) {
+        const menu_item = getMenuItem();
         menu_item.addEventListener("click", () => {
-            const random_image = this.#images_apis[Math.floor(Math.random() * this.#images_apis.length)];
+            const random_image = images_apis[Math.floor(Math.random() * images_apis.length)];
             LiteLoader.api.openExternal(random_image);
         });
         const adder_button = contact_topbar.querySelector(".contact-adder-btn");
         adder_button.addEventListener("click", () => {
             const search_input = contact_topbar.querySelector("input");
-            if (search_input.value.toLowerCase() == this.#search_word) {
+            if (search_input.value.toLowerCase() == search_word) {
                 const context_menu = document.querySelector(".q-context-menu");
                 context_menu.append(menu_item);
             }
