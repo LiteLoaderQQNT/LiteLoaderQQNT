@@ -20,26 +20,24 @@
         </div>
         <setting-button data-type="secondary" class="manager">管理</setting-button>
         <setting-modal class="manager-modal">
-            <setting-section data-title="开关">
+            <setting-section data-title="插件设置（将在下次启动时生效）">
                 <setting-panel>
                     <setting-list data-direction="column">
                         <setting-item>
-                            <setting-text>启动时加载此插件</setting-text>
-                            <setting-switch class="enable"></setting-switch>
+                            <setting-text>启用插件</setting-text>
+                            <setting-switch class="switch"></setting-switch>
                         </setting-item>
                     </setting-list>
                 </setting-panel>
-            </setting-section>
-            <setting-section data-title="删除">
                 <setting-panel>
                     <setting-list data-direction="column">
                         <setting-item>
-                            <setting-text>删除我的插件数据</setting-text>
-                            <setting-switch class="keepdata"></setting-switch>
+                            <setting-text>删除插件数据</setting-text>
+                            <setting-switch class="data"></setting-switch>
                         </setting-item>
                         <setting-item>
-                            <setting-text>在下次启动时删除</setting-text>
-                            <setting-switch class="uninstall"></setting-switch>
+                            <setting-text>删除插件本体</setting-text>
+                            <setting-switch class="self"></setting-switch>
                         </setting-item>
                     </setting-list>
                 </setting-panel>
@@ -58,26 +56,26 @@
         </setting-list>
     </setting-panel>
     <setting-panel>
-        <setting-list data-direction="row" class="current">
+        <setting-list data-direction="row">
             <setting-item class="liteloader">
                 <setting-text>LiteLoader</setting-text>
-                <setting-text data-type="secondary"></setting-text>
+                <setting-text data-type="secondary" class="version"></setting-text>
             </setting-item>
             <setting-item class="qqnt">
                 <setting-text>QQNT</setting-text>
-                <setting-text data-type="secondary"></setting-text>
+                <setting-text data-type="secondary" class="version"></setting-text>
             </setting-item>
             <setting-item class="electron">
                 <setting-text>Electron</setting-text>
-                <setting-text data-type="secondary"></setting-text>
+                <setting-text data-type="secondary" class="version"></setting-text>
             </setting-item>
             <setting-item class="chromium">
                 <setting-text>Chromium</setting-text>
-                <setting-text data-type="secondary"></setting-text>
+                <setting-text data-type="secondary" class="version"></setting-text>
             </setting-item>
             <setting-item class="nodejs">
                 <setting-text>Node.js</setting-text>
-                <setting-text data-type="secondary"></setting-text>
+                <setting-text data-type="secondary" class="version"></setting-text>
             </setting-item>
         </setting-list>
     </setting-panel>

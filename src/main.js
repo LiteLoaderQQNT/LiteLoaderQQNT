@@ -3,25 +3,16 @@ const store = require("./main/store.js");
 const { installHook } = require("./main/hook.js");
 const { loadAllPlugins } = require("./main/loader.js");
 const { Runtime } = require("./main/runtime.js");
-const default_config = require("./common/static/config.json");
-const config = LiteLoader.api.config.get("LiteLoader", default_config);
 
 installHook();
 loadAllPlugins();
 
-for (const slug in config.deleting_plugins) {
-    store.uninstallPlugin(slug);
-}
-
-for (const slug in config.installing_plugins) {
-    store.installPlugin(slug);
-}
-
-for (const slug in LiteLoader.plugins) {
-    const plugin = LiteLoader.plugins[slug];
-    const plugin_path = plugin.path.injects.main;
-    if (plugin.disabled || plugin.incompatible || !plugin_path) continue;
-    try { Runtime.registerPlugin(plugin, require(plugin_path)); }
+const config = LiteLoader.api.config.get("LiteLoader", require("./common/static/config.json"));
+for (const slug in config.deleting_plugins) store.deletePlugin(slug, [true, true], true);
+for (const slug in config.installing_plugins) store.installPlugin(slug);
+for (const plugin of Object.values(LiteLoader.plugins)) {
+    if (plugin.disabled || plugin.incompatible || !plugin.path.injects.main) continue;
+    try { Runtime.registerPlugin(plugin, require(plugin.path.injects.main)); }
     catch (error) { plugin.error = { message: `[Main] ${error.message}`, stack: error.stack }; }
 }
 

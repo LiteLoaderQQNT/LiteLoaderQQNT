@@ -67,7 +67,7 @@ function proxyWindow(func) {
 
 
 function proxyElectron(func) {
-    return new Proxy(require.cache["electron"], {
+    return new Proxy(func, {
         get(target, property, receiver) {
             const module = Reflect.get(target, property, receiver);
             return property != "exports" ? module : new Proxy(module, {

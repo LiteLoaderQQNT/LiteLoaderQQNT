@@ -1,197 +1,57 @@
-const default_config = require("../common/static/config.json");
-const { ipcMain, shell } = require("electron");
-const path = require("node:path");
-const fs = require("node:fs");
-const { zip } = require("../common/utils/zip.cjs");
+const path = require("path");
+const electron = require("electron");
+const store = require("./store.js");
 
+const LiteLoader = Object.create(null);
 
-// 路径配置
-const qwqnt_path = path.join(globalThis.qwqnt?.framework?.paths?.data ?? "", "LiteLoader");
-const root_path = path.join(__dirname, "..", "..");
-const profile_path = process.env.LITELOADERQQNT_PROFILE ?? (globalThis.qwqnt ? qwqnt_path : root_path);
-const data_path = path.join(profile_path, "data");
-const plugins_path = path.join(profile_path, "plugins");
-const liteloader_package = require(path.join(root_path, "package.json"));
-const qqnt_package = require(path.join(process.resourcesPath, "app/package.json"))
+LiteLoader.plugins = Object.create(null);
 
+LiteLoader.path = Object.create(null);
+LiteLoader.path.root = path.dirname(path.dirname(__dirname));
+LiteLoader.path.profile = process.env.LITELOADERQQNT_PROFILE ?? (globalThis.qwqnt ?
+    path.join(globalThis.qwqnt.framework.paths.data, "LiteLoader") :
+    LiteLoader.path.root
+);
+LiteLoader.path.data = path.join(LiteLoader.path.profile, "data");
+LiteLoader.path.plugins = path.join(LiteLoader.path.profile, "plugins");
 
-function setConfig(slug, new_config) {
-    try {
-        const config_path = path.join(data_path, slug, "config.json");
-        fs.mkdirSync(path.dirname(config_path), { recursive: true });
-        fs.writeFileSync(config_path, JSON.stringify(new_config, null, 4), "utf-8");
-        return true;
-    } catch {
-        return false;
-    }
-}
+LiteLoader.package = Object.create(null);
+LiteLoader.package.liteloader = require(path.join(LiteLoader.path.root, "package.json"));
+LiteLoader.package.qqnt = require(path.join(process.resourcesPath, "app", "package.json"));
 
-/**
- * 获取插件配置
- */
-function getConfig(slug, default_config) {
-    try {
-        const config_path = path.join(data_path, slug, "config.json");
-        if (fs.existsSync(config_path)) {
-            const config = JSON.parse(fs.readFileSync(config_path, "utf-8"));
-            return Object.assign({}, default_config, config);
-        }
-        else {
-            setConfig(slug, default_config);
-            return Object.assign({}, default_config, {});
-        }
-    } catch {
-        return default_config;
-    }
-}
+LiteLoader.versions = Object.create(null);
+LiteLoader.versions.liteloader = LiteLoader.package.liteloader.version;
+LiteLoader.versions.qqnt = LiteLoader.package.qqnt.version;
+LiteLoader.versions.electron = process.versions.electron;
+LiteLoader.versions.node = process.versions.node;
+LiteLoader.versions.chrome = process.versions.chrome;
 
+LiteLoader.os = Object.create(null);
+LiteLoader.os.platform = process.platform;
 
-function pluginInstall(plugin_path, undone = false) {
-    try {
-        if (fs.statSync(plugin_path).isFile()) {
-            // 通过 ZIP 格式文件安装插件
-            if (path.extname(plugin_path).toLowerCase() == ".zip") {
-                const plugin_zip = new zip(plugin_path);
-                for (const entry of plugin_zip.getEntries()) {
-                    if (entry.entryName == "manifest.json" && !entry.isDirectory) {
-                        const { slug } = JSON.parse(entry.getData());
-                        if (slug in LiteLoader.plugins) LiteLoader.api.plugin.delete(slug, false, false);
-                        const config = LiteLoader.api.config.get("LiteLoader", default_config);
-                        if (undone) delete config.installing_plugins[slug];
-                        else config.installing_plugins[slug] = {
-                            plugin_path: plugin_path,
-                            plugin_type: "zip"
-                        };
-                        LiteLoader.api.config.set("LiteLoader", config);
-                        return true;
-                    }
-                }
-            }
-            // 通过 manifest.json 文件安装插件
-            if (path.basename(plugin_path) == "manifest.json") {
-                const { slug } = JSON.parse(fs.readFileSync(plugin_path));
-                if (slug in LiteLoader.plugins) LiteLoader.api.plugin.delete(slug, false, false);
-                const config = LiteLoader.api.config.get("LiteLoader", default_config);
-                if (undone) delete config.installing_plugins[slug];
-                else config.installing_plugins[slug] = {
-                    plugin_path: plugin_path,
-                    plugin_type: "json"
-                };
-                LiteLoader.api.config.set("LiteLoader", config);
-                return true;
-            }
-        }
-    } catch (error) {
-        console.error("Plugin install error:", error);
-    }
-    return false;
-}
+LiteLoader.api = Object.create(null);
+LiteLoader.api.openExternal = (url) => (electron.shell.openExternal(url), true);
+LiteLoader.api.openPath = (path) => (electron.shell.openPath(path), true);
 
+LiteLoader.api.config = Object.create(null);
+LiteLoader.api.config.set = store.setPluginConfig;
+LiteLoader.api.config.get = store.getPluginConfig;
 
-/**
- * 删除插件
- */
-function pluginDelete(slug, delete_data = false, undone = false) {
-    if (!(slug in LiteLoader.plugins)) return true;
-    const { plugin, data } = LiteLoader.plugins[slug].path;
-    const config = LiteLoader.api.config.get("LiteLoader", default_config);
-    if (undone) delete config.deleting_plugins[slug];
-    else config.deleting_plugins[slug] = {
-        plugin_path: plugin,
-        data_path: delete_data ? data : null
-    };
-    LiteLoader.api.config.set("LiteLoader", config);
-}
+LiteLoader.api.plugin = Object.create(null);
+LiteLoader.api.plugin.install = store.installPlugin;
+LiteLoader.api.plugin.delete = store.deletePlugin;
+LiteLoader.api.plugin.disable = store.disablePlugin;
 
-/**
- * 禁用/启用插件
- */
-function pluginDisable(slug, undone = false) {
-    const config = LiteLoader.api.config.get("LiteLoader", default_config);
-    if (undone) config.disabled_plugins = config.disabled_plugins.filter(item => item != slug);
-    else config.disabled_plugins = config.disabled_plugins.concat(slug);
-    LiteLoader.api.config.set("LiteLoader", config);
-}
-
-
-const LiteLoader = {
-    path: {
-        root: root_path,
-        profile: profile_path,
-        data: data_path,
-        plugins: plugins_path
-    },
-    versions: {
-        qqnt: qqnt_package.version,
-        liteloader: liteloader_package.version,
-        node: process.versions.node,
-        chrome: process.versions.chrome,
-        electron: process.versions.electron
-    },
-    os: {
-        platform: process.platform
-    },
-    package: {
-        liteloader: liteloader_package,
-        qqnt: qqnt_package
-    },
-    plugins: {},
-    api: {
-        config: {
-            set: setConfig,
-            get: getConfig
-        },
-        plugin: {
-            install: pluginInstall,
-            delete: pluginDelete,
-            disable: pluginDisable
-        },
-        openExternal: (url) => (shell.openExternal(url), true),
-        openPath: (path) => (shell.openPath(path), true)
-    }
-};
-
-
-/**
- * 创建白名单
- */
-const whitelist = (() => {
-    const whitelist = new Set([
-        LiteLoader.path.root,
-        LiteLoader.path.profile,
-        LiteLoader.path.data,
-        LiteLoader.path.plugins
-    ]);
-    // 添加真实路径
-    for (const path of whitelist) {
-        try {
-            whitelist.add(fs.realpathSync(path));
-        } catch { }
-    }
-    // 添加标准化路径（统一使用正斜杠）
-    for (const path of whitelist) {
-        whitelist.add(path.replaceAll("\\", "/"));
-    }
-    return whitelist;
-})();
-
-/**
- * 将 LiteLoader 对象挂载到全局，仅允许白名单路径访问
- */
 Object.defineProperty(globalThis, "LiteLoader", {
-    configurable: false,
     get() {
         const stack = new Error().stack.split("\n")[2];
-        if ([...whitelist].some(item => stack.includes(item))) {
-            return LiteLoader;
-        }
+        const allowed = [LiteLoader.path.root, LiteLoader.path.profile];
+        return allowed.some((item) => stack.includes(item)) ? LiteLoader : null;
     }
 });
 
-/**
- * 将 LiteLoader 对象暴露给渲染进程
- */
-ipcMain.on("LiteLoader.LiteLoader.LiteLoader", (event, method = [], args = []) => {
-    if (!method.length) event.returnValue = JSON.parse(JSON.stringify(LiteLoader));
-    else event.returnValue = method.reduce((obj, key) => obj?.[key], LiteLoader)?.(...args);
+electron.ipcMain.on("LiteLoader.LiteLoader.LiteLoader", (event, method, args) => {
+    event.returnValue = method.length ?
+        method.reduce((obj, key) => obj?.[key], LiteLoader)?.(...args) :
+        JSON.parse(JSON.stringify(LiteLoader));
 });
