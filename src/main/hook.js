@@ -1,5 +1,5 @@
 const path = require("path");
-const { protocolRegister } = require("./protocol.js");
+const { protocolRegister } = require("./api.js");
 const { Runtime } = require("./runtime.js");
 
 

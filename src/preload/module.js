@@ -1,75 +1,46 @@
 class File {
-    static read(path) {
+    static #request(path, method) {
         const xhr = new XMLHttpRequest();
-        xhr.open("GET", `local:///${path}`, false);
+        xhr.open(method, `local:///${path}`, false);
         xhr.send();
-        if (xhr.status >= 200 && xhr.status < 300) return xhr.responseText;
-        throw new Error(`Failed to read file: ${path} (status: ${xhr.status})`);
+        return xhr.status == 200 && xhr.responseText;
     }
-    static exists(path) {
-        const xhr = new XMLHttpRequest();
-        xhr.open("HEAD", `local:///${path}`, false);
-        xhr.send();
-        return xhr.status >= 200 && xhr.status < 300;
-    }
+    static read(path) { return File.#request(path, "GET"); }
+    static exists(path) { return !!File.#request(path, "HEAD"); }
 }
 
 class Path {
     static isWindows(path) { return /^[a-zA-Z]:[\\/]/.test(path); }
     static isUnix(path) { return path.startsWith("/"); }
     static isAbsolute(path) { return Path.isUnix(path) || Path.isWindows(path); }
-    static getDrive(path) {
-        if (Path.isWindows(path)) return `${path.slice(0, 2).toUpperCase()}/`;
-        if (Path.isUnix(path)) return "/";
-        return "";
-    }
+    static getDrive(path) { return Path.isWindows(path) ? `${path.slice(0, 2)}/` : Path.isUnix(path) ? "/" : ""; }
     static normalize(path) {
         const drive = Path.getDrive(path);
-        const isAbs = drive != "";
-        const body = isAbs ? path.slice(drive.length) : path;
-        const parts = body.split(/[\\\/]/);
+        const parts = path.slice(drive.length).split(/[\\/]/);
         const stack = [];
-        for (const part of parts) {
-            if (!part || part == ".") continue;
-            if (part == "..") {
-                if (stack.length) stack.pop();
-                else if (!isAbs) stack.push("..");
-                continue;
-            }
-            stack.push(part);
-        }
+        for (const part of parts) if (part && part != ".") part == ".." ? stack.pop() : stack.push(part);
         return `${drive}${stack.join("/")}` || ".";
     }
     static dirname(path) {
-        const normPath = Path.normalize(path);
-        const drive = Path.getDrive(normPath);
-        const parts = normPath.slice(drive.length).split("/");
-        parts.pop();
-        const result = parts.join("/");
-        return `${drive}${result}` || (drive ? drive : ".");
+        const parts = Path.normalize(path).split("/").slice(0, -1);
+        return parts.length ? `${Path.getDrive(path)}${parts.join("/")}` : ".";
     }
-    static extname(path) {
-        const filename = path.substring(path.lastIndexOf("/") + 1);
-        const dotIndex = filename.lastIndexOf(".");
-        return dotIndex > 0 ? filename.slice(dotIndex) : "";
-    }
+    static extname(path) { return path.match(/\.[^/.]+$/)?.[0] ?? ""; }
 }
 
 class Module {
-    static globals = { LiteLoader: module.exports.LiteLoader };
     static cache = {};
     constructor(module) {
         this.id = null;
         this.exports = {};
         this.parent = module;
-        this.require = this.require.bind(this);
     }
     require(id) {
         try {
             this.id = id;
-            this.exports = module.require(id);
-            return this.exports;
-        } catch {
+            return this.exports = module.require(id);
+        }
+        catch {
             this.id = this.#resolve(id, Path.dirname(this.parent?.id ?? "."));
             if (!Module.cache[this.id]) {
                 Module.cache[this.id] = new Module(this);
@@ -80,38 +51,21 @@ class Module {
     }
     #resolve(id, base) {
         const resolved = Path.normalize(Path.isAbsolute(id) ? id : `${base}/${id}`);
-        if (File.exists(resolved)) return resolved;
-        if (File.exists(resolved + ".js")) return resolved + ".js";
-        if (File.exists(resolved + ".json")) return resolved + ".json";
-        if (File.exists(resolved + "/index.js")) return resolved + "/index.js";
-        if (File.exists(resolved + "/index.json")) return resolved + "/index.json";
+        for (const ext of ["", ".js", ".json"]) if (File.exists(resolved + ext)) return resolved + ext;
         throw new Error(`Module not found: ${id} (from ${base})`);
     }
     #load(file) {
-        switch (Path.extname(file)) {
-            case ".js": this.#executeJS(File.read(file)); break;
-            case ".cjs": this.#executeJS(File.read(file)); break;
-            case ".mjs": this.#executeJS(File.read(file)); break;
-            case ".json": this.#executeJSON(File.read(file)); break;
-            default: throw new Error(`Unsupported module extension: ${this.filename}`);
-        }
-    }
-    #executeJS(content) {
         const context = {
-            module: this,
-            require: this.require,
-            exports: this.exports,
-            process,
-            global,
-            Buffer,
-            setImmediate,
-            clearImmediate,
-            ...Module.globals,
+            module: this, require: this.require.bind(this), exports: this.exports,
+            global, process, Buffer, setImmediate, clearImmediate,
+            __filename: file, __dirname: Path.dirname(file),
+            LiteLoader: module.exports.LiteLoader
         };
-        new Function(...Object.keys(context), content)(...Object.values(context));
-    }
-    #executeJSON(content) {
-        this.exports = JSON.parse(content);
+        switch (Path.extname(file)) {
+            case ".js": return new Function(...Object.keys(context), File.read(file))(...Object.values(context));
+            case ".json": return this.exports = JSON.parse(File.read(file));
+            default: throw new Error(`Unsupported module extension: ${file}`);
+        }
     }
 }
 

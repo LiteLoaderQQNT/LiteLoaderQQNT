@@ -1,5 +1,6 @@
 const path = require("path");
 const fs = require("fs");
+const electron = require("electron");
 const default_config = require("../common/static/config.json");
 
 const AdmZip = (() => {
@@ -7,6 +8,15 @@ const AdmZip = (() => {
     require(major_node).load("internal_admzip", module);
     return module.exports.admZip.default;
 })();
+
+function showErrorDialog(title, message) {
+    const showDialog = () => electron.dialog.showMessageBox(null, {
+        type: "error",
+        title: "LiteLoaderQQNT",
+        message: `${title}\n${message}`
+    });
+    electron.app.isReady() ? showDialog() : electron.app.once("ready", showDialog);
+}
 
 function getDestPath(manifest_text) {
     const { slug } = JSON.parse(manifest_text);

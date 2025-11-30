@@ -1,7 +1,6 @@
 const path = require("path");
-const default_config = require("../common/static/config.json");
 const store = require("./store.js");
-const config = LiteLoader.api.config.get("LiteLoader", default_config);
+const config = LiteLoader.api.config.get("LiteLoader", require("../common/static/config.json"));
 
 function topologicalSort(plugins) {
     const sorted = {};
@@ -48,9 +47,6 @@ exports.loadAllPlugins = () => {
             plugin.manifest.dependencies?.forEach(slug => dependencies.add(slug));
             plugins[plugin.manifest.slug] = getPluginInstance(plugin);
         }
-        // 检查缺失的依赖
-        const missing = [...dependencies].filter(slug => !plugins[slug]);
-        if (missing.length > 0) showErrorDialog("插件缺少依赖", missing.join(", "));
         LiteLoader.plugins = topologicalSort(plugins);
     }
 }

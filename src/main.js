@@ -1,4 +1,3 @@
-require("./main/api.js");
 const store = require("./main/store.js");
 const { installHook } = require("./main/hook.js");
 const { loadAllPlugins } = require("./main/loader.js");
