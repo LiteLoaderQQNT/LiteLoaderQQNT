@@ -1,17 +1,13 @@
-const { ipcRenderer, contextBridge, webFrame } = require("electron");
+const { ipcRenderer, contextBridge } = require("electron");
 
-function exposeInMainWorld(key, api) {
-    const script = `typeof ${key} != "undefined"`;
-    const callback = (defined) => defined || contextBridge.exposeInMainWorld(key, api);
-    webFrame.executeJavaScript(script, false, callback);
-}
-
-function sendSync(method = [], args = []) {
-    return ipcRenderer.sendSync("LiteLoader.LiteLoader.LiteLoader", method, args);
-}
+const sendSync = (method, args) => ipcRenderer.sendSync("LiteLoader.LiteLoader.LiteLoader", method, args);
+const exposeInMainWorld = (key, value) => contextBridge.executeInMainWorld({
+    func: key => key in globalThis,
+    args: [key]
+}) || contextBridge.exposeInMainWorld(key, value);
 
 module.exports.LiteLoader = {
-    ...sendSync(),
+    ...sendSync([], []),
     api: {
         config: {
             get: async (...args) => sendSync(["api", "config", "get"], args),
