@@ -1,6 +1,6 @@
 {
     "name": "liteloader-qqnt",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "description": "QQNT 插件加载器 LiteLoaderQQNT —— 轻量 · 简洁 · 开源 · 福瑞",
     "main": "./src/main.js",
     "private": true,
