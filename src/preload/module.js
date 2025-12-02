@@ -23,7 +23,7 @@ class Path {
     }
     static dirname(path) {
         const parts = Path.normalize(path).split("/").slice(0, -1);
-        return parts.length ? `${Path.getDrive(path)}${parts.join("/")}` : ".";
+        return parts.length ? parts.join("/") : ".";
     }
     static extname(path) { return path.match(/\.[^/.]+$/)?.[0] ?? ""; }
 }
