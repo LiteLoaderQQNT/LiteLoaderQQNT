@@ -8,5 +8,5 @@ installHook();
 for (const plugin of Object.values(LiteLoader.plugins)) {
     if (plugin.disabled || plugin.incompatible || !plugin.path.injects.renderer) continue;
     try { Runtime.registerPlugin(plugin, await import(`local:///${plugin.path.injects.renderer}`)); }
-    catch (error) { plugin.error = { message: `[Renderer] ${error.message}`, stack: error.stack }; }
+    catch (error) { console.log(`[Renderer] [${plugin.manifest.slug}]: `, error); }
 }

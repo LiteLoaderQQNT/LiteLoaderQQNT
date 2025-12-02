@@ -1,24 +1,18 @@
 /* 侧边栏 */
 .setting-tab {
-    & {
-        display: flex;
-        flex-direction: column;
-    }
+    display: flex;
+    flex-direction: column;
 
     & .nav-bar {
-        & {
-            flex-shrink: 0;
-        }
+        flex-shrink: 0;
 
         &.liteloader {
-            & {
-                display: flex;
-                flex-flow: column;
-                flex: 1;
-                margin-top: 25px;
-                overflow-x: hidden;
-                overflow-y: scroll;
-            }
+            display: flex;
+            flex-flow: column;
+            flex: 1;
+            margin-top: 25px;
+            overflow-x: hidden;
+            overflow-y: scroll;
 
             &::before {
                 content: "";
@@ -40,129 +34,67 @@
     }
 }
 
-
 /* 主内容 */
 .setting-main .q-scroll-view.liteloader .tab-view {
     font-size: 14px;
     padding: 20px 20px 0px;
-
-    &.error {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        min-height: 100%;
-        box-sizing: border-box;
-        overflow: hidden;
-        font-family: sans-serif;
-        background: var(--bg_bottom_standard);
-
-        &::before {
-            content: "😿";
-            position: absolute;
-            bottom: -64px;
-            right: -64px;
-            font-size: 256px;
-            opacity: 0.2;
-        }
-
-        & > * {
-            position: relative;
-        }
-
-        h2 {
-            font-size: x-large;
-            font-weight: bold;
-        }
-
-        p {
-            color: var(--text-error);
-        }
-
-        small {
-            color: var(--text_secondary);
-        }
-
-        textarea {
-            display: block;
-            width: 100%;
-            padding: 8px;
-            color: inherit;
-            font-family: inherit;
-            line-height: 1.25;
-            white-space: pre-wrap;
-            /* border: 1px solid var(--border_dark); */
-            border-radius: 8px;
-            backdrop-filter: blur(4px);
-            background: var(--fill_standard_secondary);
-        }
-    }
 }
 
 
-
 /* 设置页面样式 */
-.config_view .plugins :is(.extension, .theme, .framework) > setting-item {
-    & {
+.config_view .plugins :is(.extension, .theme, .framework)>setting-item {
+    gap: 8px;
+
+    &.disabled,
+    &.deleted {
+        & .info-area>div>div {
+            opacity: 0.5;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        &.deleted {
+            & .info-area>div>div {
+                text-decoration: line-through;
+                color: var(--text-error);
+            }
+        }
+    }
+
+    & .info-area {
         & {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             gap: 8px;
         }
 
-        &.disabled, &.deleted {
-            & .info-area > div > div {
-                opacity: 0.5;
-                font-weight: bold;
-                font-style: italic;
-            }
+        &>div {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
 
-            &.deleted {
-                & .info-area > div > div {
-                    text-decoration: line-through;
-                    color: var(--text-error);
-                }
+            & .icon :is(img, svg) {
+                width: 48px;
+                height: 48px;
+                border-radius: 8px;
             }
         }
 
+        &>setting-text {
+            display: flex;
+            gap: 8px;
 
-        & .info-area {
-            & {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
+            & :nth-child(-n+3) {
+                min-width: 120px;
             }
 
-            & > div {
-                & {
-                    height: 48px;
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                }
-
-                & .icon :is(img, svg) {
-                    width: 48px;
-                    height: 48px;
-                    border-radius: 8px;
-                }
-            }
-
-            & > setting-text {
-                & {
-                    display: flex;
-                    gap: 8px;
-                }
-
-                & :nth-child(-n+3) {
-                    min-width: 120px;
-                }
-
-                & :nth-child(3) {
-                    max-width: 240px;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
+            & :nth-child(3) {
+                max-width: 240px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
     }

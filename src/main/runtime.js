@@ -9,7 +9,7 @@ exports.Runtime = class {
     static triggerHooks(name, args) {
         for (const [plugin, exports] of this.#plugins) {
             try { exports[name]?.(...(typeof args == "function" ? args(plugin) : args)); }
-            catch (error) { plugin.error = { message: `[Main] ${error.message}`, stack: error.stack }; }
+            catch (error) { console.log(`[Main] [${plugin.manifest.slug}] [${name}]: `, error); }
         }
     }
 

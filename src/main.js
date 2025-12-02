@@ -12,7 +12,7 @@ for (const slug in config.installing_plugins) store.installPlugin(slug);
 for (const plugin of Object.values(LiteLoader.plugins)) {
     if (plugin.disabled || plugin.incompatible || !plugin.path.injects.main) continue;
     try { Runtime.registerPlugin(plugin, require(plugin.path.injects.main)); }
-    catch (error) { plugin.error = { message: `[Main] ${error.message}`, stack: error.stack }; }
+    catch (error) { console.log(`[Main] [${plugin.manifest.slug}]: `, error); }
 }
 
 if (!globalThis.qwqnt) {
