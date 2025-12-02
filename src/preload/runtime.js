@@ -1,4 +1,4 @@
-export class Runtime {
+exports.Runtime = class {
 
     static #plugins = new Map();
 

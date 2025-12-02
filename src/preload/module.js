@@ -1,12 +1,12 @@
 class File {
-    static #request(path, method) {
+    static request(path, method) {
         const xhr = new XMLHttpRequest();
         xhr.open(method, `local:///${path}`, false);
         xhr.send();
         return xhr.status == 200 && xhr.responseText;
     }
-    static read(path) { return File.#request(path, "GET"); }
-    static exists(path) { return !!File.#request(path, "HEAD"); }
+    static read(path) { return File.request(path, "GET"); }
+    static exists(path) { return !!File.request(path, "HEAD"); }
 }
 
 class Path {
@@ -69,4 +69,4 @@ class Module {
     }
 }
 
-module.exports.Module = Module;
+new Module(null).require(Path.normalize(`${module.exports.LiteLoader.path.root}/src/preload.js`));

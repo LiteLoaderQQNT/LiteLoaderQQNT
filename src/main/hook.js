@@ -23,7 +23,6 @@ function proxyPreload(func) {
             return [
                 path.join(LiteLoader.path.root, "./src/preload/api.js"),
                 path.join(LiteLoader.path.root, "./src/preload/module.js"),
-                path.join(LiteLoader.path.root, "./src/preload.js"),
                 ...Reflect.apply(target, thisArg, argArray)
             ];
         }
@@ -31,18 +30,8 @@ function proxyPreload(func) {
     if (func?.name == "getPreloadScripts") return new Proxy(func, {
         apply(target, thisArg, argArray) {
             return [
-                {
-                    filePath: path.join(LiteLoader.path.root, "./src/preload/api.js"),
-                    type: "frame"
-                },
-                {
-                    filePath: path.join(LiteLoader.path.root, "./src/preload/module.js"),
-                    type: "frame"
-                },
-                {
-                    filePath: path.join(LiteLoader.path.root, "./src/preload.js"),
-                    type: "frame"
-                },
+                { filePath: path.join(LiteLoader.path.root, "./src/preload/api.js"), type: "frame" },
+                { filePath: path.join(LiteLoader.path.root, "./src/preload/module.js"), type: "frame" },
                 ...Reflect.apply(target, thisArg, argArray)
             ];
         }
