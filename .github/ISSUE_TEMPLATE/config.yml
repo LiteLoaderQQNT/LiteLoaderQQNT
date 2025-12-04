@@ -1,8 +1,5 @@
 blank_issues_enabled: true
 contact_links:
-  - name: Telegram 频道
-    url: https://t.me/LiteLoaderQQNT_Channel
-    about: 发布框架新版本以及公告
-  - name: Telegram 群聊 (NSFW)
+  - name: Telegram 群聊
     url: https://t.me/LiteLoaderQQNT
     about: 闲聊群不解决 Issue, 进群前请先阅读群简介, 进群后请阅读当前所有置顶消息.
