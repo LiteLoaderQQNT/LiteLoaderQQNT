@@ -1,3 +1,4 @@
+const fs = require("fs");
 const path = require("path");
 const electron = require("electron");
 const store = require("./store.js");
@@ -77,16 +78,65 @@ electron.app.on("ready", () => {
     electron.app.commandLine.appendSwitch("fetch-schemes", new_schemes);
 });
 
+// MIME 映射 + 自动补 charset，避免 strict MIME 导致 ESM/JSON module 加载失败
+const getMime = (p) => {
+    const path = require("path");
+    const ext = path.extname(p || "").toLowerCase();
+    const base = {
+        ".js": "text/javascript", ".mjs": "text/javascript", ".cjs": "text/javascript",
+        ".json": "application/json", ".webmanifest": "application/manifest+json",
+        ".css": "text/css",
+        ".html": "text/html", ".htm": "text/html",
+        ".txt": "text/plain", ".log": "text/plain", ".md": "text/markdown",
+        ".xml": "application/xml",
+        ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".gif": "image/gif", ".webp": "image/webp", ".ico": "image/x-icon", ".bmp": "image/bmp",
+        ".mp3": "audio/mpeg", ".wav": "audio/wav", ".ogg": "audio/ogg",
+        ".mp4": "video/mp4", ".webm": "video/webm",
+        ".wasm": "application/wasm",
+        ".map": "application/json",
+        ".pdf": "application/pdf",
+        ".ttf": "font/ttf", ".otf": "font/otf", ".ttc": "font/collection", ".woff": "font/woff", ".woff2": "font/woff2", ".eot": "application/vnd.ms-fontobject"
+    }[ext];
+
+    let mime = base;
+    if (!mime) {
+        try {
+            const mt = require("mime-types");
+            mime = mt.lookup(ext) || mt.lookup(p) || "";
+            if (mime && mt.contentType) mime = String(mt.contentType(mime)).split(";")[0];
+        } catch { }
+    }
+
+    if (!mime) mime = "application/octet-stream";
+
+    if (mime.startsWith("text/") || mime === "application/json" || mime === "application/xml" || mime === "image/svg+xml" || mime === "text/javascript") {
+        return `${mime}; charset=utf-8`;
+    }
+    return mime;
+};
+
+
 exports.protocolRegister = (protocol) => {
     if (!protocol.isProtocolRegistered("local")) {
-        protocol.handle("local", (req) => {
-            const { host, pathname } = new URL(decodeURI(req.url));
-            const filepath = path.normalize(pathname.slice(1));
-            switch (host) {
-                case "root": return electron.net.fetch(`file:///${LiteLoader.path.root}/${filepath}`);
-                case "profile": return electron.net.fetch(`file:///${LiteLoader.path.profile}/${filepath}`);
-                default: return electron.net.fetch(`file://${host}/${filepath}`);
+        protocol.handle("local", async (req) => {
+            try {
+                const u = new URL(req.url);
+                const host = u.host; // 可能是 root/profile/C:/...
+                const pathname = decodeURIComponent(u.pathname); // /src/xxx 或 /C:/Users/...
+                const filepath = path.normalize(pathname.slice(1)); // 去掉开头 /
+                let abs = "";
+                switch (host) {
+                    case "root": abs = path.join(LiteLoader.path.root, filepath); break;
+                    case "profile": abs = path.join(LiteLoader.path.profile, filepath); break;
+                    default:
+                        abs = host ? path.normalize(`${host}/${filepath}`) : filepath; // local://C:/... 或 local:///C:/...
+                        break;
+                }
+                const buf = await fs.promises.readFile(abs);
+                return new Response(buf, { headers: { "content-type": getMime(abs) } });
+            } catch (e) {
+                return new Response(String(e && e.stack || e), { status: 404, headers: { "content-type": "text/plain; charset=utf-8" } });
             }
         });
     }
-}
+};
