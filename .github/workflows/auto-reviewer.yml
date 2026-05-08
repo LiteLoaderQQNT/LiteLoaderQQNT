@@ -1,0 +1,36 @@
+name: Auto Assign Reviewers
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Filter and Assign Reviewers
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          ALL_USERS: "GuaiZai233 mo-jinran"
+        run: |
+          
+          REVIEWERS=""
+          for USER in $ALL_USERS; do
+            if [ "$USER" != "$PR_AUTHOR" ]; then
+              REVIEWERS="${REVIEWERS}${USER},"
+            fi
+          done
+          
+          REVIEWERS=${REVIEWERS%,}
+          
+          if [ -n "$REVIEWERS" ]; then
+            echo "PR Author is $PR_AUTHOR. Assigning $REVIEWERS as reviewers."
+            gh pr edit "$PR_URL" --add-reviewer "$REVIEWERS"
+          else
+            echo "No reviewers to assign."
+          fi
+
